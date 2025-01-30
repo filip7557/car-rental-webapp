@@ -1,0 +1,58 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.12.35707.178 d17.12
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CarGo.WebAPI", "CarGo.WebAPI\CarGo.WebAPI.csproj", "{EBD6D824-062E-406E-BFF6-A5547DE13E86}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CarGo.Service.Common", "CarGo.Service.Common\CarGo.Service.Common.csproj", "{BE088D66-B28F-434E-9789-B77D747BB206}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CarGo.Service", "CarGo.Service\CarGo.Service.csproj", "{B0DD078A-A642-4A4C-BECB-D3A811927AEE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CarGo.Repository.Common", "CarGo.Repository.Common\CarGo.Repository.Common.csproj", "{BD24F833-6870-4651-A04D-E1A311092C2B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CarGo.Repository", "CarGo.Repository\CarGo.Repository.csproj", "{3FD8C55D-29D4-4C0A-AFDA-9CFB86F321DF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CarGo.Model", "CarGo.Model\CarGo.Model.csproj", "{E7EAA47F-E32F-443C-9CAE-9243DE59F145}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CarGo.Common", "CarGo.Common\CarGo.Common.csproj", "{65FB91AA-808F-46E7-9E3E-2A520441CB5D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{EBD6D824-062E-406E-BFF6-A5547DE13E86}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EBD6D824-062E-406E-BFF6-A5547DE13E86}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EBD6D824-062E-406E-BFF6-A5547DE13E86}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EBD6D824-062E-406E-BFF6-A5547DE13E86}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BE088D66-B28F-434E-9789-B77D747BB206}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BE088D66-B28F-434E-9789-B77D747BB206}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BE088D66-B28F-434E-9789-B77D747BB206}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BE088D66-B28F-434E-9789-B77D747BB206}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B0DD078A-A642-4A4C-BECB-D3A811927AEE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B0DD078A-A642-4A4C-BECB-D3A811927AEE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B0DD078A-A642-4A4C-BECB-D3A811927AEE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B0DD078A-A642-4A4C-BECB-D3A811927AEE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BD24F833-6870-4651-A04D-E1A311092C2B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BD24F833-6870-4651-A04D-E1A311092C2B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BD24F833-6870-4651-A04D-E1A311092C2B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BD24F833-6870-4651-A04D-E1A311092C2B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3FD8C55D-29D4-4C0A-AFDA-9CFB86F321DF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3FD8C55D-29D4-4C0A-AFDA-9CFB86F321DF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3FD8C55D-29D4-4C0A-AFDA-9CFB86F321DF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3FD8C55D-29D4-4C0A-AFDA-9CFB86F321DF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E7EAA47F-E32F-443C-9CAE-9243DE59F145}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E7EAA47F-E32F-443C-9CAE-9243DE59F145}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E7EAA47F-E32F-443C-9CAE-9243DE59F145}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E7EAA47F-E32F-443C-9CAE-9243DE59F145}.Release|Any CPU.Build.0 = Release|Any CPU
+		{65FB91AA-808F-46E7-9E3E-2A520441CB5D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{65FB91AA-808F-46E7-9E3E-2A520441CB5D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{65FB91AA-808F-46E7-9E3E-2A520441CB5D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{65FB91AA-808F-46E7-9E3E-2A520441CB5D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

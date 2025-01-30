@@ -1,0 +1,17 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\CarGo.Common\CarGo.Common.csproj" />
+    <ProjectReference Include="..\CarGo.Model\CarGo.Model.csproj" />
+    <ProjectReference Include="..\CarGo.Repository.Common\CarGo.Repository.Common.csproj" />
+    <ProjectReference Include="..\CarGo.Repository\CarGo.Repository.csproj" />
+    <ProjectReference Include="..\CarGo.Service.Common\CarGo.Service.Common.csproj" />
+  </ItemGroup>
+
+</Project>
