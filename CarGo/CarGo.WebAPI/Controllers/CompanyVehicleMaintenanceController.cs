@@ -1,4 +1,5 @@
-﻿using CarGo.Model;
+﻿using CarGo.Common;
+using CarGo.Model;
 using CarGo.Service.Common;
 using Microsoft.AspNetCore.Mvc;
 
@@ -23,6 +24,19 @@ namespace CarGo.WebAPI.Controllers
                 return Ok("Saved.");
             }
             return BadRequest("Invalid data.");
+        }
+        [HttpGet]
+        public async Task<IActionResult> GetById(Guid id, int rpp = 10, int pageNumber = 1)
+        {
+            var paging = new Paging
+            {
+                Rpp = rpp,
+                PageNumber = pageNumber
+            };
+            var response = await _companyVehicleMaintenanceService.GetMaintenancesByCompanyVehicleIdAsync(id, paging);
+            if (response.Data.Count == 0)
+                return BadRequest();
+            return Ok(response);
         }
     }
 }
