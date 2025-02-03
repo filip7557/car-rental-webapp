@@ -15,10 +15,10 @@ namespace CarGo.WebAPI.Controllers
             _tokenService = tokenService;
         }
 
-        [HttpPost("login")]
-        public async Task<IActionResult> Login([FromBody] LoginRequest request)
+        [HttpGet("login")]
+        public async Task<IActionResult> Login(string email, string password)
         {
-            var token = await _tokenService.Login(request.Email, request.Password);
+            var token = await _tokenService.Login(email, password);
             if (!string.IsNullOrWhiteSpace(token))
                 return Ok(token);
 
