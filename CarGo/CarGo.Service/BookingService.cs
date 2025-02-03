@@ -1,4 +1,5 @@
-﻿using CarGo.Model;
+﻿using CarGo.Common;
+using CarGo.Model;
 using CarGo.Repository;
 using CarGo.Repository.Common;
 using CarGo.Service.Common;
@@ -19,9 +20,9 @@ namespace CarGo.Service
         }
 
 
-        public async Task<List<Booking>> GetAllBookingsAsync()
+        public async Task<List<Booking>> GetAllBookingsAsync(BookingSorting sorting, BookingPaging paging, BookingFilter filter)
         {
-            return await _repository.GetAllBookingsAsync();
+            return await _repository.GetAllBookingsAsync(sorting, paging, filter);
         }
 
         public async Task<Booking> GetBookingByIdAsync(Guid id)

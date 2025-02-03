@@ -1,4 +1,5 @@
-﻿using CarGo.Model;
+﻿using CarGo.Common;
+using CarGo.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +10,7 @@ namespace CarGo.Repository.Common
 {
     public interface IBookRepository
     {
-        Task<List<Booking>> GetAllBookingsAsync();
+        Task<List<Booking>> GetAllBookingsAsync(BookingSorting sorting, BookingPaging paging, BookingFilter filter);
 
         Task<Booking> GetBookingByIdAsync(Guid Id);
 

@@ -1,4 +1,5 @@
-﻿using CarGo.Model;
+﻿using CarGo.Common;
+using CarGo.Model;
 using CarGo.Repository.Common;
 using Npgsql;
 using System;
@@ -16,7 +17,7 @@ namespace CarGo.Repository
         private  string connectionString = Environment.GetEnvironmentVariable("CONNECTION_STRING");
 
 
-        public async Task<List<Booking>> GetAllBookingsAsync()
+        public async Task<List<Booking>> GetAllBookingsAsync(BookingSorting sorting, BookingPaging paging, BookingFilter filter)
         {
             var bookings = new List<Booking>();
             using (var connection = new NpgsqlConnection(connectionString))
@@ -26,6 +27,13 @@ namespace CarGo.Repository
                     cmd.Connection = connection;
 
                     var commandText = new StringBuilder("SELECT * FROM \"Booking\" WHERE 1=1");
+                    
+                    ApplyFilters(cmd, commandText, filter);
+
+                    ApplySorting(cmd, commandText, sorting);
+
+                    ApplyPaging(cmd, commandText, paging);
+
                     cmd.CommandText = commandText.ToString();
                     await connection.OpenAsync();
 
@@ -40,6 +48,51 @@ namespace CarGo.Repository
                 }
             }
             return bookings;
+        }
+
+
+    
+
+
+        private void ApplySorting(NpgsqlCommand cmd, StringBuilder commandText, BookingSorting sorting)
+        {
+            if (!string.IsNullOrEmpty(sorting.OrderBy))
+            {
+                var direction = sorting.SortOrder.ToUpper() == "DESC" ? "DESC" : "ASC";
+                commandText.Append($" ORDER BY \"{sorting.OrderBy}\" {direction}");
+            }
+        }
+
+        private void ApplyPaging(NpgsqlCommand cmd, StringBuilder commandText, BookingPaging paging)
+        {
+            if (paging.PageNumber > 0)
+            {
+                commandText.Append(" OFFSET @OFFSET FETCH NEXT @ROWS ROWS ONLY;");
+                cmd.Parameters.AddWithValue("@OFFSET", (paging.PageNumber - 1) * paging.Rpp);
+                cmd.Parameters.AddWithValue("@ROWS", paging.Rpp);
+            }
+        }
+
+
+        private void ApplyFilters(NpgsqlCommand cmd, StringBuilder commandText, BookingFilter bookingFilter)
+        {
+            if (bookingFilter.IsActive.HasValue)
+            {
+                commandText.Append(" AND \"IsActive\" = @isActive");
+                cmd.Parameters.AddWithValue("@isActive", bookingFilter.IsActive.Value);
+            }
+
+            if (bookingFilter.UserId.HasValue)
+            {
+                commandText.Append(" AND \"UserId\" = @userId");
+                cmd.Parameters.AddWithValue("@userId", bookingFilter.UserId.Value);
+            }
+
+            if (bookingFilter.CompanyVehicleId.HasValue)
+            {
+                commandText.Append(" AND \"CompanyVehicleId\" = @companyVehicleId");
+                cmd.Parameters.AddWithValue("@companyVehicleId", bookingFilter.CompanyVehicleId.Value);
+            }
         }
 
 

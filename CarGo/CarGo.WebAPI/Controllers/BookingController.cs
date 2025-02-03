@@ -1,4 +1,5 @@
-﻿using CarGo.Model;
+﻿using CarGo.Common;
+using CarGo.Model;
 using CarGo.Service.Common;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -15,19 +16,44 @@ namespace CarGo.WebAPI.Controllers
             _service = service;
         }
 
-
         [HttpGet]
-        public async Task<IActionResult> GetBookingsAsync()
+        public async Task<IActionResult> GetBookingsAsync(
+            string orderBy = "Id",
+            string sortOrder = "asc",
+            int? pageNumber = null,
+            int? rpp = null,
+            bool? isActive = true,
+            Guid? userId = null,
+            Guid? companyVehicleId = null)
         {
             try
             {
-                var bookings = await _service.GetAllBookingsAsync();
+                var bookingFilter = new BookingFilter
+                {
+                    IsActive = isActive,
+                    UserId = userId,
+                    CompanyVehicleId = companyVehicleId
+                };
 
-                return bookings.Count > 0 ? Ok(bookings) : NotFound("No available bookings");
+                var sorting = new BookingSorting
+                {
+                    OrderBy = orderBy,
+                    SortOrder = sortOrder
+                };
+
+                var paging = new BookingPaging
+                {
+                    PageNumber = pageNumber,
+                    Rpp = rpp
+                };
+
+                var bookings = await _service.GetAllBookingsAsync(sorting, paging, bookingFilter);
+
+                return bookings.Count > 0 ? Ok(bookings) : NotFound("Nema dostupnih rezervacija");
             }
             catch (Exception ex)
             {
-                return StatusCode(500, $"Error when fetching bookings: {ex.Message}");
+                return StatusCode(500, $"Greška pri dohvaćanju rezervacija: {ex.Message}");
             }
         }
 
