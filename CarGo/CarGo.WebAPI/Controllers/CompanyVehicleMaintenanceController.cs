@@ -17,7 +17,7 @@ namespace CarGo.WebAPI.Controllers
         public async Task<IActionResult> Save(CompanyVehicleMaintenance maintenance)
         {
             // TODO: Get currently logged in user id.
-            var success = await _companyVehicleMaintenanceService.SaveCompanyVehicleMaintenance(maintenance, Guid.Empty);
+            var success = await _companyVehicleMaintenanceService.SaveCompanyVehicleMaintenanceAsync(maintenance, Guid.Empty);
             if (success)
             {
                 return Ok("Saved.");
