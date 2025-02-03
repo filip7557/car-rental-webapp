@@ -23,7 +23,7 @@ namespace CarGo.Service
                 Data = maintenances,
                 PageNumber = paging.PageNumber,
                 PageSize = paging.Rpp,
-                TotalRecords = 0 // TODO: Add count
+                TotalRecords = await _companyVehicleMaintenanceRepository.CountAsync(companyVehicleId),
             };
         }
     }
