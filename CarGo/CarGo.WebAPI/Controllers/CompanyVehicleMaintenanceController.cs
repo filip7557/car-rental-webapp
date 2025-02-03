@@ -10,12 +10,14 @@ namespace CarGo.WebAPI.Controllers
     public class CompanyVehicleMaintenanceController : ControllerBase
     {
         private readonly ICompanyVehicleMaintenanceService _companyVehicleMaintenanceService;
+
         public CompanyVehicleMaintenanceController(ICompanyVehicleMaintenanceService companyVehicleMaintenanceService)
         {
             _companyVehicleMaintenanceService = companyVehicleMaintenanceService;
         }
+
         [HttpPost]
-        public async Task<IActionResult> Save(CompanyVehicleMaintenance maintenance)
+        public async Task<IActionResult> SaveAsync(CompanyVehicleMaintenance maintenance)
         {
             // TODO: Get currently logged in user id.
             var success = await _companyVehicleMaintenanceService.SaveCompanyVehicleMaintenanceAsync(maintenance, Guid.Empty);
@@ -25,8 +27,9 @@ namespace CarGo.WebAPI.Controllers
             }
             return BadRequest("Invalid data.");
         }
+
         [HttpGet]
-        public async Task<IActionResult> GetById(Guid id, int rpp = 10, int pageNumber = 1)
+        public async Task<IActionResult> GetByIdAsync(Guid id, int rpp = 10, int pageNumber = 1)
         {
             var paging = new Paging
             {

@@ -2,7 +2,6 @@
 using CarGo.Model;
 using CarGo.Repository.Common;
 using Npgsql;
-using System.Text;
 
 namespace CarGo.Repository
 {
@@ -15,6 +14,7 @@ namespace CarGo.Repository
             _connectionString = Environment.GetEnvironmentVariable("ConnectionStrings__PostgresDb")
             ?? throw new InvalidOperationException("Database connection string is not set.");
         }
+
         public async Task<bool> SaveCompanyVehicleMaintenanceAsync(CompanyVehicleMaintenance maintenance, Guid createdByUserId)
         {
             try
@@ -55,6 +55,7 @@ namespace CarGo.Repository
                 return false;
             }
         }
+
         public async Task<List<CompanyVehicleMaintenance>> GetMaintenancesByCompanyVehicleIdAsync(Guid companyVehicleId, Paging paging)
         {
             var maintenances = new List<CompanyVehicleMaintenance>();
@@ -81,7 +82,6 @@ namespace CarGo.Repository
                                 CompanyVehicleId = Guid.Parse(reader[1].ToString()!),
                                 Title = reader[2].ToString()!,
                                 Description = reader[3].ToString()!
-
                             };
                             maintenances.Add(maintenance);
                         }
@@ -98,6 +98,7 @@ namespace CarGo.Repository
                 return maintenances;
             }
         }
+
         public async Task<int> CountAsync(Guid companyVehicleId)
         {
             int count = 0;
@@ -107,7 +108,7 @@ namespace CarGo.Repository
                 {
                     string commandText = "SELECT COUNT(\"Id\") FROM \"CompanyVehicleMaintenance\" WHERE \"CompanyVehicleId\" = @compVehId";
                     using var command = new NpgsqlCommand(commandText, connection);
-                    
+
                     command.Parameters.AddWithValue("compVehId", NpgsqlTypes.NpgsqlDbType.Uuid, companyVehicleId);
 
                     connection.Open();
