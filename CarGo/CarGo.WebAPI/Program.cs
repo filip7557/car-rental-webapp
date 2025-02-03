@@ -1,4 +1,5 @@
 using Autofac;
+using Autofac.Core;
 using Autofac.Extensions.DependencyInjection;
 using CarGo.Repository;
 using CarGo.Repository.Common;
@@ -50,7 +51,17 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+
+builder.Host
+    .UseServiceProviderFactory(new AutofacServiceProviderFactory())
+    .ConfigureContainer<ContainerBuilder>(containerBuilder =>
+    {
+        containerBuilder.RegisterType<BookingRepository>().As<IBookRepository>();
+        containerBuilder.RegisterType<BookingService>().As<IBookService>();
+    });
+
 var app = builder.Build();
+
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
