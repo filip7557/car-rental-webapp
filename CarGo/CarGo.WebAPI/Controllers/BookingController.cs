@@ -102,6 +102,10 @@ namespace CarGo.WebAPI.Controllers
                 {
                     return BadRequest("The Booking information is incorrect");
                 }
+                if (booking.Id == Guid.Empty) 
+                {
+                    booking.Id = Guid.NewGuid();
+                }
                 await _service.AddBookingAsync(booking);
                 return Ok("Booking added succesfully");
             }

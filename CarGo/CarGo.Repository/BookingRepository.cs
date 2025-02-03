@@ -134,9 +134,9 @@ namespace CarGo.Repository
 
         public async Task AddBookingAsync(Booking booking)
         {
-            string commandText = "INSERT INTO \"Booking\" (\"IsActive\", \"UserId\", \"CompanyVehicleId\", \"StartDate\", \"EndDate\", " +
+            string commandText = "INSERT INTO \"Booking\" (\"Id\",\"IsActive\", \"UserId\", \"CompanyVehicleId\", \"StartDate\", \"EndDate\", " +
                                  "\"TotalPrice\", \"StatusId\", \"PickUpLocationId\", \"DropOffLocationId\", \"CreatedByUserId\", \"UpdatedByUserId\") " +
-                                 "VALUES (@isActive, @userId, @companyVehicleId, @startDate, @endDate, " +
+                                 "VALUES (@id,@isActive, @userId, @companyVehicleId, @startDate, @endDate, " +
                                  "@totalPrice, @statusId, @pickUpLocationId, @dropOffLocationId, @createdByUserId, @updatedByUserId)";
 
             using (var connection = new NpgsqlConnection(connectionString))
@@ -145,7 +145,7 @@ namespace CarGo.Repository
 
                 using (var command = new NpgsqlCommand(commandText, connection))
                 {
-                 
+                    command.Parameters.AddWithValue("@id", booking.Id);
                     command.Parameters.AddWithValue("@isActive", booking.IsActive);
                     command.Parameters.AddWithValue("@userId", booking.UserId);
                     command.Parameters.AddWithValue("@companyVehicleId", booking.CompanyVehicleId);
