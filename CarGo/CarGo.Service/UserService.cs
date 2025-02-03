@@ -7,10 +7,12 @@ namespace CarGo.Service
     public class UserService : IUserService
     {
         private readonly IUserRepository _userRepository;
+        private readonly IRoleService _roleService;
 
-        public UserService(IUserRepository repository)
+        public UserService(IUserRepository repository, IRoleService roleService)
         {
             _userRepository = repository;
+            _roleService = roleService;
         }
 
         public async Task<bool> RegisterUserAsync(User user)
@@ -43,6 +45,22 @@ namespace CarGo.Service
         public Task<User?> GetUserByEmailAsync(string email)
         {
             return _userRepository.GetUSerByEmailAsync(email);
+        }
+
+        public async Task<UserDTO?> GetUserDTOByIdAsync(Guid userId)
+        {
+            var user = await GetUserByIdAsync(userId);
+            if (user == null)
+                return null;
+
+            return new UserDTO
+            {
+                FullName = user.FullName,
+                Email = user.Email,
+                PhoneNumber = user.PhoneNumber,
+                Role = await _roleService.GetRoleNameByIdAsync(user.RoleId),
+            };
+
         }
     }
 }

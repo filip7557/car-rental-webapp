@@ -13,5 +13,7 @@ namespace CarGo.Service.Common
         Task<User?> GetUserByEmailAndPasswordAsync(string email, string password);
 
         Task<User?> GetUserByEmailAsync(string email);
+
+        Task<UserDTO?> GetUserDTOByIdAsync(Guid userId);
     }
 }

@@ -21,7 +21,7 @@ namespace CarGo.WebAPI.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(Guid id)
         {
-            var user = await _userService.GetUserByIdAsync(id);
+            var user = await _userService.GetUserDTOByIdAsync(id);
 
             if (user == null)
             {

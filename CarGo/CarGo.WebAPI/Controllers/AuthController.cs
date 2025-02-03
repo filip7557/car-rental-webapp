@@ -28,7 +28,11 @@ namespace CarGo.WebAPI.Controllers
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] User user)
         {
-            return Ok(await _tokenService.Register(user));
+            var token = await _tokenService.Register(user);
+            if (!string.IsNullOrWhiteSpace(token))
+                return Ok(token);
+            
+            return BadRequest("Email is already in use.");
         }
     }
 }
