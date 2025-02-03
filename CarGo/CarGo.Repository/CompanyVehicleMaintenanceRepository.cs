@@ -1,6 +1,8 @@
-﻿using CarGo.Model;
+﻿using CarGo.Common;
+using CarGo.Model;
 using CarGo.Repository.Common;
 using Npgsql;
+using System.Text;
 
 namespace CarGo.Repository
 {
@@ -13,7 +15,7 @@ namespace CarGo.Repository
             _connectionString = Environment.GetEnvironmentVariable("ConnectionStrings__PostgresDb")
             ?? throw new InvalidOperationException("Database connection string is not set.");
         }
-        public async Task<bool> SaveCompanyVehicleMaintenance(CompanyVehicleMaintenance maintenance, Guid createdByUserId)
+        public async Task<bool> SaveCompanyVehicleMaintenanceAsync(CompanyVehicleMaintenance maintenance, Guid createdByUserId)
         {
             try
             {
@@ -51,6 +53,49 @@ namespace CarGo.Repository
             {
                 Console.WriteLine("Exception: " + e.Message);
                 return false;
+            }
+        }
+        public async Task<List<CompanyVehicleMaintenance>> GetMaintenancesByCompanyVehicleIdAsync(Guid companyVehicleId, Paging paging)
+        {
+            var maintenances = new List<CompanyVehicleMaintenance>();
+            try
+            {
+                using (var connection = new NpgsqlConnection(_connectionString))
+                {
+                    string commandText = "SELECT \"Id\", \"CompanyVehicleId\", \"Title\", \"Description\" \"DateCreated\" FROM \"CompanyVehicleMaintenance\" WHERE \"CompanyVehicleId\" = @companyVehId ORDER BY \"DateCreated\" DESC LIMIT @rpp OFFSET (@pageNumber - 1) * @rpp";
+                    using var command = new NpgsqlCommand(commandText, connection);
+
+                    command.Parameters.AddWithValue("companyVehId", NpgsqlTypes.NpgsqlDbType.Uuid, companyVehicleId);
+                    command.Parameters.AddWithValue("rpp", paging.Rpp);
+                    command.Parameters.AddWithValue("pageNumber", paging.PageNumber);
+
+                    var reader = await command.ExecuteReaderAsync();
+
+                    if (reader.HasRows)
+                    {
+                        while (await reader.ReadAsync())
+                        {
+                            var maintenance = new CompanyVehicleMaintenance
+                            {
+                                Id = Guid.Parse(reader[0].ToString()!),
+                                CompanyVehicleId = Guid.Parse(reader[1].ToString()!),
+                                Title = reader[2].ToString()!,
+                                Description = reader[3].ToString()!
+
+                            };
+                            maintenances.Add(maintenance);
+                        }
+                    }
+
+                    connection.Close();
+
+                    return maintenances;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Exception: " + ex.Message);
+                return maintenances;
             }
         }
     }
