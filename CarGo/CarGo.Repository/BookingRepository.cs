@@ -13,11 +13,13 @@ namespace CarGo.Repository
 {
     public class BookingRepository : IBookRepository
     {
-        private const string CONNECTION_STRING = "Host=localhost:5432;Username=postgres;Password=leonpik7;Database=CarGoDB";
+        private  string connectionString = Environment.GetEnvironmentVariable("CONNECTION_STRING");
+
+
         public async Task<List<Booking>> GetAllBookingsAsync()
         {
             var bookings = new List<Booking>();
-            using (var connection = new NpgsqlConnection(CONNECTION_STRING))
+            using (var connection = new NpgsqlConnection(connectionString))
             {
                 using (var cmd = new NpgsqlCommand())
                 {
@@ -45,7 +47,7 @@ namespace CarGo.Repository
         {
             string commandText = "SELECT * FROM \"Booking\" WHERE \"Id\" = @id";
 
-            using (var connection = new NpgsqlConnection(CONNECTION_STRING))
+            using (var connection = new NpgsqlConnection(connectionString))
             {
                 connection.Open();
                 using (var cmd = new NpgsqlCommand(commandText, connection))
@@ -66,7 +68,7 @@ namespace CarGo.Repository
         public async Task DeleteBookingAsync(Guid id)
         {
             string commandText = "DELETE FROM \"Booking\" WHERE \"Id\" = @id";
-            using (var connection= new NpgsqlConnection(CONNECTION_STRING))
+            using (var connection= new NpgsqlConnection(connectionString))
             {
                 connection.Open();
                 using(var cmd = new NpgsqlCommand(commandText, connection))
@@ -84,7 +86,7 @@ namespace CarGo.Repository
                                  "VALUES (@isActive, @userId, @companyVehicleId, @startDate, @endDate, " +
                                  "@totalPrice, @statusId, @pickUpLocationId, @dropOffLocationId, @createdByUserId, @updatedByUserId)";
 
-            using (var connection = new NpgsqlConnection(CONNECTION_STRING))
+            using (var connection = new NpgsqlConnection(connectionString))
             {
                 await connection.OpenAsync();
 
@@ -109,8 +111,6 @@ namespace CarGo.Repository
             }
         }
 
-      
-
 
         public async Task UpdateBookingAsync(Guid id,Booking updatedBooking)
         {
@@ -128,7 +128,7 @@ namespace CarGo.Repository
                                  "\"DateUpdated\" = CURRENT_TIMESTAMP " + 
                                  "WHERE \"Id\" = @id";
 
-            using (var connection = new NpgsqlConnection(CONNECTION_STRING))
+            using (var connection = new NpgsqlConnection(connectionString))
             {
                 await connection.OpenAsync();
 
@@ -151,8 +151,6 @@ namespace CarGo.Repository
                 }
             }
         }
-
-
 
 
 
