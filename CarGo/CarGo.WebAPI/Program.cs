@@ -24,6 +24,8 @@ builder.Host
         //Register types
         containerBuilder.RegisterType<ImageRepository>().As<IImageRepository>();
         containerBuilder.RegisterType<ImageService>().As<IImageService>();
+        containerBuilder.RegisterType<CompanyVehicleMaintenanceRepository>().As<ICompanyVehicleMaintenanceRepository>();
+        containerBuilder.RegisterType<CompanyVehicleMaintenanceService>().As<ICompanyVehicleMaintenanceService>();
     });
 
 // Add services to the container.
