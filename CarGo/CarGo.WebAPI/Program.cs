@@ -1,5 +1,6 @@
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
+using CarGo.Common;
 using CarGo.Repository;
 using CarGo.Repository.Common;
 using CarGo.Service;
@@ -26,6 +27,8 @@ builder.Host
         containerBuilder.RegisterType<ImageService>().As<IImageService>();
         containerBuilder.RegisterType<CompanyVehicleMaintenanceRepository>().As<ICompanyVehicleMaintenanceRepository>();
         containerBuilder.RegisterType<CompanyVehicleMaintenanceService>().As<ICompanyVehicleMaintenanceService>();
+        containerBuilder.RegisterType<NotificationRepository>().As<INotificationRepository>();
+        containerBuilder.RegisterType<NotificationService>().As<INotificationService>();
     });
 
 // Add services to the container.
@@ -50,7 +53,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 
 builder.Services.AddAuthorization();
 
-builder.Services.AddControllers();
+builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("EmailSettings"));
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
