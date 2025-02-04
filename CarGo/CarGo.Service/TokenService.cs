@@ -30,6 +30,7 @@ namespace CarGo.Service
             var claims = new[]
             {
             new Claim(JwtRegisteredClaimNames.Email, user.Email),
+            new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
             new Claim(ClaimTypes.Role, await _roleService.GetRoleNameByIdAsync(user.RoleId!)),
             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
         };
