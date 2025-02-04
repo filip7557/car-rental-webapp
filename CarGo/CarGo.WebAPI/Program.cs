@@ -20,6 +20,8 @@ builder.Host
         containerBuilder.RegisterType<RoleRepository>().As<IRoleRepository>();
         containerBuilder.RegisterType<RoleService>().As<IRoleService>();
         containerBuilder.RegisterType<TokenService>().As<ITokenService>();
+        containerBuilder.RegisterType<BookingRepository>().As<IBookRepository>();
+        containerBuilder.RegisterType<BookingService>().As<IBookService>();
     });
 
 // Add services to the container.
@@ -52,13 +54,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 
-builder.Host
-    .UseServiceProviderFactory(new AutofacServiceProviderFactory())
-    .ConfigureContainer<ContainerBuilder>(containerBuilder =>
-    {
-        containerBuilder.RegisterType<BookingRepository>().As<IBookRepository>();
-        containerBuilder.RegisterType<BookingService>().As<IBookService>();
-    });
+
 
 var app = builder.Build();
 
