@@ -26,7 +26,7 @@ namespace CarGo.WebAPI.Controllers
         }
 
         [HttpPost("register")]
-        public async Task<IActionResult> Register([FromBody] User user)
+        public async Task<IActionResult> Register(UserDTO user)
         {
             var success = await _tokenService.RegisterAsync(user);
             if (success)

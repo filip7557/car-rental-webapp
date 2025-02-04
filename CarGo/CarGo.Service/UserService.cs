@@ -47,13 +47,13 @@ namespace CarGo.Service
             return _userRepository.GetUSerByEmailAsync(email);
         }
 
-        public async Task<UserDTO?> GetUserDTOByIdAsync(Guid userId)
+        public async Task<UserResponse?> GetUserDTOByIdAsync(Guid userId)
         {
             var user = await GetUserByIdAsync(userId);
             if (user == null)
                 return null;
 
-            return new UserDTO
+            return new UserResponse
             {
                 FullName = user.FullName,
                 Email = user.Email,
