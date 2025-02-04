@@ -29,14 +29,14 @@ namespace CarGo.Service
         {
             return await _repository.GetBookingByIdAsync(id);
         }
-        public Task AddBookingAsync(Booking booking)
+        public async Task AddBookingAsync(Booking booking)
         {
-            return _repository.AddBookingAsync(booking);
+             await _repository.AddBookingAsync(booking);
         }
 
-        public Task UpdateBookingAsync(Guid id, Booking updatedBooking)
+        public async Task UpdateBookingAsync(Guid id, Booking updatedBooking)
         {
-            return _repository.UpdateBookingAsync(id, updatedBooking);
+             await _repository.UpdateBookingAsync(id, updatedBooking);
         }
 
         public async Task DeleteBookingAsync(Guid id)

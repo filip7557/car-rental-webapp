@@ -102,7 +102,7 @@ namespace CarGo.Repository
 
             using (var connection = new NpgsqlConnection(connectionString))
             {
-                connection.Open();
+                 connection.Open();
                 using (var cmd = new NpgsqlCommand(commandText, connection))
                 {
                     cmd.Parameters.AddWithValue("id", id);
