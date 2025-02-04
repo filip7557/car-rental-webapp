@@ -7,6 +7,9 @@ namespace CarGo.Repository
         public Task<bool> SaveImageAsync(Image image, Guid createdByUserId);
 
         public Task<List<Guid>> GetImageIdsByDamageReportIdAsync(Guid damageReportId);
-        public Task<Image?> GetImageById(Guid id);
+
+        public Task<Image?> GetImageByIdAsync(Guid id);
+
+        public Task<bool> DeleteImageByIdAsync(Guid imageId);
     }
 }

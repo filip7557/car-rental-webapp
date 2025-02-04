@@ -1,9 +1,7 @@
 ﻿using CarGo.Common;
 using CarGo.Model;
 using CarGo.Service.Common;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System.Net.NetworkInformation;
 
 namespace CarGo.WebAPI.Controllers
 {
@@ -12,7 +10,9 @@ namespace CarGo.WebAPI.Controllers
     public class BookingController : ControllerBase
     {
         public IBookService _service;
-        public BookingController(IBookService service) {
+
+        public BookingController(IBookService service)
+        {
             _service = service;
         }
 
@@ -73,7 +73,7 @@ namespace CarGo.WebAPI.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task <IActionResult> DeleteBooking(Guid id)
+        public async Task<IActionResult> DeleteBooking(Guid id)
         {
             try
             {
@@ -86,11 +86,10 @@ namespace CarGo.WebAPI.Controllers
                 await _service.DeleteBookingAsync(id);
                 return Ok("Booking has been deleted");
             }
-            catch(Exception ex) 
-            { 
-            return StatusCode(500, $"Error when deleting booking: {ex.Message}");
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Error when deleting booking: {ex.Message}");
             }
-            
         }
 
         [HttpPost]
@@ -102,14 +101,14 @@ namespace CarGo.WebAPI.Controllers
                 {
                     return BadRequest("The Booking information is incorrect");
                 }
-                if (booking.Id == Guid.Empty) 
+                if (booking.Id == Guid.Empty)
                 {
                     booking.Id = Guid.NewGuid();
                 }
                 await _service.AddBookingAsync(booking);
                 return Ok("Booking added succesfully");
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return StatusCode(500, $"Error when adding a Booking: {ex.Message}");
             }
@@ -118,7 +117,6 @@ namespace CarGo.WebAPI.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateBookingAsync(Guid id, Booking updatedBooking)
         {
-
             if (updatedBooking == null)
             {
                 return BadRequest("The Booking information is incorrect");
@@ -127,7 +125,7 @@ namespace CarGo.WebAPI.Controllers
             try
             {
                 var existingBooking = _service.GetBookingByIdAsync(id);
-                if(existingBooking== null)
+                if (existingBooking == null)
                 {
                     return NotFound($"The Booking with Id={id} you want to delete does not exist");
                 }
@@ -139,9 +137,5 @@ namespace CarGo.WebAPI.Controllers
                 return StatusCode(500, $"Error when updating Booking {ex.Message}");
             }
         }
-
-
     }
-
 }
-

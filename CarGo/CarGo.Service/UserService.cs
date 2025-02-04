@@ -60,7 +60,6 @@ namespace CarGo.Service
                 PhoneNumber = user.PhoneNumber,
                 Role = await _roleService.GetRoleNameByIdAsync(user.RoleId),
             };
-
         }
     }
 }

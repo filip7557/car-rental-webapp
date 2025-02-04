@@ -81,7 +81,7 @@ namespace CarGo.Repository
             }
         }
 
-        public async Task<Image?> GetImageById(Guid id)
+        public async Task<Image?> GetImageByIdAsync(Guid id)
         {
             Image? image = null;
             try
@@ -115,6 +115,38 @@ namespace CarGo.Repository
             {
                 Console.WriteLine("Exception: " + ex.Message);
                 return image;
+            }
+        }
+
+        public async Task<bool> DeleteImageByIdAsync(Guid imageId)
+        {
+            try
+            {
+                using (var connection = new NpgsqlConnection(_connectionString))
+                {
+                    string commandText = "DELETE FROM \"Image\" WHERE \"Id\" = @id";
+                    using var command = new NpgsqlCommand(commandText, connection);
+
+                    command.Parameters.AddWithValue("id", imageId);
+
+                    connection.Open();
+
+                    var affectedRows = await command.ExecuteNonQueryAsync();
+                    if (affectedRows == 0)
+                    {
+                        connection.Close();
+                        return false;
+                    }
+
+                    connection.Close();
+
+                    return true;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Exception: " + ex.Message);
+                return false;
             }
         }
     }

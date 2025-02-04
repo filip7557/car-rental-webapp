@@ -46,5 +46,18 @@ namespace CarGo.WebAPI.Controllers
 
             return Ok(await _imageService.GetImageIdsByDamageReportAsync(damageReportId));
         }
+
+        [HttpDelete("{imageId}")]
+        public async Task<IActionResult> DeleteImageById(Guid imageId)
+        {
+            if (imageId == Guid.Empty)
+                return BadRequest();
+
+            var success = await _imageService.DeleteImageByIdAsync(imageId);
+
+            if (success)
+                return Ok("Deleted");
+            return BadRequest();
+        }
     }
 }

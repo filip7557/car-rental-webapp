@@ -31,7 +31,12 @@ namespace CarGo.Service
 
         public async Task<Image?> GetImageByIdAsync(Guid id)
         {
-            return await _imageRepository.GetImageById(id);
+            return await _imageRepository.GetImageByIdAsync(id);
+        }
+
+        public async Task<bool> DeleteImageByIdAsync(Guid imageId)
+        {
+            return await _imageRepository.DeleteImageByIdAsync(imageId);
         }
 
         private async Task<byte[]> ConvertToByteArrayAsync(IFormFile file)
