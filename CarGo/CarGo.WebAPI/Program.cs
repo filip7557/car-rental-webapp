@@ -1,7 +1,6 @@
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using CarGo.Common;
-using CarGo.Model;
 using CarGo.Repository;
 using CarGo.Repository.Common;
 using CarGo.Service;
