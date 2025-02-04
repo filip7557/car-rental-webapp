@@ -8,6 +8,8 @@ using CarGo.Service.Common;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using CarGo.Service;
+using CarGo.Service.Common;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,6 +24,9 @@ builder.Host
         containerBuilder.RegisterType<TokenService>().As<ITokenService>();
         containerBuilder.RegisterType<BookingRepository>().As<IBookRepository>();
         containerBuilder.RegisterType<BookingService>().As<IBookService>();
+        //Register types
+        containerBuilder.RegisterType<ImageRepository>().As<IImageRepository>();
+        containerBuilder.RegisterType<ImageService>().As<IImageService>();
     });
 
 // Add services to the container.
