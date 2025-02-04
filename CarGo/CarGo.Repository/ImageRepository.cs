@@ -19,7 +19,7 @@ namespace CarGo.Repository
             {
                 using (var connection = new NpgsqlConnection(_connectionString))
                 {
-                    string commandText = $"INSERT INTO \"Image\" (\"Id\", \"ImageFile\", \"DamageReportId\"{/*\"CreatedByUserId\", \"UpdatedByUserId\"" */""}) VALUES (@id, @file, @damageReportId);";
+                    string commandText = $"INSERT INTO \"Image\" (\"Id\", \"ImageFile\", \"DamageReportId\", \"CreatedByUserId\", \"UpdatedByUserId\") VALUES (@id, @file, @damageReportId, @createdBy, @updatedBy)";
                     using var command = new NpgsqlCommand(commandText, connection);
 
                     command.Parameters.AddWithValue("id", NpgsqlTypes.NpgsqlDbType.Uuid, Guid.NewGuid());

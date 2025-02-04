@@ -1,6 +1,8 @@
 ﻿using CarGo.Model;
 using CarGo.Service.Common;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace CarGo.WebAPI.Controllers
 {
@@ -15,6 +17,7 @@ namespace CarGo.WebAPI.Controllers
             _imageService = imageService;
         }
 
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> SaveImageAsync(ImageDTO image)
         {
@@ -22,8 +25,9 @@ namespace CarGo.WebAPI.Controllers
                 return BadRequest();
 
             // TODO: Get current logged in user.
+            var userId = Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
 
-            var success = await _imageService.SaveImageAsync(image, Guid.Parse("a025b4b1-f76b-4770-87bb-a71266576201")); //test guid
+            var success = await _imageService.SaveImageAsync(image, userId);
             if (success)
                 return Ok("Saved.");
             return BadRequest();
@@ -38,6 +42,7 @@ namespace CarGo.WebAPI.Controllers
             return File(image.ImageFile, "image/*");
         }
 
+        [Authorize]
         [HttpGet]
         public async Task<IActionResult> GetImageByDamageReportIdAsync(Guid damageReportId)
         {
@@ -47,6 +52,7 @@ namespace CarGo.WebAPI.Controllers
             return Ok(await _imageService.GetImageIdsByDamageReportAsync(damageReportId));
         }
 
+        [Authorize]
         [HttpDelete("{imageId}")]
         public async Task<IActionResult> DeleteImageById(Guid imageId)
         {

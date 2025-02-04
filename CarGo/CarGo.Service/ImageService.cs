@@ -21,7 +21,7 @@ namespace CarGo.Service
                 ImageFile = await ConvertToByteArrayAsync(imageDto.ImageFile),
                 DamageReportId = imageDto.DamageReportId,
             };
-            return await _imageRepository.SaveImageAsync(image, Guid.Empty);
+            return await _imageRepository.SaveImageAsync(image, createdByUserId);
         }
 
         public async Task<List<Guid>> GetImageIdsByDamageReportAsync(Guid damageReportId)
