@@ -2,29 +2,40 @@
 using CarGo.Model;
 using CarGo.Repository.Common;
 using Npgsql;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net.NetworkInformation;
+using System.Reflection;
 using System.Text;
 
 namespace CarGo.Repository
 {
     public class BookingRepository : IBookRepository
     {
-        private string connectionString = Environment.GetEnvironmentVariable("CONNECTION_STRING");
+
+        private string? _connectionString;
+        public BookingRepository()
+        {
+            _connectionString = Environment.GetEnvironmentVariable("ConnectionStrings__PostgresDb")
+            ?? throw new InvalidOperationException("Database connection string is not set.");
+        }
+
 
         public async Task<List<Booking>> GetAllBookingsAsync(BookingSorting sorting, BookingPaging paging, BookingFilter filter)
         {
             var bookings = new List<Booking>();
-            using (var connection = new NpgsqlConnection(connectionString))
+            using (var connection = new NpgsqlConnection(_connectionString))
             {
                 using (var cmd = new NpgsqlCommand())
                 {
                     cmd.Connection = connection;
 
-                    var commandText = new StringBuilder("SELECT * FROM \"Booking\" WHERE 1=1");
-
+                    var commandText = new StringBuilder(@"SELECT * FROM ""Booking"" WHERE 1 = 1");
                     ApplyFilters(cmd, commandText, filter);
 
+           
                     ApplySorting(cmd, commandText, sorting);
-
                     ApplyPaging(cmd, commandText, paging);
 
                     cmd.CommandText = commandText.ToString();
@@ -42,11 +53,16 @@ namespace CarGo.Repository
             return bookings;
         }
 
+
+
+
+
+
         private void ApplySorting(NpgsqlCommand cmd, StringBuilder commandText, BookingSorting sorting)
         {
             if (!string.IsNullOrEmpty(sorting.OrderBy))
             {
-                var direction = sorting.SortOrder.ToUpper() == "DESC" ? "DESC" : "ASC";
+                var direction = sorting.SortOrder.ToUpper();
                 commandText.Append($" ORDER BY \"{sorting.OrderBy}\" {direction}");
             }
         }
@@ -55,7 +71,7 @@ namespace CarGo.Repository
         {
             if (paging.PageNumber > 0)
             {
-                commandText.Append(" OFFSET @OFFSET FETCH NEXT @ROWS ROWS ONLY;");
+                commandText.Append(" OFFSET @OFFSET LIMIT @ROWS");
                 cmd.Parameters.AddWithValue("@OFFSET", (paging.PageNumber - 1) * paging.Rpp);
                 cmd.Parameters.AddWithValue("@ROWS", paging.Rpp);
             }
@@ -80,13 +96,43 @@ namespace CarGo.Repository
                 commandText.Append(" AND \"CompanyVehicleId\" = @companyVehicleId");
                 cmd.Parameters.AddWithValue("@companyVehicleId", bookingFilter.CompanyVehicleId.Value);
             }
+
+            if (bookingFilter.StatusId.HasValue)
+            {
+                commandText.Append(" AND \"StatusId\" = @statusId");
+                cmd.Parameters.AddWithValue("@statusId", bookingFilter.StatusId.Value);
+            }
+
+            if (bookingFilter.PickUpLocationId.HasValue)
+            {
+                commandText.Append(" AND \"PickUpLocationId\" = @pickUpLocationId");
+                cmd.Parameters.AddWithValue("@pickUpLocationId", bookingFilter.PickUpLocationId.Value);
+            }
+
+            if (bookingFilter.DropOffLocationId.HasValue)
+            {
+                commandText.Append(" AND \"DropOffLocationId\" = @dropOffLocationId");
+                cmd.Parameters.AddWithValue("@dropOffLocationId", bookingFilter.DropOffLocationId.Value);
+            }
+
+            if (bookingFilter.StartDate.HasValue)
+            {
+                commandText.Append(" AND \"StartDate\" >= @startDate");
+                cmd.Parameters.AddWithValue("@startDate", bookingFilter.StartDate.Value);
+            }
+
+            if (bookingFilter.EndDate.HasValue)
+            {
+                commandText.Append(" AND \"EndDate\" <= @endDate");
+                cmd.Parameters.AddWithValue("@endDate", bookingFilter.EndDate.Value);
+            }
         }
 
         public async Task<Booking?> GetBookingByIdAsync(Guid id)
         {
             string commandText = "SELECT * FROM \"Booking\" WHERE \"Id\" = @id";
 
-            using (var connection = new NpgsqlConnection(connectionString))
+            using (var connection = new NpgsqlConnection(_connectionString))
             {
                 connection.Open();
                 using (var cmd = new NpgsqlCommand(commandText, connection))
@@ -104,10 +150,10 @@ namespace CarGo.Repository
             return null;
         }
 
-        public async Task DeleteBookingAsync(Guid id)
+        public async Task SoftDeleteBookingAsync(Guid id)
         {
-            string commandText = "DELETE FROM \"Booking\" WHERE \"Id\" = @id";
-            using (var connection = new NpgsqlConnection(connectionString))
+            string commandText = "UPDATE \"Booking\" SET \"IsActive\" = FALSE WHERE  \"Id\" = @id";
+            using (var connection= new NpgsqlConnection(_connectionString))
             {
                 connection.Open();
                 using (var cmd = new NpgsqlCommand(commandText, connection))
@@ -120,19 +166,18 @@ namespace CarGo.Repository
 
         public async Task AddBookingAsync(Booking booking)
         {
-            string commandText = "INSERT INTO \"Booking\" (\"Id\",\"IsActive\", \"UserId\", \"CompanyVehicleId\", \"StartDate\", \"EndDate\", " +
+            string commandText = "INSERT INTO \"Booking\" (\"Id\", \"UserId\", \"CompanyVehicleId\", \"StartDate\", \"EndDate\", " +
                                  "\"TotalPrice\", \"StatusId\", \"PickUpLocationId\", \"DropOffLocationId\", \"CreatedByUserId\", \"UpdatedByUserId\") " +
-                                 "VALUES (@id,@isActive, @userId, @companyVehicleId, @startDate, @endDate, " +
+                                 "VALUES (@id, @userId, @companyVehicleId, @startDate, @endDate, " +
                                  "@totalPrice, @statusId, @pickUpLocationId, @dropOffLocationId, @createdByUserId, @updatedByUserId)";
 
-            using (var connection = new NpgsqlConnection(connectionString))
+            using (var connection = new NpgsqlConnection(_connectionString))
             {
                 await connection.OpenAsync();
 
                 using (var command = new NpgsqlCommand(commandText, connection))
                 {
                     command.Parameters.AddWithValue("@id", booking.Id);
-                    command.Parameters.AddWithValue("@isActive", booking.IsActive);
                     command.Parameters.AddWithValue("@userId", booking.UserId);
                     command.Parameters.AddWithValue("@companyVehicleId", booking.CompanyVehicleId);
                     command.Parameters.AddWithValue("@startDate", booking.StartDate);
@@ -165,7 +210,7 @@ namespace CarGo.Repository
                                  "\"DateUpdated\" = CURRENT_TIMESTAMP " +
                                  "WHERE \"Id\" = @id";
 
-            using (var connection = new NpgsqlConnection(connectionString))
+            using (var connection = new NpgsqlConnection(_connectionString))
             {
                 await connection.OpenAsync();
 

@@ -9,7 +9,7 @@ namespace CarGo.Repository.Common
 
         Task<Booking> GetBookingByIdAsync(Guid Id);
 
-        Task DeleteBookingAsync(Guid Id);
+        Task SoftDeleteBookingAsync(Guid Id);
 
         Task AddBookingAsync(Booking booking);
 
