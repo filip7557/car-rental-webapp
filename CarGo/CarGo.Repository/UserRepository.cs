@@ -21,9 +21,9 @@ namespace CarGo.Repository
                 using (var connection = new NpgsqlConnection(_connectionString))
                 {
                     string commandText = "INSERT INTO \"User\"" +
-                        " (\"Id\", \"FullName\", \"Email\", \"Password\", \"PhoneNumber\", \"RoleId\", \"CreatedByUserId\", \"UpdatedByUserId\")" +
+                        " (\"Id\", \"FullName\", \"Email\", \"Password\", \"PhoneNumber\", \"RoleId\")" +
                         " VALUES" +
-                        " (@id, @fullName, @email, @password, @phoneNumber, @roleId, @createdBy, @updatedBy)";
+                        " (@id, @fullName, @email, @password, @phoneNumber, @roleId)";
 
                     using var command = new NpgsqlCommand(commandText, connection);
 
@@ -33,8 +33,7 @@ namespace CarGo.Repository
                     command.Parameters.AddWithValue("password", user.Password!);
                     command.Parameters.AddWithValue("phoneNumber", user.PhoneNumber!);
                     command.Parameters.AddWithValue("roleId", user.RoleId!);
-                    command.Parameters.AddWithValue("createdBy", user.Id);
-                    command.Parameters.AddWithValue("updatedBy", user.Id);
+
 
                     connection.Open();
 

@@ -1,5 +1,6 @@
 ﻿using CarGo.Model;
 using CarGo.Service.Common;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CarGo.WebAPI.Controllers
@@ -17,6 +18,7 @@ namespace CarGo.WebAPI.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "User,Administrator,Manager")]
         public async Task<IActionResult> Get()
         {
             try
@@ -30,6 +32,7 @@ namespace CarGo.WebAPI.Controllers
             }
         }
         [HttpGet("{id}")]
+        [Authorize(Roles = "User,Administrator,Manager")]
         public async Task<IActionResult> GetById(Guid id)
         {
             try
@@ -47,6 +50,7 @@ namespace CarGo.WebAPI.Controllers
             }
         }
         [HttpPost("{id}")]
+        [Authorize(Roles = "Administrator,Manager")]
         public async Task<IActionResult> Post(Location location, Guid id)
         {
             try
@@ -68,6 +72,7 @@ namespace CarGo.WebAPI.Controllers
         
 
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Administrator,Manager")]
         public async Task<IActionResult> DeleteAsync(Guid id)
         {
             try
