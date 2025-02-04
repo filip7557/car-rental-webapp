@@ -31,7 +31,7 @@ namespace CarGo.WebAPI.Controllers
             var token = await _tokenService.Register(user);
             if (!string.IsNullOrWhiteSpace(token))
                 return Ok(token);
-            
+
             return BadRequest("Email is already in use.");
         }
     }

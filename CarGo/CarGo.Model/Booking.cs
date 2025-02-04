@@ -1,16 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace CarGo.Model
+﻿namespace CarGo.Model
 {
     public class Booking
     {
-      
         public Guid Id { get; set; }
 
         public bool IsActive { get; set; }
@@ -36,7 +27,5 @@ namespace CarGo.Model
         public Guid CreatedByUserId { get; set; }
 
         public Guid UpdatedByUserId { get; set; }
-
-
     }
 }

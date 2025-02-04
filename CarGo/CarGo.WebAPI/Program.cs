@@ -1,5 +1,4 @@
 using Autofac;
-using Autofac.Core;
 using Autofac.Extensions.DependencyInjection;
 using CarGo.Repository;
 using CarGo.Repository.Common;
@@ -22,6 +21,9 @@ builder.Host
         containerBuilder.RegisterType<TokenService>().As<ITokenService>();
         containerBuilder.RegisterType<BookingRepository>().As<IBookRepository>();
         containerBuilder.RegisterType<BookingService>().As<IBookService>();
+        //Register types
+        containerBuilder.RegisterType<ImageRepository>().As<IImageRepository>();
+        containerBuilder.RegisterType<ImageService>().As<IImageService>();
     });
 
 // Add services to the container.
@@ -53,11 +55,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-
-
-
 var app = builder.Build();
-
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
