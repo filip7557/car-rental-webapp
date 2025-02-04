@@ -91,8 +91,8 @@ namespace CarGo.Repository
 
                     ApplyFilters(cmd, commandText, filter);
 
+           
                     ApplySorting(cmd, commandText, sorting);
-
                     ApplyPaging(cmd, commandText, paging);
 
                     cmd.CommandText = commandText.ToString();
@@ -209,6 +209,36 @@ namespace CarGo.Repository
             }
         }
 
+            if (bookingFilter.StatusId.HasValue)
+            {
+                commandText.Append(" AND \"StatusId\" = @statusId");
+                cmd.Parameters.AddWithValue("@statusId", bookingFilter.StatusId.Value);
+            }
+
+            if (bookingFilter.PickUpLocationId.HasValue)
+            {
+                commandText.Append(" AND \"PickUpLocationId\" = @pickUpLocationId");
+                cmd.Parameters.AddWithValue("@pickUpLocationId", bookingFilter.PickUpLocationId.Value);
+            }
+
+            if (bookingFilter.DropOffLocationId.HasValue)
+            {
+                commandText.Append(" AND \"DropOffLocationId\" = @dropOffLocationId");
+                cmd.Parameters.AddWithValue("@dropOffLocationId", bookingFilter.DropOffLocationId.Value);
+            }
+
+            if (bookingFilter.StartDate.HasValue)
+            {
+                commandText.Append(" AND \"StartDate\" >= @startDate");
+                cmd.Parameters.AddWithValue("@startDate", bookingFilter.StartDate.Value);
+            }
+
+            if (bookingFilter.EndDate.HasValue)
+            {
+                commandText.Append(" AND \"EndDate\" <= @endDate");
+                cmd.Parameters.AddWithValue("@endDate", bookingFilter.EndDate.Value);
+            }
+        }
 
         public async Task<Booking?> GetBookingByIdAsync(Guid id)
         {

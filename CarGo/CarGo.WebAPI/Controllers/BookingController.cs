@@ -21,7 +21,6 @@ namespace CarGo.WebAPI.Controllers
         }
 
 
-
         [HttpGet]
         public async Task<IActionResult> GetBookingsAsync(
             string orderBy = "Id",
