@@ -56,17 +56,50 @@ namespace CarGo.Repository
             }
         }
 
-        public async Task<List<CompanyVehicleMaintenance>> GetMaintenancesByCompanyVehicleIdAsync(Guid companyVehicleId, Paging paging)
+        public async Task<bool> DeleteCompanyVehicleMaintenanceByIdAsync(Guid maintenanceId, Guid userId)
+        {
+            try
+            {
+                using (var connection = new NpgsqlConnection(_connectionString))
+                {
+                    string commandText = "UPDATE \"CompanyVehicleMaintenance\" set \"IsActive\" = @value, \"UpdatedByUserId\" = @userId WHERE \"Id\" = @id";
+                    using var command = new NpgsqlCommand(commandText, connection);
+
+                    command.Parameters.AddWithValue("value", false);
+                    command.Parameters.AddWithValue("userId", userId);
+                    command.Parameters.AddWithValue("id", maintenanceId);
+
+                    connection.Open();
+
+                    var affectedRows = await command.ExecuteNonQueryAsync();
+                    if (affectedRows == 0)
+                    {
+                        connection.Close();
+                        return false;
+                    }
+
+                    return true;
+                }
+            }
+            catch (Exception ex)
+            { 
+                Console.WriteLine("Exception: " + ex.Message);
+                return false;
+            }
+        }
+
+        public async Task<List<CompanyVehicleMaintenance>> GetMaintenancesByCompanyVehicleIdAsync(Guid companyVehicleId, Paging paging, bool isActiveFilter)
         {
             var maintenances = new List<CompanyVehicleMaintenance>();
             try
             {
                 using (var connection = new NpgsqlConnection(_connectionString))
                 {
-                    string commandText = "SELECT \"Id\", \"CompanyVehicleId\", \"Title\", \"Description\" \"DateCreated\" FROM \"CompanyVehicleMaintenance\" WHERE \"CompanyVehicleId\" = @companyVehId ORDER BY \"DateCreated\" DESC LIMIT @rpp OFFSET (@pageNumber - 1) * @rpp";
+                    string commandText = $"SELECT \"Id\", \"CompanyVehicleId\", \"Title\", \"Description\" \"DateCreated\" FROM \"CompanyVehicleMaintenance\" WHERE \"CompanyVehicleId\" = @companyVehId{(!isActiveFilter ? " AND \"IsActive = @isActive" : "")} ORDER BY \"DateCreated\" DESC LIMIT @rpp OFFSET (@pageNumber - 1) * @rpp";
                     using var command = new NpgsqlCommand(commandText, connection);
 
                     command.Parameters.AddWithValue("companyVehId", NpgsqlTypes.NpgsqlDbType.Uuid, companyVehicleId);
+                    command.Parameters.AddWithValue("isActive", true);
                     command.Parameters.AddWithValue("rpp", paging.Rpp);
                     command.Parameters.AddWithValue("pageNumber", paging.PageNumber);
 

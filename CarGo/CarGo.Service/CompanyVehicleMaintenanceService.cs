@@ -19,6 +19,11 @@ namespace CarGo.Service
             return await _companyVehicleMaintenanceRepository.SaveCompanyVehicleMaintenanceAsync(maintenance, createdByUserId);
         }
 
+        public async Task<bool> DeleteCompanyVehicleMaintenanceByIdAsync(Guid maintenanceId, Guid userId, bool isActiveFilter)
+        {
+            return await _companyVehicleMaintenanceRepository.DeleteCompanyVehicleMaintenanceByIdAsync(maintenanceId, userId, isActiveFilter);
+        }
+
         public async Task<PagedResponse<CompanyVehicleMaintenance>> GetMaintenancesByCompanyVehicleIdAsync(Guid companyVehicleId, Paging paging)
         {
             var maintenances = await _companyVehicleMaintenanceRepository.GetMaintenancesByCompanyVehicleIdAsync(companyVehicleId, paging);

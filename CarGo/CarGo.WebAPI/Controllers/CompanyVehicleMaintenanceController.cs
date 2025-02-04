@@ -1,7 +1,9 @@
 ﻿using CarGo.Common;
 using CarGo.Model;
 using CarGo.Service.Common;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace CarGo.WebAPI.Controllers
 {
@@ -16,11 +18,12 @@ namespace CarGo.WebAPI.Controllers
             _companyVehicleMaintenanceService = companyVehicleMaintenanceService;
         }
 
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> SaveAsync(CompanyVehicleMaintenance maintenance)
         {
-            // TODO: Get currently logged in user id.
-            var success = await _companyVehicleMaintenanceService.SaveCompanyVehicleMaintenanceAsync(maintenance, Guid.Empty);
+            var userId = Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+            var success = await _companyVehicleMaintenanceService.SaveCompanyVehicleMaintenanceAsync(maintenance, userId);
             if (success)
             {
                 return Ok("Saved.");
@@ -28,15 +31,31 @@ namespace CarGo.WebAPI.Controllers
             return BadRequest("Invalid data.");
         }
 
+        [Authorize]
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteByIdAsync(Guid id)
+        {
+            var userId = Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+            var success = await _companyVehicleMaintenanceService.DeleteCompanyVehicleMaintenanceByIdAsync(id, userId);
+            if (success)
+            {
+                return Ok("Deleted.");
+            }
+            return BadRequest();
+        }
+
+        [Authorize]
         [HttpGet]
-        public async Task<IActionResult> GetByIdAsync(Guid id, int rpp = 10, int pageNumber = 1)
+        public async Task<IActionResult> GetByCompanyVehicleIdAsync(Guid id, int rpp = 10, int pageNumber = 1)
         {
             var paging = new Paging
             {
                 Rpp = rpp,
                 PageNumber = pageNumber
             };
-            var response = await _companyVehicleMaintenanceService.GetMaintenancesByCompanyVehicleIdAsync(id, paging);
+            var role = User.FindFirst(ClaimTypes.Role)!.Value;
+            var isActiveFilter = role.Equals("Administrator");
+            var response = await _companyVehicleMaintenanceService.GetMaintenancesByCompanyVehicleIdAsync(id, paging, isActiveFilter);
             if (response.Data.Count == 0)
                 return BadRequest();
             return Ok(response);
