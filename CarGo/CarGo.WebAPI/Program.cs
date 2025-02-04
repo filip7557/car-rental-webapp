@@ -1,6 +1,7 @@
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using CarGo.Common;
+using CarGo.Model;
 using CarGo.Repository;
 using CarGo.Repository.Common;
 using CarGo.Service;
@@ -10,6 +11,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
+
 
 builder.Host
     .UseServiceProviderFactory(new AutofacServiceProviderFactory())
@@ -22,7 +24,8 @@ builder.Host
         containerBuilder.RegisterType<TokenService>().As<ITokenService>();
         containerBuilder.RegisterType<BookingRepository>().As<IBookRepository>();
         containerBuilder.RegisterType<BookingService>().As<IBookService>();
-        //Register types
+        containerBuilder.RegisterType<LocationService>().As<ILocationService>();
+        containerBuilder.RegisterType<LocationRepository>().As<ILocationRepository>();
         containerBuilder.RegisterType<ImageRepository>().As<IImageRepository>();
         containerBuilder.RegisterType<ImageService>().As<IImageService>();
         containerBuilder.RegisterType<CompanyVehicleMaintenanceRepository>().As<ICompanyVehicleMaintenanceRepository>();
