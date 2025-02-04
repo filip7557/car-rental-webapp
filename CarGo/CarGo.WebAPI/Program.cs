@@ -15,8 +15,9 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Host
     .UseServiceProviderFactory(new AutofacServiceProviderFactory())
-    .ConfigureContainer<ContainerBuilder>(containerBuilder =>
+    .ConfigureContainer<ContainerBuilder>((containerBuilder) =>
     {
+
         containerBuilder.RegisterType<UserRepository>().As<IUserRepository>();
         containerBuilder.RegisterType<UserService>().As<IUserService>();
         containerBuilder.RegisterType<RoleRepository>().As<IRoleRepository>();
@@ -42,6 +43,10 @@ builder.Host
         containerBuilder.RegisterType<VehicleStatusService>().As<IVehicleStatusService>();
         containerBuilder.RegisterType<VehicleTypeRepository>().As<IVehicleTypeRepository>();
         containerBuilder.RegisterType<VehicleTypeService>().As<IVehicleTypeService>();
+        containerBuilder.RegisterType<CompanyService>().As<ICompanyService>();
+        containerBuilder.RegisterType<CompanyRepository>().As<ICompanyRepository>();
+        containerBuilder.RegisterType<CompanyRequestService>().As<ICompanyRequestService>();
+        containerBuilder.RegisterType<CompanyRequestRepostiroy>().As<ICompanyRequestRepository>();
     });
 
 // Add services to the container.
