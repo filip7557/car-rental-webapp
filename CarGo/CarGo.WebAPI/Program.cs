@@ -11,6 +11,7 @@ using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
+
 builder.Host
     .UseServiceProviderFactory(new AutofacServiceProviderFactory())
     .ConfigureContainer<ContainerBuilder>(containerBuilder =>
@@ -22,7 +23,8 @@ builder.Host
         containerBuilder.RegisterType<TokenService>().As<ITokenService>();
         containerBuilder.RegisterType<BookingRepository>().As<IBookRepository>();
         containerBuilder.RegisterType<BookingService>().As<IBookService>();
-        //Register types
+        containerBuilder.RegisterType<LocationService>().As<ILocationService>();
+        containerBuilder.RegisterType<LocationRepository>().As<ILocationRepository>();
         containerBuilder.RegisterType<ImageRepository>().As<IImageRepository>();
         containerBuilder.RegisterType<ImageService>().As<IImageService>();
         containerBuilder.RegisterType<CompanyVehicleMaintenanceRepository>().As<ICompanyVehicleMaintenanceRepository>();
