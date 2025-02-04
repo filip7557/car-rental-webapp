@@ -18,7 +18,7 @@ namespace CarGo.WebAPI.Controllers
         [HttpGet("login")]
         public async Task<IActionResult> Login(string email, string password)
         {
-            var token = await _tokenService.Login(email, password);
+            var token = await _tokenService.LoginAsync(email, password);
             if (!string.IsNullOrWhiteSpace(token))
                 return Ok(token);
 
@@ -28,9 +28,9 @@ namespace CarGo.WebAPI.Controllers
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] User user)
         {
-            var token = await _tokenService.Register(user);
-            if (!string.IsNullOrWhiteSpace(token))
-                return Ok(token);
+            var success = await _tokenService.RegisterAsync(user);
+            if (success)
+                return Ok("Registered.");
 
             return BadRequest("Email is already in use.");
         }

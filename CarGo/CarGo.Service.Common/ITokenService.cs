@@ -4,8 +4,8 @@ namespace CarGo.Service.Common
 {
     public interface ITokenService
     {
-        public Task<string> Register(User user);
+        public Task<bool> RegisterAsync(User user);
 
-        public Task<string> Login(string email, string password);
+        public Task<string> LoginAsync(string email, string password);
     }
 }

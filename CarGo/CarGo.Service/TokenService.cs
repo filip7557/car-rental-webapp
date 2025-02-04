@@ -46,10 +46,10 @@ namespace CarGo.Service
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
-        public async Task<string> Register(User user)
+        public async Task<bool> RegisterAsync(User user)
         {
             if (await _userService.GetUserByEmailAsync(user.Email) != null)
-                return "";
+                return false;
 
             string hashedPassword = HashPassword(user.Password!);
 
@@ -59,9 +59,7 @@ namespace CarGo.Service
 
             await _userService.RegisterUserAsync(user);
 
-            var token = await GenerateTokenAsync(user);
-
-            return token;
+            return true;
         }
 
         private string HashPassword(string password)
@@ -71,7 +69,7 @@ namespace CarGo.Service
             return Convert.ToBase64String(hashedBytes);
         }
 
-        public async Task<string> Login(string email, string password)
+        public async Task<string> LoginAsync(string email, string password)
         {
             var user = await _userService.GetUserByEmailAndPasswordAsync(email, HashPassword(password));
             if (user != null)
