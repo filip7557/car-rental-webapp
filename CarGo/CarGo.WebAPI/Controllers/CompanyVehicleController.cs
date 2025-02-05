@@ -1,0 +1,149 @@
+﻿using System.ComponentModel.Design;
+using System.Drawing;
+using CarGo.Common;
+using CarGo.Model;
+using CarGo.Service.Common;
+using Microsoft.AspNetCore.Mvc;
+
+namespace CarGo.WebAPI.Controllers
+{
+    [Route("api/[controller]")]
+    [ApiController]
+    public class CompanyVehicleController : ControllerBase
+    {
+        private readonly ICompanyVehicleService _service;
+
+        public CompanyVehicleController(ICompanyVehicleService service)
+        {
+            _service = service;
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetCompanyVehiclesAsync(
+            string orderBy = "Id",
+            string sortOrder = "asc",
+            int pageNumber = 1,
+            int rpp = 10,
+            bool? isActive = null,
+            Guid? compId = null,
+            Guid? vehiCompId = null,
+            Guid? colorId = null,
+            bool? isOper = null,
+            Guid? locId = null)
+        {
+            try
+            {
+                var filter = new CompanyVehicleFilter
+                {
+                    IsActive = isActive,
+                    CompanyId = compId,
+                    VehicleModelId = vehiCompId,
+                    ColorId = colorId,
+                    IsOperational = isOper,
+                    CurrentLocationId = locId
+                };
+
+                var sorting = new BookingSorting
+                {
+                    OrderBy = orderBy,
+                    SortOrder = sortOrder
+                };
+
+                var paging = new Paging
+                {
+                    PageNumber = pageNumber,
+                    Rpp = rpp
+                };
+
+                var vehicles = await _service.GetAllCompanyVehiclesAsync(sorting, paging, filter);
+
+                return vehicles.Count > 0 ? Ok(vehicles) : NotFound("Nema dostupnih vozila");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Greška pri dohvaćanju vozila: {ex.Message}");
+            }
+        }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetCompanyVehicleByIdAsync(Guid id)
+        {
+            try
+            {
+                var vehicle = await _service.GetCompanyVehicleByIdAsync(id);
+
+                return vehicle != null ? Ok(vehicle) : NotFound("Vozilo nije pronađeno");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Greška pri dohvaćanju vozila: {ex.Message}");
+            }
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteCompanyVehicle(Guid id)
+        {
+            try
+            {
+                var existingVehicle = await _service.GetCompanyVehicleByIdAsync(id);
+                if (existingVehicle == null)
+                {
+                    return NotFound($"Vozilo s Id={id} ne postoji");
+                }
+
+                await _service.DeleteCompanyVehicleAsync(id);
+                return Ok("Vozilo je uspješno obrisano");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Greška pri brisanju vozila: {ex.Message}");
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddCompanyVehicleAsync(CompanyVehicle vehicle)
+        {
+            try
+            {
+                if (vehicle == null)
+                {
+                    return BadRequest("Podaci o vozilu su neispravni");
+                }
+                if (vehicle.Id == Guid.Empty)
+                {
+                    vehicle.Id = Guid.NewGuid();
+                }
+                await _service.AddCompanyVehicleAsync(vehicle);
+                return Ok("Vozilo je uspješno dodano");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Greška pri dodavanju vozila: {ex.Message}");
+            }
+        }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateCompanyVehicleAsync(Guid id, CompanyVehicle updatedVehicle)
+        {
+            if (updatedVehicle == null)
+            {
+                return BadRequest("Podaci o vozilu su neispravni");
+            }
+
+            try
+            {
+                var existingVehicle = await _service.GetCompanyVehicleByIdAsync(id);
+                if (existingVehicle == null)
+                {
+                    return NotFound($"Vozilo s Id={id} ne postoji");
+                }
+                await _service.UpdateCompanyVehicleAsync(id, updatedVehicle);
+                return Ok("Vozilo je uspješno ažurirano");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Greška pri ažuriranju vozila: {ex.Message}");
+            }
+        }
+    }
+}
