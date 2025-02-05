@@ -48,6 +48,8 @@ builder.Host
         containerBuilder.RegisterType<CompanyRequestRepostiroy>().As<ICompanyRequestRepository>();
         containerBuilder.RegisterType<UserCompanyService>().As<IUserCompanyService>();
         containerBuilder.RegisterType<UserCompanyRepository>().As<IUserCompanyRepository>();
+        containerBuilder.RegisterType<ManagerRepository>().As<IManagerRepository>();
+        containerBuilder.RegisterType<ManagerService>().As<IManagerService>();
 
     });
 
