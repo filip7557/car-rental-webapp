@@ -5,16 +5,16 @@ namespace CarGoAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class CarGoRoleController : ControllerBase
+    public class RoleController : ControllerBase
     {
         private IRoleService _service;
 
-        public CarGoRoleController(IRoleService carGoService)
+        public RoleController(IRoleService roleService)
         {
-            _service = carGoService;
+            _service = roleService;
         }
 
-        [HttpGet("roles")]
+        [HttpGet]
         public async Task<IActionResult> GetAllAsync()
         {
             var roles = await _service.GetAllAsync();
@@ -25,7 +25,7 @@ namespace CarGoAPI.Controllers
             return Ok(roles);
         }
 
-        [HttpGet("{roles-id}")]
+        [HttpGet("{id}")]
         public async Task<IActionResult> GetByIdAsync(Guid id)
         {
             var rolesId = await _service.GetByIdAsync(id);

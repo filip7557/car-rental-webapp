@@ -7,6 +7,8 @@ using CarGo.Service;
 using CarGo.Service.Common;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using Repository;
+using Service;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -30,6 +32,16 @@ builder.Host
         containerBuilder.RegisterType<CompanyVehicleMaintenanceService>().As<ICompanyVehicleMaintenanceService>();
         containerBuilder.RegisterType<NotificationRepository>().As<INotificationRepository>();
         containerBuilder.RegisterType<NotificationService>().As<INotificationService>();
+        containerBuilder.RegisterType<CarColorRepository>().As<ICarColorRepository>();
+        containerBuilder.RegisterType<CarColorService>().As<ICarColorService>();
+        containerBuilder.RegisterType<VehicleMakeRepository>().As<IVehicleMakeRepository>();
+        containerBuilder.RegisterType<VehicleMakeService>().As<IVehicleMakeService>();
+        containerBuilder.RegisterType<VehicleModelRepository>().As<IVehicleModelRepository>();
+        containerBuilder.RegisterType<VehicleModelService>().As<IVehicleModelService>();
+        containerBuilder.RegisterType<VehicleStatusRepository>().As<IVehicleStatusRepository>();
+        containerBuilder.RegisterType<VehicleStatusService>().As<IVehicleStatusService>();
+        containerBuilder.RegisterType<VehicleTypeRepository>().As<IVehicleTypeRepository>();
+        containerBuilder.RegisterType<VehicleTypeService>().As<IVehicleTypeService>();
     });
 
 // Add services to the container.

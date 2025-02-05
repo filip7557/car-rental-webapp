@@ -4,21 +4,21 @@ using CarGo.Repository.Common;
 
 namespace Service
 {
-    public class VehicleMakesService : IVehicleMakesService
+    public class VehicleMakeService : IVehicleMakeService
     {
-        private IVehicleMakesRepository _vehicleMakesRepository;
+        private IVehicleMakeRepository _vehicleMakesRepository;
 
-        public VehicleMakesService(IVehicleMakesRepository repository)
+        public VehicleMakeService(IVehicleMakeRepository repository)
         {
             _vehicleMakesRepository = repository;
         }
 
-        public async Task<List<VehicleMakes>?> GetAllAsync()
+        public async Task<List<VehicleMake>?> GetAllAsync()
         {
             return await _vehicleMakesRepository.GetAllAsync();
         }
 
-        public async Task<VehicleMakes?> GetByIdAsync(Guid id)
+        public async Task<VehicleMake?> GetByIdAsync(Guid id)
         {
             return await _vehicleMakesRepository.GetByIdAsync(id);
         }

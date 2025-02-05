@@ -1,4 +1,6 @@
-﻿namespace CarGo.Repository.Common
+﻿using CarGo.Model;
+
+namespace CarGo.Repository.Common
 {
     public interface IRoleRepository
     {
@@ -6,7 +8,7 @@
 
         public Task<string> GetRoleNameByIdAsync(Guid roleId);
         
-        public Task<List<Role>> GetAllAsync();
+        public Task<List<Role>?> GetAllAsync();
 
         public Task<Role?> GetByIdAsync(Guid id);
     }

@@ -37,47 +37,53 @@ namespace CarGo.Repository
                             Id = Guid.Parse(reader[0].ToString()!),
                             Name = reader[1].ToString()!
                         };
+                    }
 
-                        connection.Close();
+                    connection.Close();
 
                     return role!.Id;
-                    }
-                    }
+                }
+            }
             catch (Exception ex)
             {
                 Console.WriteLine("Exception: " + ex.ToString());
                 return Guid.Empty;
             }
+        }
 
 
 
-//GET ALL
-        public async Task<List<Role>> GetAllAsync()
+        //GET ALL
+        public async Task<List<Role>?> GetAllAsync()
         {
             var roles = new List<Role>();
 
             try
             {
-                using (var connection = new NpgsqlConnection(connectionString))
+                using (var connection = new NpgsqlConnection(_connectionString))
                 {
                     var commandText = "SELECT \"Id\", \"Name\"" +
                                       "FROM \"Role\"";
 
                     using var command = new NpgsqlCommand(commandText, connection);
 
+                    connection.Open();
+                    var reader = await command.ExecuteReaderAsync();
+                    if (reader.HasRows)
+                    {
+
                         while (await reader.ReadAsync())
                         {
                             var role = new Role()
                             {
-                                ID = Guid.Parse(reader[0].ToString()!),
+                                Id = Guid.Parse(reader[0].ToString()!),
                                 Name = reader[1].ToString()!,
                             };
 
                             roles.Add(role);
                         }
+                        return roles;
                     }
-
-                    return roles;
 
 
                     else
@@ -86,8 +92,9 @@ namespace CarGo.Repository
                         return null;
                     }
                 }
+            }
 
-                catch (Exception)
+            catch (Exception)
             {
                 return null;
             }
@@ -104,7 +111,7 @@ namespace CarGo.Repository
                     using var command = new NpgsqlCommand(commandText, connection);
 
                     command.Parameters.AddWithValue("id", NpgsqlTypes.NpgsqlDbType.Uuid, roleId);
-                    
+
                     connection.Open();
 
                     var reader = await command.ExecuteReaderAsync();
@@ -128,18 +135,17 @@ namespace CarGo.Repository
             {
                 Console.WriteLine("Exception: " + ex.ToString());
                 return "";
-                }
-        }
             }
+        }
 
-//GET BY ID
+        //GET BY ID
         public async Task<Role?> GetByIdAsync(Guid id)
         {
             try
             {
-                var role = new Role() { };
+                Role? role = null;
 
-                using (var connection = new NpgsqlConnection(connectionString))
+                using (var connection = new NpgsqlConnection(_connectionString))
                 {
                     var commandText = "SELECT " +
                                       "\"Role\".\"Id\", \"Name\"" +
@@ -151,9 +157,11 @@ namespace CarGo.Repository
 
                     connection.Open();
 
-                    
+                    var reader = await command.ExecuteReaderAsync();
+                    if (reader.HasRows)
+                    {
                         reader.Read();
-                        role.ID = Guid.Parse(reader[0].ToString()!);
+                        role.Id = Guid.Parse(reader[0].ToString()!);
                         role.Name = reader[1].ToString()!;
                     }
 
@@ -168,7 +176,7 @@ namespace CarGo.Repository
                     return role;
 
                 }
-        }
+            }
 
             catch (Exception)
             {
@@ -176,3 +184,4 @@ namespace CarGo.Repository
             }
         }
     }
+}

@@ -8,9 +8,9 @@ namespace CarGoAPI.Controllers
     [ApiController]
     public class VehicleMakesController : ControllerBase
     {
-        private IVehicleMakesService _service;
+        private IVehicleMakeService _service;
 
-        public VehicleMakesController(IVehicleMakesService carGoService)
+        public VehicleMakesController(IVehicleMakeService carGoService)
         {
             _service = carGoService;
         }

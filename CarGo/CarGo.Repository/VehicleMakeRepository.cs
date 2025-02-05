@@ -4,14 +4,14 @@ using Npgsql;
 
 namespace Repository
 {
-    public class VehicleMakesRepository : IVehicleMakesRepository
+    public class VehicleMakeRepository : IVehicleMakeRepository
     {
         private readonly string connectionString = "";
 
 //GET ALL
-        public async Task<List<VehicleMakes>> GetAllAsync()
+        public async Task<List<VehicleMake>> GetAllAsync()
         {
-            var vehicleMakes = new List<VehicleMakes>();
+            var vehicleMakes = new List<VehicleMake>();
 
             try
             {
@@ -29,7 +29,7 @@ namespace Repository
                     {
                         while (await reader.ReadAsync())
                         {
-                            var vehicleMake = new VehicleMakes()
+                            var vehicleMake = new VehicleMake()
                             {
                                 ID = Guid.Parse(reader[0].ToString()!),
                                 Name = reader[1].ToString()!,
@@ -56,11 +56,11 @@ namespace Repository
         }
 
 //GET BY ID
-        public async Task<VehicleMakes?> GetByIdAsync(Guid id)
+        public async Task<VehicleMake?> GetByIdAsync(Guid id)
         {
             try
             {
-                var vehicleMake = new VehicleMakes() { };
+                var vehicleMake = new VehicleMake() { };
 
                 using (var connection = new NpgsqlConnection(connectionString))
                 {
