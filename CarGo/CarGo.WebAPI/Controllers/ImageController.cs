@@ -24,10 +24,21 @@ namespace CarGo.WebAPI.Controllers
             if (image == null)
                 return BadRequest();
 
-            // TODO: Get current logged in user.
             var userId = Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
 
             var success = await _imageService.SaveImageAsync(image, userId);
+            if (success)
+                return Ok("Saved.");
+            return BadRequest();
+        }
+
+        [Authorize]
+        [HttpPost]
+        public async Task<IActionResult> SaveImagesAsync(List<ImageDTO> images)
+        {
+            if (!images.Any()) return BadRequest();
+            var userId = Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+            var success = await _imageService.SaveImagesAsync(images, userId);
             if (success)
                 return Ok("Saved.");
             return BadRequest();

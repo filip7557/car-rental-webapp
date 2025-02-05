@@ -24,6 +24,16 @@ namespace CarGo.Service
             return await _imageRepository.SaveImageAsync(image, createdByUserId);
         }
 
+        public async Task<bool> SaveImagesAsync(List<ImageDTO> images, Guid createdByUserId)
+        {
+            var results = new List<bool>();
+            foreach (var image in images)
+            {
+                results.Add(await SaveImageAsync(image, createdByUserId));
+            }
+            return !results.Any(p => p == false);
+        }
+
         public async Task<List<Guid>> GetImageIdsByDamageReportAsync(Guid damageReportId)
         {
             return await _imageRepository.GetImageIdsByDamageReportIdAsync(damageReportId);

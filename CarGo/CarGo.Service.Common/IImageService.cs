@@ -11,5 +11,6 @@ namespace CarGo.Service.Common
         public Task<Image?> GetImageByIdAsync(Guid imageId);
 
         public Task<bool> DeleteImageByIdAsync(Guid imageId);
+        public Task<bool> SaveImagesAsync(List<ImageDTO> images, Guid userId);
     }
 }
