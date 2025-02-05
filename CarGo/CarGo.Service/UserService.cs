@@ -18,7 +18,6 @@ namespace CarGo.Service
         public async Task<bool> RegisterUserAsync(User user)
         {
             user.Id = Guid.NewGuid();
-            // TODO: Fetch user role Id from database.
             return await _userRepository.RegisterUserAsync(user);
         }
 

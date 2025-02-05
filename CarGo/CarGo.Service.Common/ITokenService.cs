@@ -7,5 +7,9 @@ namespace CarGo.Service.Common
         public Task<bool> RegisterAsync(UserDTO user);
 
         public Task<string> LoginAsync(string email, string password);
+
+        public Guid GetCurrentUserId();
+
+        public string GetCurrentUserRoleName();
     }
 }

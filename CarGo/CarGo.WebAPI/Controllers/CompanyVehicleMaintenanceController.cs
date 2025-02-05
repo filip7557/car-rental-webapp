@@ -26,7 +26,7 @@ namespace CarGo.WebAPI.Controllers
         {
             var userId = Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
             var roleName = User.FindFirst(ClaimTypes.Role)!.Value; //Equals
-            var success = await _companyVehicleMaintenanceService.SaveCompanyVehicleMaintenanceAsync(maintenance, userId);
+            var success = await _companyVehicleMaintenanceService.SaveCompanyVehicleMaintenanceAsync(maintenance);
             if (success)
             {
                 return Ok("Saved.");
@@ -39,7 +39,7 @@ namespace CarGo.WebAPI.Controllers
         public async Task<IActionResult> DeleteByIdAsync(Guid id)
         {
             var userId = Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
-            var success = await _companyVehicleMaintenanceService.DeleteCompanyVehicleMaintenanceByIdAsync(id, userId);
+            var success = await _companyVehicleMaintenanceService.DeleteCompanyVehicleMaintenanceByIdAsync(id);
             if (success)
             {
                 return Ok("Deleted.");
@@ -56,9 +56,7 @@ namespace CarGo.WebAPI.Controllers
                 Rpp = rpp,
                 PageNumber = pageNumber
             };
-            var role = User.FindFirst(ClaimTypes.Role)!.Value;
-            var isActiveFilter = role.Equals("Administrator");
-            var response = await _companyVehicleMaintenanceService.GetMaintenancesByCompanyVehicleIdAsync(id, paging, isActiveFilter);
+            var response = await _companyVehicleMaintenanceService.GetMaintenancesByCompanyVehicleIdAsync(id, paging);
             if (response.Data.Count == 0)
                 return BadRequest();
             return Ok(response);

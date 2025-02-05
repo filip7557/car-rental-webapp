@@ -8,10 +8,10 @@ namespace CarGo.Service.Common
 
         Task<Location> GetByIdAsync(Guid id);
 
-        Task<bool> PostAsync(Location entity, Guid id);
+        Task<bool> PostAsync(Location entity);
 
         //Task<bool> Put(Guid id);
 
-        Task<bool> DeleteAsync(Guid locationId, Guid id);
+        Task<bool> DeleteAsync(Guid locationId);
     }
 }

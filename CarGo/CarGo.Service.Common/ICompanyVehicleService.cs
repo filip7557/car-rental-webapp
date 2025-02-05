@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using CarGo.Common;
 using CarGo.Model;
 
@@ -14,9 +12,9 @@ namespace CarGo.Service.Common
 
         Task<CompanyVehicle> GetCompanyVehicleByIdAsync(Guid id);
 
-        Task AddCompanyVehicleAsync(CompanyVehicle companyVehicle, Guid userId);
+        Task AddCompanyVehicleAsync(CompanyVehicle companyVehicle);
 
-        Task UpdateCompanyVehicleAsync(Guid id, CompanyVehicle updatedCompanyVehicle, Guid userId);
+        Task UpdateCompanyVehicleAsync(Guid id, CompanyVehicle updatedCompanyVehicle);
 
         Task DeleteCompanyVehicleAsync(Guid id);
     }

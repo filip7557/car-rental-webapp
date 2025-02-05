@@ -122,7 +122,7 @@ namespace CarGo.WebAPI.Controllers
                     vehicle.Id = Guid.NewGuid();
                 }
                 var userId = Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
-                await _service.AddCompanyVehicleAsync(vehicle, userId);
+                await _service.AddCompanyVehicleAsync(vehicle);
                 return Ok("Vozilo je uspješno dodano");
             }
             catch (Exception ex)
@@ -148,7 +148,7 @@ namespace CarGo.WebAPI.Controllers
                     return NotFound($"Vozilo s Id={id} ne postoji");
                 }
                 var userId = Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
-                await _service.UpdateCompanyVehicleAsync(id, updatedVehicle, userId);
+                await _service.UpdateCompanyVehicleAsync(id, updatedVehicle);
                 return Ok("Vozilo je uspješno ažurirano");
             }
             catch (Exception ex)

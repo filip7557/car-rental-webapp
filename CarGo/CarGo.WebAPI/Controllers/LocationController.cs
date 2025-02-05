@@ -59,7 +59,7 @@ namespace CarGo.WebAPI.Controllers
                 if (location != null)
                 {
                     var userId = Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
-                    await _locationService.PostAsync(location, userId);
+                    await _locationService.PostAsync(location);
 
                     return Ok("Location of company added successfully.");
                 }
@@ -83,7 +83,7 @@ namespace CarGo.WebAPI.Controllers
                 if (location != null)
                 {
                     var userId = Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value); //(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
-                    await _locationService.DeleteAsync(locationId, userId);
+                    await _locationService.DeleteAsync(locationId);
                     return Ok("Location isActive status changed successfully.");
                 }
                 return NotFound("Location not found with the provided ID.");
