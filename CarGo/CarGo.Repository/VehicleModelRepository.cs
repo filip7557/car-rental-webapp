@@ -6,7 +6,7 @@ namespace Repository
 {
     public class VehicleModelRepository : IVehicleModelRepository
     {
-        private readonly string connectionString = "";
+        private readonly string connectionString = "ConnectionStrings__PostgresDb";
 
         //GET ALL
         public async Task<List<VehicleModel>> GetAllAsync()
@@ -104,5 +104,35 @@ namespace Repository
                 return null;
             }
         }
+
+        public async Task AddAsync(VehicleModel vehicleModel, Guid userId)
+        {
+            try
+            {
+                using (var connection = new NpgsqlConnection(connectionString))
+                {
+                    var commandText = "INSERT INTO \"VehicleModel\" (\"Id\", \"MakeID\", \"TypeID\", \"Name\", \"EnginePower\") " +
+                                      "VALUES (@id, @makeID, @typeID, @name, @enginePower);";
+
+                    using var command = new NpgsqlCommand(commandText, connection);
+                    command.Parameters.AddWithValue("id", NpgsqlTypes.NpgsqlDbType.Uuid, vehicleModel.ID);
+                    command.Parameters.AddWithValue("makeID", NpgsqlTypes.NpgsqlDbType.Integer, vehicleModel.MakeID);
+                    command.Parameters.AddWithValue("typeID", NpgsqlTypes.NpgsqlDbType.Integer, vehicleModel.TypeID);
+                    command.Parameters.AddWithValue("name", NpgsqlTypes.NpgsqlDbType.Text, vehicleModel.Name);
+                    command.Parameters.AddWithValue("enginePower", NpgsqlTypes.NpgsqlDbType.Integer, vehicleModel.EnginePower);
+                    command.Parameters.AddWithValue("createdByUserId", id);
+                    command.Parameters.AddWithValue("updatedByUserId", id);
+
+                    connection.Open();
+                    await command.ExecuteNonQueryAsync();
+                    connection.Close();
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error while adding vehicle model", ex);
+            }
+        }
+        public async Task DeleteAsync(Guid id) { }
     }
 }

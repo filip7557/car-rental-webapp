@@ -22,5 +22,8 @@ namespace Service
         {
             return await _vehicleModelRepository.GetByIdAsync(id);
         }
+        public async Task AddAsync(VehicleModel vehicleModel){}
+        public async Task DeleteAsync(Guid id){}
+
     }
 }
