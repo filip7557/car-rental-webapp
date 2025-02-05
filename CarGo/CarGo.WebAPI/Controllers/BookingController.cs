@@ -21,7 +21,7 @@ namespace CarGo.WebAPI.Controllers
         }
 
 
-      
+
         [HttpGet]
         public async Task<IActionResult> GetBookingsAsync(
             string orderBy = "Id",
@@ -35,7 +35,13 @@ namespace CarGo.WebAPI.Controllers
             Guid? pickUpLocationId =null,
             Guid? dropOffLocationId=null,
             Guid? userId = null,
-            Guid? companyVehicleId = null)
+            Guid? companyVehicleId = null,
+            string? bookingStatusName=null,
+            string? locationAddress=null,
+            string? vehicleMakeName=null,
+            string? vehicleModelName=null,
+            string? imageUrl=null
+            )
         {
 
             var userRole = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value;
@@ -58,7 +64,12 @@ namespace CarGo.WebAPI.Controllers
                     EndDate = endDate,
                     StatusId=statusId,
                     PickUpLocationId=pickUpLocationId,
-                    DropOffLocationId=dropOffLocationId
+                    DropOffLocationId=dropOffLocationId,
+                     BookingStatusName = bookingStatusName,
+                    LocationAddress = locationAddress,
+                    VehicleMakeName = vehicleMakeName,
+                    VehicleModelName = vehicleModelName,
+                    ImageUrl = imageUrl,
                 };
 
                 var sorting = new BookingSorting

@@ -17,5 +17,12 @@
 
         public Guid? DropOffLocationId { get; set; }
 
+
+        public string? BookingStatusName { get; set; }  
+        public string? LocationAddress { get; set; } 
+        public string? VehicleMakeName { get; set; }
+        public string? VehicleModelName { get; set; }
+        public string? ImageUrl { get; set; }  
+
     }
 }

@@ -31,11 +31,68 @@ namespace CarGo.Repository
                 {
                     cmd.Connection = connection;
 
-                    var commandText = new StringBuilder(@"SELECT * FROM ""Booking"" WHERE 1 = 1");
+                    var commandText = new StringBuilder(@"
+                    SELECT 
+                         b.*,
+                  
+                         
+                         bs.""Name"" AS ""BookingStatus"",
+         
+                  
+                         c.""Name"" AS ""CompanyName"",
+                         vm.""Name"" AS ""Model"",
+                         vmm.""Name"" AS ""Make"",
+                         vc.""Name"" AS ""Color"",
+                         cv.""DailyPrice"",
+                         cv.""PlateNumber"",
+                         cv.""ImageUrl"",
+         
+                      
+                         cl.""Address"" AS ""LocationAddress"",
+                         cl.""City"" AS ""LocationCity"",
+         
+                    
+                         u.""Id"" AS ""UserId"",
+                         u.""FullName"",
+                         u.""Email"",
+                         u.""PhoneNumber"",
+                         r.""Name"" AS ""UserRole""
+         
+                    FROM ""Booking"" b
+         
+                    JOIN ""BookingStatus"" bs 
+                         ON b.""StatusId"" = bs.""Id""
+         
+                    JOIN ""CompanyVehicle"" cv 
+                         ON b.""CompanyVehicleId"" = cv.""Id""
+         
+                    JOIN ""Company"" c
+                         ON cv.""CompanyId"" = c.""Id""
+         
+                    JOIN ""VehicleModel"" vm
+                         ON cv.""VehicleModelId"" = vm.""Id""
+         
+                    JOIN ""VehicleMake"" vmm
+                         ON vm.""MakeId"" = vmm.""Id""
+         
+                    JOIN ""VehicleColor"" vc
+                         ON cv.""ColorId"" = vc.""Id""
+         
+                    JOIN ""Location"" cl
+                         ON cv.""CurrentLocationId"" = cl.""Id""
+         
+                    JOIN ""User"" u
+                         ON b.""UserId"" = u.""Id""
+         
+                    JOIN ""Role"" r
+                         ON u.""RoleId"" = r.""Id""
+         
+                    WHERE 1 = 1");
+
                     ApplyFilters(cmd, commandText, filter);
 
-           
                     ApplySorting(cmd, commandText, sorting);
+
                     ApplyPaging(cmd, commandText, paging);
 
                     cmd.CommandText = commandText.ToString();
@@ -56,14 +113,12 @@ namespace CarGo.Repository
 
 
 
-
-
         private void ApplySorting(NpgsqlCommand cmd, StringBuilder commandText, BookingSorting sorting)
         {
             if (!string.IsNullOrEmpty(sorting.OrderBy))
             {
                 var direction = sorting.SortOrder.ToUpper();
-                commandText.Append($" ORDER BY \"{sorting.OrderBy}\" {direction}");
+                commandText.Append($" ORDER BY b.\"{sorting.OrderBy}\" {direction}");
             }
         }
 
@@ -81,52 +136,79 @@ namespace CarGo.Repository
         {
             if (bookingFilter.IsActive.HasValue)
             {
-                commandText.Append(" AND \"IsActive\" = @isActive");
+                commandText.Append(" AND b.\"IsActive\" = @isActive");
                 cmd.Parameters.AddWithValue("@isActive", bookingFilter.IsActive.Value);
             }
 
             if (bookingFilter.UserId.HasValue)
             {
-                commandText.Append(" AND \"UserId\" = @userId");
+                commandText.Append(" AND b.\"UserId\" = @userId");
                 cmd.Parameters.AddWithValue("@userId", bookingFilter.UserId.Value);
             }
 
             if (bookingFilter.CompanyVehicleId.HasValue)
             {
-                commandText.Append(" AND \"CompanyVehicleId\" = @companyVehicleId");
+                commandText.Append(" AND b.\"CompanyVehicleId\" = @companyVehicleId");
                 cmd.Parameters.AddWithValue("@companyVehicleId", bookingFilter.CompanyVehicleId.Value);
             }
 
             if (bookingFilter.StatusId.HasValue)
             {
-                commandText.Append(" AND \"StatusId\" = @statusId");
+                commandText.Append(" AND b.\"StatusId\" = @statusId");
                 cmd.Parameters.AddWithValue("@statusId", bookingFilter.StatusId.Value);
             }
 
             if (bookingFilter.PickUpLocationId.HasValue)
             {
-                commandText.Append(" AND \"PickUpLocationId\" = @pickUpLocationId");
+                commandText.Append(" AND b.\"PickUpLocationId\" = @pickUpLocationId");
                 cmd.Parameters.AddWithValue("@pickUpLocationId", bookingFilter.PickUpLocationId.Value);
             }
 
             if (bookingFilter.DropOffLocationId.HasValue)
             {
-                commandText.Append(" AND \"DropOffLocationId\" = @dropOffLocationId");
+                commandText.Append(" AND b.\"DropOffLocationId\" = @dropOffLocationId");
                 cmd.Parameters.AddWithValue("@dropOffLocationId", bookingFilter.DropOffLocationId.Value);
             }
 
             if (bookingFilter.StartDate.HasValue)
             {
-                commandText.Append(" AND \"StartDate\" >= @startDate");
+                commandText.Append(" AND b.\"StartDate\" >= @startDate");
                 cmd.Parameters.AddWithValue("@startDate", bookingFilter.StartDate.Value);
             }
 
             if (bookingFilter.EndDate.HasValue)
             {
-                commandText.Append(" AND \"EndDate\" <= @endDate");
+                commandText.Append(" AND b.\"EndDate\" <= @endDate");
                 cmd.Parameters.AddWithValue("@endDate", bookingFilter.EndDate.Value);
             }
+
+         
+
+            if (!string.IsNullOrWhiteSpace(bookingFilter.BookingStatusName))
+            {
+                commandText.Append(" AND bs.\"Name\" = @bookingStatusName");
+                cmd.Parameters.AddWithValue("@bookingStatusName",  bookingFilter.BookingStatusName );
+            }
+
+            if (!string.IsNullOrWhiteSpace(bookingFilter.VehicleMakeName))
+            {
+                commandText.Append(" AND vmm.\"Name\" = @vehicleMakeName");
+                cmd.Parameters.AddWithValue("@vehicleMakeName",  bookingFilter.VehicleMakeName );
+            }
+
+            if (!string.IsNullOrWhiteSpace(bookingFilter.VehicleModelName))
+            {
+                commandText.Append(" AND vm.\"Name\" = @vehicleModelName");
+                cmd.Parameters.AddWithValue("@vehicleModelName", bookingFilter.VehicleModelName);
+            }
+
+            if (!string.IsNullOrWhiteSpace(bookingFilter.ImageUrl))
+            {
+                commandText.Append(" AND cv.\"ImageUrl\" = @imageUrl");
+                cmd.Parameters.AddWithValue("@imageUrl",  bookingFilter.ImageUrl);
+            }
         }
+
 
         public async Task<Booking?> GetBookingByIdAsync(Guid id)
         {
