@@ -25,6 +25,7 @@ namespace CarGo.WebAPI.Controllers
         public async Task<IActionResult> SaveAsync(CompanyVehicleMaintenance maintenance)
         {
             var userId = Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+            var roleName = User.FindFirst(ClaimTypes.Role)!.Value; //Equals
             var success = await _companyVehicleMaintenanceService.SaveCompanyVehicleMaintenanceAsync(maintenance, userId);
             if (success)
             {
