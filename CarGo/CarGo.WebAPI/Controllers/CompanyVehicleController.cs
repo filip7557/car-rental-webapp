@@ -1,8 +1,10 @@
 ﻿using System.ComponentModel.Design;
 using System.Drawing;
+using System.Security.Claims;
 using CarGo.Common;
 using CarGo.Model;
 using CarGo.Service.Common;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CarGo.WebAPI.Controllers
@@ -17,7 +19,8 @@ namespace CarGo.WebAPI.Controllers
         {
             _service = service;
         }
-
+        
+        [Authorize(Roles ="User,Manager,Administrator")]
         [HttpGet]
         public async Task<IActionResult> GetCompanyVehiclesAsync(
             string orderBy = "Id",
@@ -66,6 +69,7 @@ namespace CarGo.WebAPI.Controllers
         }
 
         [HttpGet("{id}")]
+        [Authorize(Roles = "User,Manager,Administrator")]
         public async Task<IActionResult> GetCompanyVehicleByIdAsync(Guid id)
         {
             try
@@ -80,7 +84,9 @@ namespace CarGo.WebAPI.Controllers
             }
         }
 
+
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Administrator,Manager")]
         public async Task<IActionResult> DeleteCompanyVehicle(Guid id)
         {
             try
@@ -101,6 +107,7 @@ namespace CarGo.WebAPI.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Administrator,Manager")]
         public async Task<IActionResult> AddCompanyVehicleAsync(CompanyVehicle vehicle)
         {
             try
@@ -111,9 +118,11 @@ namespace CarGo.WebAPI.Controllers
                 }
                 if (vehicle.Id == Guid.Empty)
                 {
+                    
                     vehicle.Id = Guid.NewGuid();
                 }
-                await _service.AddCompanyVehicleAsync(vehicle);
+                var userId = Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+                await _service.AddCompanyVehicleAsync(vehicle, userId);
                 return Ok("Vozilo je uspješno dodano");
             }
             catch (Exception ex)
@@ -123,6 +132,7 @@ namespace CarGo.WebAPI.Controllers
         }
 
         [HttpPut("{id}")]
+        [Authorize(Roles = "Administrator, Manager")]
         public async Task<IActionResult> UpdateCompanyVehicleAsync(Guid id, CompanyVehicle updatedVehicle)
         {
             if (updatedVehicle == null)
@@ -137,7 +147,8 @@ namespace CarGo.WebAPI.Controllers
                 {
                     return NotFound($"Vozilo s Id={id} ne postoji");
                 }
-                await _service.UpdateCompanyVehicleAsync(id, updatedVehicle);
+                var userId = Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+                await _service.UpdateCompanyVehicleAsync(id, updatedVehicle, userId);
                 return Ok("Vozilo je uspješno ažurirano");
             }
             catch (Exception ex)

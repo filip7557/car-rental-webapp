@@ -1,4 +1,5 @@
-﻿using CarGo.Model;
+﻿using System.Security.Claims;
+using CarGo.Model;
 using CarGo.Service.Common;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -49,16 +50,16 @@ namespace CarGo.WebAPI.Controllers
                 return BadRequest(ex.Message);
             }
         }
-
-        [HttpPost("{id}")]
+        [HttpPost]
         [Authorize(Roles = "Administrator,Manager")]
-        public async Task<IActionResult> Post(Location location, Guid id)
+        public async Task<IActionResult> Post(Location location)
         {
             try
             {
                 if (location != null)
                 {
-                    await _locationService.PostAsync(location, id);
+                    var userId = Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+                    await _locationService.PostAsync(location, userId);
 
                     return Ok("Location of company added successfully.");
                 }
@@ -70,16 +71,20 @@ namespace CarGo.WebAPI.Controllers
             }
         }
 
-        [HttpDelete("{id}")]
+        
+
+        [HttpDelete("{locationId}")]
         [Authorize(Roles = "Administrator,Manager")]
-        public async Task<IActionResult> DeleteAsync(Guid id)
+        public async Task<IActionResult> DeleteAsync(Guid locationId)
         {
             try
             {
-                if (id != Guid.Empty)
+                var location =  await _locationService.GetByIdAsync(locationId);
+                if (location != null)
                 {
-                    await _locationService.DeleteAsync(id);
-                    return Ok("Location deleted successfully.");
+                    var userId = Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value); //(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+                    await _locationService.DeleteAsync(locationId, userId);
+                    return Ok("Location isActive status changed successfully.");
                 }
                 return NotFound("Location not found with the provided ID.");
             }

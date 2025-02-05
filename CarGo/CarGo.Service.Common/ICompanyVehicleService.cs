@@ -14,9 +14,9 @@ namespace CarGo.Service.Common
 
         Task<CompanyVehicle> GetCompanyVehicleByIdAsync(Guid id);
 
-        Task AddCompanyVehicleAsync(CompanyVehicle companyVehicle);
+        Task AddCompanyVehicleAsync(CompanyVehicle companyVehicle, Guid userId);
 
-        Task UpdateCompanyVehicleAsync(Guid id, CompanyVehicle updatedCompanyVehicle);
+        Task UpdateCompanyVehicleAsync(Guid id, CompanyVehicle updatedCompanyVehicle, Guid userId);
 
         Task DeleteCompanyVehicleAsync(Guid id);
     }

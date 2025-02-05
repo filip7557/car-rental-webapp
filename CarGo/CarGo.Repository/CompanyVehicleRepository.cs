@@ -12,7 +12,7 @@ namespace CarGo.Repository
 {
     public class CompanyVehicleRepository : ICompanyVehicleRepository
     {
-        private string connectionString = Environment.GetEnvironmentVariable("CONNECTION_STRING");
+        private string connectionString = Environment.GetEnvironmentVariable("ConnectionStrings__PostgresDb");
 
         public async Task<List<CompanyVehicle>> GetAllCompanyVehiclesAsync(BookingSorting sorting, Paging paging, CompanyVehicleFilter filter)
         {
@@ -43,7 +43,7 @@ namespace CarGo.Repository
             return vehicles;
         }
 
-        private void ApplySorting(NpgsqlCommand cmd, StringBuilder commandText, CompanyVehicleSorting sorting)
+        private void ApplySorting(NpgsqlCommand cmd, StringBuilder commandText, BookingSorting sorting)
         {
             if (!string.IsNullOrEmpty(sorting.OrderBy))
             {
@@ -52,7 +52,7 @@ namespace CarGo.Repository
             }
         }
 
-        private void ApplyPaging(NpgsqlCommand cmd, StringBuilder commandText, CompanyVehiclePaging paging)
+        private void ApplyPaging(NpgsqlCommand cmd, StringBuilder commandText, Paging paging)
         {
             if (paging.PageNumber > 0)
             {
@@ -107,7 +107,7 @@ namespace CarGo.Repository
             }
         }
 
-        public async Task AddCompanyVehicleAsync(CompanyVehicle companyVehicle)
+        public async Task AddCompanyVehicleAsync(CompanyVehicle companyVehicle, Guid userId)
         {
             string commandText = "INSERT INTO \"CompanyVehicle\" (\"Id\", \"CompanyId\", \"VehicleModelId\", \"DailyPrice\", \"ColorId\", \"PlateNumber\", \"ImageUrl\", \"CurrentLocationId\", \"IsOperational\", \"IsActive\", \"CreatedByUserId\", \"UpdatedByUserId\") " +
                                  "VALUES (@id, @companyId, @vehicleModelId, @dailyPrice, @colorId, @plateNumber, @imageUrl, @currentLocationId, @isOperational, @isActive, @createdByUserId, @updatedByUserId)";
@@ -127,15 +127,15 @@ namespace CarGo.Repository
                     command.Parameters.AddWithValue("@currentLocationId", companyVehicle.CurrentLocationId ?? (object)DBNull.Value);
                     command.Parameters.AddWithValue("@isOperational", companyVehicle.IsOperational);
                     command.Parameters.AddWithValue("@isActive", companyVehicle.IsActive);
-                    command.Parameters.AddWithValue("@createdByUserId", companyVehicle.CreatedByUserId);
-                    command.Parameters.AddWithValue("@updatedByUserId", companyVehicle.UpdatedByUserId);
+                    command.Parameters.AddWithValue("@createdByUserId", userId);
+                    command.Parameters.AddWithValue("@updatedByUserId", userId);
 
                     await command.ExecuteNonQueryAsync();
                 }
             }
         }
 
-        public async Task UpdateCompanyVehicleAsync(Guid id, CompanyVehicle updatedCompanyVehicle)
+        public async Task UpdateCompanyVehicleAsync(Guid id, CompanyVehicle updatedCompanyVehicle, Guid userId)
         {
             string commandText = "UPDATE \"CompanyVehicle\" SET \"CompanyId\" = @companyId, \"VehicleModelId\" = @vehicleModelId, \"DailyPrice\" = @dailyPrice, \"ColorId\" = @colorId, \"PlateNumber\" = @plateNumber, \"ImageUrl\" = @imageUrl, \"CurrentLocationId\" = @currentLocationId, \"IsOperational\" = @isOperational, \"IsActive\" = @isActive, \"UpdatedByUserId\" = @updatedByUserId, \"DateUpdated\" = CURRENT_TIMESTAMP WHERE \"Id\" = @id";
 
@@ -154,11 +154,32 @@ namespace CarGo.Repository
                     command.Parameters.AddWithValue("@currentLocationId", updatedCompanyVehicle.CurrentLocationId ?? (object)DBNull.Value);
                     command.Parameters.AddWithValue("@isOperational", updatedCompanyVehicle.IsOperational);
                     command.Parameters.AddWithValue("@isActive", updatedCompanyVehicle.IsActive);
-                    command.Parameters.AddWithValue("@updatedByUserId", updatedCompanyVehicle.UpdatedByUserId);
+                    command.Parameters.AddWithValue("@updatedByUserId", userId);
 
                     await command.ExecuteNonQueryAsync();
                 }
             }
+        }
+
+        public CompanyVehicle ReadCompanyVehicle(NpgsqlDataReader reader)
+        {
+            return new CompanyVehicle
+            {
+                Id = Guid.Parse(reader["Id"].ToString()!),
+                CompanyId = Guid.Parse(reader["CompanyId"].ToString()!),
+                VehicleModelId = Guid.Parse(reader["VehicleModelId"].ToString()!),
+                DailyPrice = decimal.Parse(reader["DailyPrice"].ToString()!),
+                ColorId = Guid.Parse(reader["ColorId"].ToString()!),
+                PlateNumber = reader["PlateNumber"].ToString()!,
+                ImageUrl = reader["ImageUrl"] == DBNull.Value ? null : reader["ImageUrl"].ToString(),
+                CurrentLocationId = reader["CurrentLocationId"] == DBNull.Value ? (Guid?)null : Guid.Parse(reader["CurrentLocationId"].ToString()!),
+                IsOperational = bool.Parse(reader["IsOperational"].ToString()!),
+                IsActive = bool.Parse(reader["IsActive"].ToString()!),
+                CreatedByUserId = Guid.Parse(reader["CreatedByUserId"].ToString()!),
+                UpdatedByUserId = Guid.Parse(reader["UpdatedByUserId"].ToString()!),
+                DateCreated = DateTime.Parse(reader["DateCreated"].ToString()!),
+                DateUpdated = DateTime.Parse(reader["DateCreated"].ToString()!)
+            };
         }
     }
 }
