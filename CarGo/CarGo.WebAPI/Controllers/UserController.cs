@@ -19,7 +19,7 @@ namespace CarGo.WebAPI.Controllers
         //[Authorize(Roles = "Administrator")]
         [Authorize]
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetById(Guid id)
+        public async Task<IActionResult> GetByIdAsync(Guid id)
         {
             var user = await _userService.GetUserDTOByIdAsync(id);
 
@@ -32,7 +32,7 @@ namespace CarGo.WebAPI.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(Guid id, User user)
+        public async Task<IActionResult> UpdateAsync(Guid id, User user)
         {
             var success = await _userService.UpdateUserByIdAsync(id, user);
             if (!success)

@@ -45,7 +45,7 @@ namespace CarGo.WebAPI.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetImageById(Guid id)
+        public async Task<IActionResult> GetImageByIdAsync(Guid id)
         {
             var image = await _imageService.GetImageByIdAsync(id);
             if (image == null)
@@ -65,7 +65,7 @@ namespace CarGo.WebAPI.Controllers
 
         [Authorize]
         [HttpDelete("{imageId}")]
-        public async Task<IActionResult> DeleteImageById(Guid imageId)
+        public async Task<IActionResult> DeleteImageByIdAsync(Guid imageId)
         {
             if (imageId == Guid.Empty)
                 return BadRequest();
