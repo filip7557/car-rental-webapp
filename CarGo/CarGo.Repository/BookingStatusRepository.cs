@@ -8,7 +8,7 @@ namespace Repository
     {
         private readonly string connectionString = "";
 
-//GET ALL
+        //GET ALL
         public async Task<List<BookingStatus>> GetAllAsync()
         {
             var bookingStatuses = new List<BookingStatus>();
@@ -55,7 +55,7 @@ namespace Repository
             }
         }
 
-//GET BY ID
+        //GET BY ID
         public async Task<BookingStatus?> GetByIdAsync(Guid id)
         {
             try
@@ -81,7 +81,6 @@ namespace Repository
                         bookingStatus.ID = Guid.Parse(reader[0].ToString()!);
                         bookingStatus.Name = reader[1].ToString()!;
                     }
-
                     else
                     {
                         connection.Close();
@@ -93,7 +92,6 @@ namespace Repository
                     return bookingStatus;
                 }
             }
-
             catch (Exception)
             {
                 return null;

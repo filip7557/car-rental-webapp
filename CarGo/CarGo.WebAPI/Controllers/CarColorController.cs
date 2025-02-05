@@ -1,5 +1,5 @@
-using Microsoft.AspNetCore.Mvc;
 using CarGo.Service.Common;
+using Microsoft.AspNetCore.Mvc;
 
 namespace CarGoAPI.Controllers
 {

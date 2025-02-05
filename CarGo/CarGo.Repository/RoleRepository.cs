@@ -51,8 +51,6 @@ namespace CarGo.Repository
             }
         }
 
-
-
         //GET ALL
         public async Task<List<Role>?> GetAllAsync()
         {
@@ -71,7 +69,6 @@ namespace CarGo.Repository
                     var reader = await command.ExecuteReaderAsync();
                     if (reader.HasRows)
                     {
-
                         while (await reader.ReadAsync())
                         {
                             var role = new Role()
@@ -84,8 +81,6 @@ namespace CarGo.Repository
                         }
                         return roles;
                     }
-
-
                     else
                     {
                         connection.Close();
@@ -93,7 +88,6 @@ namespace CarGo.Repository
                     }
                 }
             }
-
             catch (Exception)
             {
                 return null;
@@ -130,7 +124,6 @@ namespace CarGo.Repository
                     return role!.Name;
                 }
             }
-
             catch (Exception ex)
             {
                 Console.WriteLine("Exception: " + ex.ToString());
@@ -164,7 +157,6 @@ namespace CarGo.Repository
                         role.Id = Guid.Parse(reader[0].ToString()!);
                         role.Name = reader[1].ToString()!;
                     }
-
                     else
                     {
                         connection.Close();
@@ -174,10 +166,50 @@ namespace CarGo.Repository
                     connection.Close();
 
                     return role;
-
                 }
             }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
 
+        public async Task<Role?> GetRoleByNameAsync(string name)
+        {
+            try
+            {
+                Role? role = null;
+
+                using (var connection = new NpgsqlConnection(_connectionString))
+                {
+                    var commandText = "SELECT" +
+                                      " \"Id\", \"Name\"" +
+                                      " FROM \"Role\"" +
+                                      " WHERE \"Role\".\"Name\" = @name;";
+
+                    using var command = new NpgsqlCommand(commandText, connection);
+                    command.Parameters.AddWithValue("name", name);
+
+                    connection.Open();
+
+                    var reader = await command.ExecuteReaderAsync();
+                    if (reader.HasRows)
+                    {
+                        reader.Read();
+                        role.Id = Guid.Parse(reader[0].ToString()!);
+                        role.Name = reader[1].ToString()!;
+                    }
+                    else
+                    {
+                        connection.Close();
+                        return null;
+                    }
+
+                    connection.Close();
+
+                    return role;
+                }
+            }
             catch (Exception)
             {
                 return null;

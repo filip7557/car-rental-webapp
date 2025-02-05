@@ -134,7 +134,7 @@ namespace CarGo.Repository
             }
         }
 
-        public async Task<bool> UpdateUserRoleByUserIdAsync(Guid id, User user)
+        public async Task<bool> UpdateUserRoleByUserIdAsync(Guid id, Guid roleId)
         {
             try
             {
@@ -143,7 +143,7 @@ namespace CarGo.Repository
                     string commandText = $"UPDATE \"User\" set \"RoleId\" = @roleId, \"DateUpdated\" = @datetime WHERE \"Id\" = @id;";
                     using var command = new NpgsqlCommand(commandText, connection);
 
-                    command.Parameters.AddWithValue("roleId", user.RoleId!);
+                    command.Parameters.AddWithValue("roleId", roleId);
                     command.Parameters.AddWithValue("datetime", DateTime.Now);
                     command.Parameters.AddWithValue("id", id);
 
