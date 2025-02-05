@@ -18,7 +18,9 @@ namespace CarGo.WebAPI.Controllers
             _companyVehicleMaintenanceService = companyVehicleMaintenanceService;
         }
 
-        [Authorize]
+        // TODO: Add checks for company Id - if manager is that companies manager
+
+        [Authorize(Roles = "Administrator,Manager")]
         [HttpPost]
         public async Task<IActionResult> SaveAsync(CompanyVehicleMaintenance maintenance)
         {
@@ -31,7 +33,7 @@ namespace CarGo.WebAPI.Controllers
             return BadRequest("Invalid data.");
         }
 
-        [Authorize]
+        [Authorize(Roles = "Administrator,Manager")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteByIdAsync(Guid id)
         {
@@ -44,7 +46,7 @@ namespace CarGo.WebAPI.Controllers
             return BadRequest();
         }
 
-        [Authorize]
+        [Authorize(Roles = "Administrator,Manager")]
         [HttpGet]
         public async Task<IActionResult> GetByCompanyVehicleIdAsync(Guid id, int rpp = 10, int pageNumber = 1)
         {

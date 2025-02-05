@@ -44,6 +44,7 @@ namespace CarGo.WebAPI.Controllers
             return BadRequest();
         }
 
+        [Authorize]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetImageByIdAsync(Guid id)
         {

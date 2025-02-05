@@ -14,6 +14,7 @@ namespace CarGo.Repository
             _connectionString = Environment.GetEnvironmentVariable("ConnectionStrings__PostgresDb")
             ?? throw new InvalidOperationException("Database connection string is not set.");
         }
+
         public async Task<bool> SaveNotificationAsync(Notification notification)
         {
             try
@@ -48,6 +49,7 @@ namespace CarGo.Repository
                 return false;
             }
         }
+
         public async Task<List<Notification>> GetAllNotificationsAsync(Paging paging)
         {
             var notifications = new List<Notification>();

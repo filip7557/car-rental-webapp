@@ -1,19 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics.Metrics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using CarGo.Model;
+﻿using CarGo.Model;
 using CarGo.Repository.Common;
 using Microsoft.Extensions.Configuration;
 using Npgsql;
+using System.Text;
 
 namespace CarGo.Repository
 {
     public class LocationRepository : ILocationRepository
     {
-        private string connectionString; 
+        private string connectionString;
         protected readonly string TableName = "\"Location\"";
 
         public LocationRepository(IConfiguration configuration)
@@ -23,7 +18,6 @@ namespace CarGo.Repository
 
         public async Task<List<Location>> GetLocationAsync()
         {
-
             var locationList = new List<Location>();
             StringBuilder query = new StringBuilder($"SELECT \"Id\", \"Address\", \"City\", \"Country\" FROM \"Location\" Where \"IsActive\" = true");
             using (var connection = new NpgsqlConnection(connectionString))
@@ -44,15 +38,14 @@ namespace CarGo.Repository
                 }
 
                 return locationList;
-
             }
         }
 
         public async Task<Location> GetByIdLocationAsync(Guid id)
         {
             string commandText = $"SELECT \"Id\", \"Address\", \"City\", \"Country\" FROM \"Location\" WHERE \"Id\" = @id ";
-            using (var connection = new NpgsqlConnection(connectionString)) 
-            using(var command = new NpgsqlCommand(commandText, connection))
+            using (var connection = new NpgsqlConnection(connectionString))
+            using (var command = new NpgsqlCommand(commandText, connection))
             {
                 await connection.OpenAsync();
                 command.Parameters.AddWithValue("id", id);
@@ -71,7 +64,8 @@ namespace CarGo.Repository
             throw new Exception("Location with inputed id not found");
         }
 
-        public async Task<bool> PostLocationAsync(Location entity, Guid id) {
+        public async Task<bool> PostLocationAsync(Location entity, Guid id)
+        {
             string commandText = $"INSERT INTO {TableName} (\"Id\", \"Address\", \"City\", \"Country\", \"IsActive\",\"CreatedByUserId\", \"UpdatedByUserId\") VALUES (@id, @address, @city, @country, @isActive,@createdByUserId, @UpdatedByUserId)";
             using (var connection = new NpgsqlConnection(connectionString))
             using (var command = new NpgsqlCommand(commandText, connection))
@@ -82,7 +76,7 @@ namespace CarGo.Repository
                 command.Parameters.AddWithValue("city", entity.City);
                 command.Parameters.AddWithValue("country", entity.Country);
                 command.Parameters.AddWithValue("isActive", true);
-                
+
                 command.Parameters.AddWithValue("createdByUserId", id);
                 command.Parameters.AddWithValue("updatedByUserId", id);
 
@@ -106,7 +100,6 @@ namespace CarGo.Repository
                 }
                 bool newIsActive = !(bool)currentStatus;
 
-
                 using (var updateCommand = new NpgsqlCommand(commandText, connection))
                 {
                     updateCommand.Parameters.AddWithValue("id", id);
@@ -114,11 +107,7 @@ namespace CarGo.Repository
                     updateCommand.ExecuteNonQuery();
                     return await updateCommand.ExecuteNonQueryAsync() > 0;
                 }
-
-
             }
         }
-
-        
     }
 }

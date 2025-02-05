@@ -82,7 +82,7 @@ namespace CarGo.Repository
                 }
             }
             catch (Exception ex)
-            { 
+            {
                 Console.WriteLine("Exception: " + ex.Message);
                 return false;
             }
