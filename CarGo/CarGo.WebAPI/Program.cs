@@ -51,6 +51,8 @@ builder.Host
         containerBuilder.RegisterType<ManagerRepository>().As<IManagerRepository>();
         containerBuilder.RegisterType<ManagerService>().As<IManagerService>();
 
+        containerBuilder.RegisterType<CompanyVehicleService>().As<ICompanyVehicleService>();
+        containerBuilder.RegisterType<CompanyVehicleRepository>().As<ICompanyVehicleRepository>();
     });
 
 // Add services to the container.

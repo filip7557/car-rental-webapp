@@ -6,7 +6,7 @@ namespace Repository
 {
     public class VehicleModelRepository : IVehicleModelRepository
     {
-        private readonly string connectionString = "";
+        private readonly string connectionString = "ConnectionStrings__PostgresDb";
 
         //GET ALL
         public async Task<List<VehicleModel>> GetAllAsync()
@@ -102,6 +102,51 @@ namespace Repository
             catch (Exception)
             {
                 return null;
+            }
+        }
+
+        public async Task AddAsync(VehicleModel vehicleModel, Guid userId)
+        {
+            try
+            {
+                using (var connection = new NpgsqlConnection(connectionString))
+                {
+                    var commandText = "INSERT INTO \"VehicleModel\" (\"Id\", \"MakeID\", \"TypeID\", \"Name\", \"EnginePower\", \"CreatedByUserId\", \"UpdatedByUserId\") " +
+                                      "VALUES (@id, @makeID, @typeID, @name, @enginePower, @createdByUserId, @updatedByUserId);";
+
+                    using var command = new NpgsqlCommand(commandText, connection);
+                    command.Parameters.AddWithValue("id", NpgsqlTypes.NpgsqlDbType.Uuid, vehicleModel.ID);
+                    command.Parameters.AddWithValue("makeID", NpgsqlTypes.NpgsqlDbType.Integer, vehicleModel.MakeID);
+                    command.Parameters.AddWithValue("typeID", NpgsqlTypes.NpgsqlDbType.Integer, vehicleModel.TypeID);
+                    command.Parameters.AddWithValue("name", NpgsqlTypes.NpgsqlDbType.Text, vehicleModel.Name);
+                    command.Parameters.AddWithValue("enginePower", NpgsqlTypes.NpgsqlDbType.Integer, vehicleModel.EnginePower);
+                    command.Parameters.AddWithValue("createdByUserId", userId);
+                    command.Parameters.AddWithValue("updatedByUserId", userId);
+
+                    await connection.OpenAsync();
+                    await command.ExecuteNonQueryAsync();
+                    
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error while adding vehicle model", ex);
+            }
+        }
+        public async Task DeleteAsync(Guid id) {
+            try
+            {
+                using var connection = new NpgsqlConnection(connectionString);
+                var commandText = "DELETE FROM \"VehicleModel\" WHERE \"Id\" = @id";
+                using var command = new NpgsqlCommand(commandText, connection);
+                command.Parameters.AddWithValue("id", id);
+                connection.Open();
+                await command.ExecuteNonQueryAsync();
+
+                
+            }catch(Exception ex)
+            {
+                throw new Exception("Error while deleting vehicle model", ex);
             }
         }
     }

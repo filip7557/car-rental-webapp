@@ -28,9 +28,10 @@ namespace CarGo.Service
             return await _locationRepository.PostLocationAsync(entity, id);
         }
 
-        public async Task<bool> DeleteAsync(Guid id)
+        public async Task<bool> DeleteAsync(Guid locationId, Guid id)
         {
-            return await _locationRepository.DeleteLocationAsync(id);
+            
+            return await _locationRepository.DeleteLocationAsync(locationId, id);
         }
     }
 }

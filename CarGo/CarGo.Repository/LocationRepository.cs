@@ -84,15 +84,16 @@ namespace CarGo.Repository
             }
         }
 
-        public async Task<bool> DeleteLocationAsync(Guid id)
+        public async Task<bool> DeleteLocationAsync(Guid locationId, Guid id)
         {
+            Console.WriteLine(id);
             string selectCommandText = $"SELECT \"IsActive\" FROM \"Location\" WHERE \"Id\" = @id  ";
-            string commandText = $"UPDATE {TableName} SET \"IsActive\"  = @newIsActive WHERE \"Id\" = @id";
+            string commandText = $"UPDATE {TableName} SET \"IsActive\"  = @newIsActive, \"UpdatedByUserId\" = @updatedByUserId WHERE \"Id\" = @id";
             using (var connection = new NpgsqlConnection(connectionString))
             using (var selectCommand = new NpgsqlCommand(selectCommandText, connection))
             {
                 await connection.OpenAsync();
-                selectCommand.Parameters.AddWithValue("id", id);
+                selectCommand.Parameters.AddWithValue("id", locationId);
                 var currentStatus = await selectCommand.ExecuteScalarAsync();
                 if (currentStatus == null)
                 {
@@ -102,8 +103,10 @@ namespace CarGo.Repository
 
                 using (var updateCommand = new NpgsqlCommand(commandText, connection))
                 {
-                    updateCommand.Parameters.AddWithValue("id", id);
+                    updateCommand.Parameters.AddWithValue("id", locationId);
                     updateCommand.Parameters.AddWithValue("newIsActive", newIsActive);
+                    updateCommand.Parameters.AddWithValue("updatedByUserId", id);
+
                     updateCommand.ExecuteNonQuery();
                     return await updateCommand.ExecuteNonQueryAsync() > 0;
                 }
