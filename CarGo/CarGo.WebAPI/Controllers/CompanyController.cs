@@ -15,12 +15,13 @@ namespace CarGo.WebAPI.Controllers
             _companyService = companyService;
         }
 
+        [HttpPost]
         [HttpGet]
         public async Task<IActionResult> GetCompanyesAsync()
         {
             var companyes = await _companyService.GetCompaniesAsync();
 
-            if(companyes.Count > 0)
+            if (companyes.Count > 0)
             {
                 return Ok(companyes);
             }

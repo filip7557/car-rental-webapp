@@ -29,3 +29,4 @@ namespace CarGo.Model
         public Guid CompanyId { get; set; }
         //public List<Location?> LocationId  { get; set; }
     }
+}
