@@ -49,7 +49,7 @@ namespace CarGo.WebAPI.Controllers
             if (user == null || user.RoleId == null)
                 return BadRequest();
 
-            var result = await _userService.UpdateUserRoleByUserIdAsync(id, user);
+            var result = await _userService.UpdateUserRoleByUserIdAsync(id, (Guid)user.RoleId);
 
             if (result)
                 return Ok("Updated.");

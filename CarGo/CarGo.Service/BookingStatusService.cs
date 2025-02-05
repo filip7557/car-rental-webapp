@@ -1,6 +1,6 @@
-using CarGo.Service.Common;
 using CarGo.Model;
 using CarGo.Repository.Common;
+using CarGo.Service.Common;
 
 namespace Service
 {

@@ -1,6 +1,6 @@
-﻿using CarGo.Repository.Common;
+﻿using CarGo.Model;
+using CarGo.Repository.Common;
 using CarGo.Service.Common;
-using CarGo.Model;
 
 namespace CarGo.Service
 {
@@ -31,6 +31,12 @@ namespace CarGo.Service
         public async Task<Role?> GetByIdAsync(Guid id)
         {
             return await _roleRepository.GetByIdAsync(id);
+        }
+
+        public async Task<Role> GetRoleByNameAsync(string name)
+        {
+            var role = await _roleRepository.GetRoleByNameAsync(name);
+            return role!;
         }
     }
 }

@@ -1,6 +1,6 @@
 using CarGo.Model;
 
-﻿namespace CarGo.Service.Common
+namespace CarGo.Service.Common
 {
     public interface IRoleService
     {
@@ -9,7 +9,9 @@ using CarGo.Model;
         public Task<string> GetRoleNameByIdAsync(Guid? roleId);
 
         public Task<List<Role>?> GetAllAsync();
-        
+
         public Task<Role?> GetByIdAsync(Guid id);
+
+        public Task<Role> GetRoleByNameAsync(string name);
     }
 }

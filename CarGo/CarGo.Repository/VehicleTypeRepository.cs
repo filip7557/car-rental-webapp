@@ -8,7 +8,7 @@ namespace Repository
     {
         private readonly string connectionString = "";
 
-//GET ALL
+        //GET ALL
         public async Task<List<VehicleType>> GetAllAsync()
         {
             var vehicleTypes = new List<VehicleType>();
@@ -55,7 +55,7 @@ namespace Repository
             }
         }
 
-//GET BY ID
+        //GET BY ID
         public async Task<VehicleType?> GetByIdAsync(Guid id)
         {
             try
@@ -81,7 +81,6 @@ namespace Repository
                         vehicleType.ID = Guid.Parse(reader[0].ToString()!);
                         vehicleType.Name = reader[1].ToString()!;
                     }
-
                     else
                     {
                         connection.Close();
@@ -93,7 +92,6 @@ namespace Repository
                     return vehicleType;
                 }
             }
-
             catch (Exception)
             {
                 return null;
