@@ -34,9 +34,9 @@ namespace CarGo.Service
             await _repository.UpdateBookingAsync(id, updatedBooking);
         }
 
-        public async Task DeleteBookingAsync(Guid id)
+        public async Task SoftDeleteBookingAsync(Guid id)
         {
-            await _repository.DeleteBookingAsync(id);
+             await _repository.SoftDeleteBookingAsync(id);
         }
     }
 }
