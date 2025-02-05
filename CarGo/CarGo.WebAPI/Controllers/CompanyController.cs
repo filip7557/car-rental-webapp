@@ -1,4 +1,6 @@
-﻿using CarGo.Service.Common;
+﻿using Autofac.Core;
+using CarGo.Model;
+using CarGo.Service.Common;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CarGo.WebAPI.Controllers
@@ -14,7 +16,17 @@ namespace CarGo.WebAPI.Controllers
             _companyService = companyService;
         }
 
-        [HttpPost]
+        [HttpPost("new-company-location")]
+        public async Task<IActionResult> NewCompanyLocation([FromBody] CompanyLocations companyLocations)
+        {
+            var result = await _companyService.NewCompanyLocation(companyLocations);
+            if (result)
+            {
+                return Ok("Company location created successfully.");
+            }
+            return BadRequest("Failed to create company location.");
+        }
+
         [HttpGet]
         public async Task<IActionResult> GetCompanyesAsync()
         {

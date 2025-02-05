@@ -27,5 +27,10 @@ namespace CarGo.Service
         {
             return await _repository.CreateCompanyAsync(company);
         }
+
+        public async Task<bool> NewCompanyLocation(CompanyLocations companyLocations)
+        {
+            return await _repository.NewCompanyLocation(companyLocations);
+        }
     }
 }

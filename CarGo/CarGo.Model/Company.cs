@@ -20,7 +20,7 @@
 
     public class CompanyLocations
     {
-        public Guid CompanyId { get; set; }
-        //public List<Location?> LocationId  { get; set; }
+        public required Guid CompanyId { get; set; }
+        public required List<Guid> LocationId { get; set; }
     }
 }

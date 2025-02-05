@@ -125,5 +125,29 @@ namespace CarGo.Repository
                 return false;
             }
         }
+
+        public async Task<bool> NewCompanyLocation(CompanyLocations companyLocations)
+        {
+            try
+            {
+                using (var connection = new NpgsqlConnection(connectionString))
+                {
+                    var commandText = "INSERT INTO \"CompanyLocation\" (\"CompanyId\", \"LocationId\") VALUES (@companyId, @locationId);";
+                    using (var command = new NpgsqlCommand(commandText, connection))
+                    {
+                        command.Parameters.AddWithValue("companyId", NpgsqlTypes.NpgsqlDbType.Uuid, companyLocations.CompanyId);
+                        command.Parameters.AddWithValue("locationId", NpgsqlTypes.NpgsqlDbType.Uuid, companyLocations.LocationId);
+                        await connection.OpenAsync();
+                        await command.ExecuteNonQueryAsync();
+                    }
+                }
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error creating company location: {ex.Message}");
+                return false;
+            }
+        }
     }
 }

@@ -9,5 +9,7 @@ namespace CarGo.Repository.Common
         public Task<bool> CreateCompanyAsync(Company company);
 
         public Task<List<CompanyInfoIdAndNameDto>> GetCompaniesAsync();
+
+        public Task<bool> NewCompanyLocation(CompanyLocations companyLocations);
     }
 }

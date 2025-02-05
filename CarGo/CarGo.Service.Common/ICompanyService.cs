@@ -9,5 +9,7 @@ namespace CarGo.Service.Common
         Task<bool> CreateCompanyAsync(Company company);
 
         Task<List<CompanyInfoIdAndNameDto>> GetCompaniesAsync();
+
+        Task<bool> NewCompanyLocation(CompanyLocations companyLocations);
     }
 }
