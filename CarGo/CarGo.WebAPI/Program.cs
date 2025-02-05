@@ -17,7 +17,6 @@ builder.Host
     .UseServiceProviderFactory(new AutofacServiceProviderFactory())
     .ConfigureContainer<ContainerBuilder>((containerBuilder) =>
     {
-
         containerBuilder.RegisterType<UserRepository>().As<IUserRepository>();
         containerBuilder.RegisterType<UserService>().As<IUserService>();
         containerBuilder.RegisterType<RoleRepository>().As<IRoleRepository>();
@@ -47,6 +46,9 @@ builder.Host
         containerBuilder.RegisterType<CompanyRepository>().As<ICompanyRepository>();
         containerBuilder.RegisterType<CompanyRequestService>().As<ICompanyRequestService>();
         containerBuilder.RegisterType<CompanyRequestRepostiroy>().As<ICompanyRequestRepository>();
+        containerBuilder.RegisterType<UserCompanyService>().As<IUserCompanyService>();
+        containerBuilder.RegisterType<UserCompanyRepository>().As<IUserCompanyRepository>();
+
     });
 
 // Add services to the container.

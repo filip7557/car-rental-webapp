@@ -11,6 +11,8 @@ namespace CarGo.Repository.Common
     {
         public Task<bool> NewCompanyRequest(CompanyRequest newCompanyRequest);
 
-        public Task<bool> AcceptCompanyRequest(CompanyRequest acceptedCompanyRequest);
+        Task<bool> UpdateCompanyRequestAsync(CompanyRequest acceptedCompanyRequest);
+
+        Task<CompanyRequest?> GetCompanyRequestByIdAsync(Guid id);
     }
 }

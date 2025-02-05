@@ -18,9 +18,19 @@ namespace CarGo.Service
             _repository = repository;
         }
 
-        public async Task<CompanyInfoDto> GetCompanyAsync(Guid id)
+        public async Task<CompanyInfoDto?> GetCompanyAsync(Guid id)
         {
             return await _repository.GetCompanyAsync(id);
+        }
+
+        public async Task<List<CompanyInfoIdAndNameDto>> GetCompaniesAsync()
+        {
+            return await _repository.GetCompaniesAsync();
+        }
+
+        public async Task<bool> CreateCompanyAsync(Company company)
+        {
+            return await _repository.CreateCompanyAsync(company);
         }
     }
 }

@@ -7,8 +7,8 @@ using CarGo.Model;
 
 namespace CarGo.Service.Common
 {
-    public interface ICompanyRequestService
+    public interface IUserCompanyService
     {
-        Task<bool> NewCompanyRequest(CompanyRequest newCompanyRequest);
+        Task<bool> InsertUserCompanyAsync(UserCompany userCompany);
     }
 }

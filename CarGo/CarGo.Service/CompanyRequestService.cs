@@ -6,26 +6,26 @@ using System.Threading.Tasks;
 using CarGo.Model;
 using CarGo.Repository.Common;
 using CarGo.Service.Common;
+using Npgsql;
 
 namespace CarGo.Service
 {
     public class CompanyRequestService : ICompanyRequestService
     {
-        private readonly ICompanyRequestRepository _repository;
+        private readonly ICompanyService _companyService;
+        private readonly ICompanyRequestRepository _companyRequestRepository;
+        private readonly IUserCompanyService _userCompanyService;
 
-        public CompanyRequestService(ICompanyRequestRepository companyRequestRepository)
+        public CompanyRequestService(ICompanyRequestRepository companyRequestRepository, ICompanyService companyService, IUserCompanyService userCompanyService) // Add the missing parameter
         {
-            _repository = companyRequestRepository;
+            _companyService = companyService;
+            _companyRequestRepository = companyRequestRepository;
+            _userCompanyService = userCompanyService;
         }
 
         public async Task<bool> NewCompanyRequest(CompanyRequest newCompanyRequest)
         {
-            return await _repository.NewCompanyRequest(newCompanyRequest);
-        }
-
-        public async Task<bool> AcceptCompanyRequest(CompanyRequest acceptedCompanyRequest)
-        {
-            return await _repository.AcceptCompanyRequest(acceptedCompanyRequest);
+            return await _companyRequestRepository.NewCompanyRequest(newCompanyRequest);
         }
     }
 }

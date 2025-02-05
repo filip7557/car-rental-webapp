@@ -1,5 +1,7 @@
 ﻿using System.Security.Claims;
 using CarGo.Model;
+using CarGo.Repository.Common;
+using CarGo.Service;
 using CarGo.Service.Common;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Mvc;
@@ -12,39 +14,19 @@ namespace CarGo.WebAPI.Controllers
     public class CompanyRequestController : ControllerBase
     {
         private readonly ICompanyRequestService _companyRequestService;
+        private readonly ICompanyRequestRepository _companyRequestRepository;
+        private readonly ICompanyService _companyService;
 
-        public CompanyRequestController(ICompanyRequestService companyRequestService)
+        public CompanyRequestController(ICompanyRequestService companyRequestService, ICompanyRequestRepository companyRequestRepository, ICompanyService companyService)
         {
             _companyRequestService = companyRequestService;
+            _companyRequestRepository = companyRequestRepository;
+            _companyService = companyService;
         }
 
-        [HttpPost]
+        [HttpPost("new-company-request")]
         public async Task<IActionResult> NewCompanyRequest([FromBody] CompanyRequest newCompanyRequest)
         {
-            // FOR TESTING If the user id is not set, generate a new one for the request
-            if (newCompanyRequest.UserId == Guid.Empty)
-            {
-                newCompanyRequest.UserId = Guid.NewGuid();
-            }
-
-            //Pass user id from token
-            /*
-            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-
-            if (userId == null)
-            {
-                return Unauthorized("User is not authenticated");
-            }
-
-            Guid userGuid;
-            if (!Guid.TryParse(userId, out userGuid))
-            {
-                return Unauthorized("Invalit user id");
-            }
-
-            newCompanyRequest.UserId = userGuid;
-            */
-
             var result = await _companyRequestService.NewCompanyRequest(newCompanyRequest);
             if (result)
             {
@@ -53,15 +35,59 @@ namespace CarGo.WebAPI.Controllers
             return BadRequest("Failed to create company request.");
         }
 
-        [HttpPost]
-        public async Task<IActionResult> AcceptCompanyRequest([FromBody] CompanyRequest acceptedCompanyRequest)
+        [HttpPut("manage-company-request/{userId}")]
+        public async Task<IActionResult> ManageCompanyRequest(Guid userId, [FromBody] bool isAccepted)
         {
-            var result = await _companyRequestService.AcceptCompanyRequest(acceptedCompanyRequest);
-            if (result)
+            try
             {
-                return Ok("Company request accepted successfully.");
+                var companyRequest = await _companyRequestRepository.GetCompanyRequestByIdAsync(userId);
+
+                if (companyRequest == null)
+                {
+                    return NotFound("Company request not found for the specified user.");
+                }
+
+                bool result = false;
+
+                if (isAccepted)
+                {
+                    var newCompany = new Company
+                    {
+                        Id = Guid.NewGuid(),
+                        Name = companyRequest.Name,
+                        Email = companyRequest.Email,
+                        IsActive = true,
+                        CreatedByUserId = userId,
+                        DateCreated = DateTime.UtcNow,
+                        UpdatedByUserId = userId,
+                    };
+
+                    var resultOfCreatingCompany = await _companyService.CreateCompanyAsync(newCompany);
+
+                    if (resultOfCreatingCompany)
+                    {
+                        companyRequest.IsApproved = true;
+                        companyRequest.IsActive = false;
+                        result = await _companyRequestRepository.UpdateCompanyRequestAsync(companyRequest);
+                    }
+                }
+                else
+                {
+                    companyRequest.IsApproved = false;
+                    companyRequest.IsActive = false;
+                    result = await _companyRequestRepository.UpdateCompanyRequestAsync(companyRequest);
+                }
+                if (result)
+                {
+                    return Ok(isAccepted ? "Company request accepted successfully." : "Company request rejected.");
+                }
+                return BadRequest("Failed to update company request.");
             }
-            return BadRequest("Failed to accept company request.");
+            catch (Exception e)
+            {
+                Console.WriteLine($"Error occurred: {e.Message}");
+                return BadRequest("Failed to update company request.");
+            }
         }
     }
 }

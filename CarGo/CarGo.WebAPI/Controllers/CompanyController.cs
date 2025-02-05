@@ -15,6 +15,23 @@ namespace CarGo.WebAPI.Controllers
             _companyService = companyService;
         }
 
+        [HttpGet]
+        public async Task<IActionResult> GetCompanyesAsync()
+        {
+            var companyes = await _companyService.GetCompaniesAsync();
+
+            if(companyes.Count > 0)
+            {
+                return Ok(companyes);
+            }
+
+            return NotFound(new
+            {
+                error = "Not found",
+                message = "No companyes found."
+            });
+        }
+
         [HttpGet("{id}")]
         public async Task<IActionResult> GetCompany(Guid id)
         {
