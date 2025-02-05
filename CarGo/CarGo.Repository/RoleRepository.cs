@@ -37,17 +37,59 @@ namespace CarGo.Repository
                             Id = Guid.Parse(reader[0].ToString()!),
                             Name = reader[1].ToString()!
                         };
-                    }
 
-                    connection.Close();
+                        connection.Close();
 
                     return role!.Id;
-                }
-            }
+                    }
+                    }
             catch (Exception ex)
             {
                 Console.WriteLine("Exception: " + ex.ToString());
                 return Guid.Empty;
+            }
+
+
+
+//GET ALL
+        public async Task<List<Role>> GetAllAsync()
+        {
+            var roles = new List<Role>();
+
+            try
+            {
+                using (var connection = new NpgsqlConnection(connectionString))
+                {
+                    var commandText = "SELECT \"Id\", \"Name\"" +
+                                      "FROM \"Role\"";
+
+                    using var command = new NpgsqlCommand(commandText, connection);
+
+                        while (await reader.ReadAsync())
+                        {
+                            var role = new Role()
+                            {
+                                ID = Guid.Parse(reader[0].ToString()!),
+                                Name = reader[1].ToString()!,
+                            };
+
+                            roles.Add(role);
+                        }
+                    }
+
+                    return roles;
+
+
+                    else
+                    {
+                        connection.Close();
+                        return null;
+                    }
+                }
+
+                catch (Exception)
+            {
+                return null;
             }
         }
 
@@ -62,7 +104,7 @@ namespace CarGo.Repository
                     using var command = new NpgsqlCommand(commandText, connection);
 
                     command.Parameters.AddWithValue("id", NpgsqlTypes.NpgsqlDbType.Uuid, roleId);
-
+                    
                     connection.Open();
 
                     var reader = await command.ExecuteReaderAsync();
@@ -81,11 +123,56 @@ namespace CarGo.Repository
                     return role!.Name;
                 }
             }
+
             catch (Exception ex)
             {
                 Console.WriteLine("Exception: " + ex.ToString());
                 return "";
+                }
+        }
+            }
+
+//GET BY ID
+        public async Task<Role?> GetByIdAsync(Guid id)
+        {
+            try
+            {
+                var role = new Role() { };
+
+                using (var connection = new NpgsqlConnection(connectionString))
+                {
+                    var commandText = "SELECT " +
+                                      "\"Role\".\"Id\", \"Name\"" +
+                                      "FROM \"Role\" " +
+                                      "WHERE \"Role\".\"Id\" = @id;";
+
+                    using var command = new NpgsqlCommand(commandText, connection);
+                    command.Parameters.AddWithValue("id", NpgsqlTypes.NpgsqlDbType.Uuid, id);
+
+                    connection.Open();
+
+                    
+                        reader.Read();
+                        role.ID = Guid.Parse(reader[0].ToString()!);
+                        role.Name = reader[1].ToString()!;
+                    }
+
+                    else
+                    {
+                        connection.Close();
+                        return null;
+                    }
+
+                    connection.Close();
+
+                    return role;
+
+                }
+        }
+
+            catch (Exception)
+            {
+                return null;
             }
         }
     }
-}
