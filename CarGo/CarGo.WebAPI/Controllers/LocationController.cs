@@ -9,7 +9,6 @@ namespace CarGo.WebAPI.Controllers
     [Route("[controller]")]
     public class LocationController : ControllerBase
     {
-
         private readonly ILocationService _locationService;
 
         public LocationController(ILocationService location)
@@ -31,6 +30,7 @@ namespace CarGo.WebAPI.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
         [HttpGet("{id}")]
         [Authorize(Roles = "User,Administrator,Manager")]
         public async Task<IActionResult> GetById(Guid id)
@@ -49,6 +49,7 @@ namespace CarGo.WebAPI.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
         [HttpPost("{id}")]
         [Authorize(Roles = "Administrator,Manager")]
         public async Task<IActionResult> Post(Location location, Guid id)
@@ -69,8 +70,6 @@ namespace CarGo.WebAPI.Controllers
             }
         }
 
-        
-
         [HttpDelete("{id}")]
         [Authorize(Roles = "Administrator,Manager")]
         public async Task<IActionResult> DeleteAsync(Guid id)
@@ -89,6 +88,5 @@ namespace CarGo.WebAPI.Controllers
                 return BadRequest(ex.Message);
             }
         }
-
     }
 }

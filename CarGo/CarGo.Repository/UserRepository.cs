@@ -34,7 +34,6 @@ namespace CarGo.Repository
                     command.Parameters.AddWithValue("phoneNumber", user.PhoneNumber!);
                     command.Parameters.AddWithValue("roleId", user.RoleId!);
 
-
                     connection.Open();
 
                     var affectedRows = await command.ExecuteNonQueryAsync();

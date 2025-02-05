@@ -33,7 +33,7 @@ namespace CarGo.WebAPI.Controllers
         }
 
         [Authorize]
-        [HttpPost]
+        [HttpPost("saveList")]
         public async Task<IActionResult> SaveImagesAsync(List<ImageDTO> images)
         {
             if (!images.Any()) return BadRequest();
