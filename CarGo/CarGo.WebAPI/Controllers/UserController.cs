@@ -32,7 +32,7 @@ namespace CarGo.WebAPI.Controllers
 
         [Authorize]
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateAsync(Guid id, User user)
+        public async Task<IActionResult> UpdateAsync(Guid id, UserDTO user)
         {
             var success = await _userService.UpdateUserByIdAsync(id, user);
             if (!success)
@@ -40,6 +40,21 @@ namespace CarGo.WebAPI.Controllers
                 return NotFound();
             }
             return Ok("Updated.");
+        }
+
+        [Authorize(Roles = "Administrator")]
+        [HttpPut("updateRole/{id}")]
+        public async Task<IActionResult> UpdateRoleByUserIdAsync(Guid id, User user)
+        {
+            if (user == null || user.RoleId == null)
+                return BadRequest();
+
+            var result = await _userService.UpdateUserRoleByUserIdAsync(id, user);
+
+            if (result)
+                return Ok("Updated.");
+
+            return BadRequest();
         }
     }
 }

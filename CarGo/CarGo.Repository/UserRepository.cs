@@ -97,20 +97,53 @@ namespace CarGo.Repository
             }
         }
 
-        public async Task<bool> UpdateUserByIdAsync(Guid id, User user)
+        public async Task<bool> UpdateUserByIdAsync(Guid id, UserDTO user)
         {
             try
             {
                 using (var connection = new NpgsqlConnection(_connectionString))
                 {
-                    string commandText = $"UPDATE \"User\" set \"FullName\" = @fullName, {(!string.IsNullOrEmpty(user.Email) ? "\"Email\" = @email, " : "")} {(!string.IsNullOrEmpty(user.Password) ? "\"Password\" = @password, " : "")}\"PhoneNumber\" = @phoneNumber, {(user.RoleId != null ? "\"RoleId\" = @roleId, " : "")}\"DateUpdated\" = @datetime WHERE \"Id\" = @id;";
+                    string commandText = $"UPDATE \"User\" set \"FullName\" = @fullName, {(!string.IsNullOrEmpty(user.Email) ? "\"Email\" = @email, " : "")} {(!string.IsNullOrEmpty(user.Password) ? "\"Password\" = @password, " : "")}\"PhoneNumber\" = @phoneNumber, \"DateUpdated\" = @datetime WHERE \"Id\" = @id;";
                     using var command = new NpgsqlCommand(commandText, connection);
 
                     command.Parameters.AddWithValue("fullName", user.FullName);
                     command.Parameters.AddWithValue("email", user.Email);
                     command.Parameters.AddWithValue("password", user.Password ?? "");
-                    command.Parameters.AddWithValue("roleId", user.RoleId ?? Guid.Empty);
                     command.Parameters.AddWithValue("phoneNumber", user.PhoneNumber!);
+                    command.Parameters.AddWithValue("datetime", DateTime.Now);
+                    command.Parameters.AddWithValue("id", id);
+
+                    connection.Open();
+
+                    var affectedRows = await command.ExecuteNonQueryAsync();
+                    if (affectedRows == 0)
+                    {
+                        connection.Close();
+                        return false;
+                    }
+
+                    connection.Close();
+
+                    return true;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Exception: " + ex.ToString());
+                return false;
+            }
+        }
+
+        public async Task<bool> UpdateUserRoleByUserIdAsync(Guid id, User user)
+        {
+            try
+            {
+                using (var connection = new NpgsqlConnection(_connectionString))
+                {
+                    string commandText = $"UPDATE \"User\" set \"RoleId\" = @roleId, \"DateUpdated\" = @datetime WHERE \"Id\" = @id;";
+                    using var command = new NpgsqlCommand(commandText, connection);
+
+                    command.Parameters.AddWithValue("roleId", user.RoleId!);
                     command.Parameters.AddWithValue("datetime", DateTime.Now);
                     command.Parameters.AddWithValue("id", id);
 

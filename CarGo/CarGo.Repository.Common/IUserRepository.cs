@@ -8,7 +8,9 @@ namespace CarGo.Repository.Common
 
         Task<User?> GetUserByIdAsync(Guid id);
 
-        Task<bool> UpdateUserByIdAsync(Guid id, User user);
+        Task<bool> UpdateUserByIdAsync(Guid id, UserDTO user);
+
+        public Task<bool> UpdateUserRoleByUserIdAsync(Guid id, User user);
 
         Task<User?> GetUserByEmailAndPasswordAsync(string email, string password);
 

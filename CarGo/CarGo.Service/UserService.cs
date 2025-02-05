@@ -1,6 +1,7 @@
 ﻿using CarGo.Model;
 using CarGo.Repository.Common;
 using CarGo.Service.Common;
+using Org.BouncyCastle.Bcpg;
 
 namespace CarGo.Service
 {
@@ -27,7 +28,7 @@ namespace CarGo.Service
             return await _userRepository.GetUserByIdAsync(id);
         }
 
-        public async Task<bool> UpdateUserByIdAsync(Guid userId, User newUser)
+        public async Task<bool> UpdateUserByIdAsync(Guid userId, UserDTO newUser)
         {
             var user = await GetUserByIdAsync(userId);
             if (user == null)
@@ -35,6 +36,13 @@ namespace CarGo.Service
                 return false;
             }
             return await _userRepository.UpdateUserByIdAsync(userId, newUser);
+        }
+
+        public async Task<bool> UpdateUserRoleByUserIdAsync(Guid userId, User user)
+        {
+            if (user == null || user.RoleId == null)
+                return false;
+            return await _userRepository.UpdateUserRoleByUserIdAsync(userId, user);
         }
 
         public async Task<User?> GetUserByEmailAndPasswordAsync(string email, string password)
