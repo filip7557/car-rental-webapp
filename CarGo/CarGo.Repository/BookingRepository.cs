@@ -207,7 +207,7 @@ namespace CarGo.Repository
                 commandText.Append(" AND cv.\"ImageUrl\" = @imageUrl");
                 cmd.Parameters.AddWithValue("@imageUrl",  bookingFilter.ImageUrl);
             }
-        }
+        
 
             if (bookingFilter.StatusId.HasValue)
             {
