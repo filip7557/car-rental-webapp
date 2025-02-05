@@ -44,7 +44,7 @@ namespace CarGo.Service
 
         public Task<User?> GetUserByEmailAsync(string email)
         {
-            return _userRepository.GetUSerByEmailAsync(email);
+            return _userRepository.GetUserByEmailAsync(email);
         }
 
         public async Task<UserResponse?> GetUserDTOByIdAsync(Guid userId)

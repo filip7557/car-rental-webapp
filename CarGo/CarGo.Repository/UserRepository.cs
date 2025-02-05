@@ -104,7 +104,7 @@ namespace CarGo.Repository
             {
                 using (var connection = new NpgsqlConnection(_connectionString))
                 {
-                    string commandText = $"UPDATE \"User\" set \"FullName\" = @fullName, {(!string.IsNullOrEmpty(user.Email) ? "\"Email\" = @email, " : "")} {(!string.IsNullOrEmpty(user.Password) ? "\"Password\" = @password, " : "")}\"PhoneNumber\" = @phoneNumber, {(user.RoleId != null ? "\"RoleId\" = @roleId, " : "")}\"DateUpdated\" = @datetime, \"UpdatedByUserId\" = @updatedBy WHERE \"Id\" = @id;";
+                    string commandText = $"UPDATE \"User\" set \"FullName\" = @fullName, {(!string.IsNullOrEmpty(user.Email) ? "\"Email\" = @email, " : "")} {(!string.IsNullOrEmpty(user.Password) ? "\"Password\" = @password, " : "")}\"PhoneNumber\" = @phoneNumber, {(user.RoleId != null ? "\"RoleId\" = @roleId, " : "")}\"DateUpdated\" = @datetime WHERE \"Id\" = @id;";
                     using var command = new NpgsqlCommand(commandText, connection);
 
                     command.Parameters.AddWithValue("fullName", user.FullName);
@@ -113,7 +113,6 @@ namespace CarGo.Repository
                     command.Parameters.AddWithValue("roleId", user.RoleId ?? Guid.Empty);
                     command.Parameters.AddWithValue("phoneNumber", user.PhoneNumber!);
                     command.Parameters.AddWithValue("datetime", DateTime.Now);
-                    command.Parameters.AddWithValue("updatedBy", id);
                     command.Parameters.AddWithValue("id", id);
 
                     connection.Open();
@@ -179,7 +178,7 @@ namespace CarGo.Repository
             }
         }
 
-        public async Task<User?> GetUSerByEmailAsync(string email)
+        public async Task<User?> GetUserByEmailAsync(string email)
         {
             try
             {

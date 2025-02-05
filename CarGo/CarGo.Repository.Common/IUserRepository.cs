@@ -12,6 +12,6 @@ namespace CarGo.Repository.Common
 
         Task<User?> GetUserByEmailAndPasswordAsync(string email, string password);
 
-        Task<User?> GetUSerByEmailAsync(string email);
+        Task<User?> GetUserByEmailAsync(string email);
     }
 }
