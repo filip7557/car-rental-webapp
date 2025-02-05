@@ -6,7 +6,6 @@ using System.Text;
 using System.Threading.Tasks;
 using CarGo.Model;
 using CarGo.Repository.Common;
-using Microsoft.AspNetCore.Mvc;
 using Npgsql;
 
 namespace CarGo.Repository
