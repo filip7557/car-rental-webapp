@@ -5,14 +5,15 @@ namespace CarGo.Repository.Common
 {
     public interface IBookRepository
     {
-        Task<List<Booking>> GetAllBookingsAsync(BookingSorting sorting, BookingPaging paging, BookingFilter filter);
+        Task<List<Booking>> GetAllBookingsAsync(BookingSorting sorting, BookingPaging paging, BookingFilter filter, Guid userId, string userRole);
 
         Task<Booking> GetBookingByIdAsync(Guid Id);
 
         Task SoftDeleteBookingAsync(Guid Id);
 
-        Task AddBookingAsync(Booking booking);
+        Task AddBookingAsync(Booking booking, Guid createdByUserId);
 
-        Task UpdateBookingAsync(Guid id, Booking updatedBooking);
+        Task UpdateBookingAsync(Guid id, Booking updatedBooking, Guid createdByUserId);
+        Task UpdateBookingStatusAsync(Guid id, BookingStatus status, Guid createdByUserId);
     }
 }

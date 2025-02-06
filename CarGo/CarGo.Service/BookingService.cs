@@ -8,16 +8,22 @@ namespace CarGo.Service
     public class BookingService : IBookService
     {
         private IBookRepository _repository;
+        private readonly ITokenService _tokenService;
+        
 
-        public BookingService(IBookRepository repository)
+        public BookingService(IBookRepository repository, ITokenService tokenService, IManagerRepository managerRepository)
         {
             _repository = repository;
+            _tokenService = tokenService;
+   
         }
 
         public async Task<List<Booking>> GetAllBookingsAsync(BookingSorting sorting, BookingPaging paging,
             BookingFilter filter)
         {
-            return await _repository.GetAllBookingsAsync(sorting, paging, filter);
+            var userId = _tokenService.GetCurrentUserId();
+            var userRole=_tokenService.GetCurrentUserRoleName();
+            return await _repository.GetAllBookingsAsync(sorting, paging, filter, userId, userRole);
         }
 
         public async Task<Booking> GetBookingByIdAsync(Guid id)
@@ -27,12 +33,20 @@ namespace CarGo.Service
 
         public async Task AddBookingAsync(Booking booking)
         {
-            await _repository.AddBookingAsync(booking);
+            var userId = _tokenService.GetCurrentUserId();
+            await _repository.AddBookingAsync(booking, userId);
         }
 
         public async Task UpdateBookingAsync(Guid id, Booking updatedBooking)
         {
-            await _repository.UpdateBookingAsync(id, updatedBooking);
+            var userId = _tokenService.GetCurrentUserId();
+            await _repository.UpdateBookingAsync(id, updatedBooking, userId);
+        }
+
+        public async Task UpdateBookingStatusAsync(Guid id, BookingStatus status)
+        {
+            var userId = _tokenService.GetCurrentUserId();
+            await _repository.UpdateBookingStatusAsync(id, status, userId);
         }
 
         public async Task SoftDeleteBookingAsync(Guid id)

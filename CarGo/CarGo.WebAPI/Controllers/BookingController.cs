@@ -1,5 +1,6 @@
 ﻿using CarGo.Common;
 using CarGo.Model;
+using CarGo.Service;
 using CarGo.Service.Common;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -18,6 +19,9 @@ namespace CarGo.WebAPI.Controllers
             _service = service;
         }
 
+
+
+        [Authorize]
         [HttpGet]
         public async Task<IActionResult> GetBookingsAsync(
             string orderBy = "Id",
@@ -40,8 +44,9 @@ namespace CarGo.WebAPI.Controllers
         )
         {
             var userRole = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value;
+            
 
-            if (userRole == "Administrator")
+            if (userRole == "Administrator" || userRole=="Manager")
             {
                 isActive = null;
             }
@@ -163,7 +168,7 @@ namespace CarGo.WebAPI.Controllers
                 var existingBooking = _service.GetBookingByIdAsync(id);
                 if (existingBooking == null)
                 {
-                    return NotFound($"The Booking with Id={id} you want to delete does not exist");
+                    return NotFound($"The Booking with Id={id} you want to update does not exist");
                 }
 
                 await _service.UpdateBookingAsync(id, updatedBooking);
@@ -172,6 +177,33 @@ namespace CarGo.WebAPI.Controllers
             catch (Exception ex)
             {
                 return StatusCode(500, $"Error when updating Booking {ex.Message}");
+            }
+        }
+
+
+
+        [Authorize]
+        [HttpPut("{id}/status")]
+        public async Task<IActionResult> UpdateBookingStatusAsync(Guid id, BookingStatus status)
+        {
+            if (status == null)
+            {
+                return BadRequest("The Booking status information is incorrect");
+            }
+
+            try
+            {
+                var existingBooking = _service.GetBookingByIdAsync(id);
+                if (existingBooking == null)
+                {
+                    return NotFound($"The Booking with Id={id} you want to update does not exist");
+                }
+                await _service.UpdateBookingStatusAsync(id, status);
+                return Ok("Booking status has been succesfully updated");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Error when updating Booking status {ex.Message}");
             }
         }
     }

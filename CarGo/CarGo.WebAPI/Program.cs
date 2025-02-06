@@ -54,6 +54,7 @@ builder.Host
         containerBuilder.RegisterType<CompanyVehicleRepository>().As<ICompanyVehicleRepository>();
         containerBuilder.RegisterType<DamageReportRepository>().As<IDamageReportRepository>();
         containerBuilder.RegisterType<DamageReportService>().As<IDamageReportService>();
+        containerBuilder.RegisterType<HttpContextAccessor>().As<IHttpContextAccessor>().SingleInstance();
     });
 
 // Add services to the container.

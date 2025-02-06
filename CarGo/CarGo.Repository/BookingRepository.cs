@@ -16,10 +16,16 @@ namespace CarGo.Repository
                                 ?? throw new InvalidOperationException("Database connection string is not set.");
         }
 
+<<<<<<< HEAD
         public async Task<List<Booking>> GetAllBookingsAsync(BookingSorting sorting, BookingPaging paging,
             BookingFilter filter)
+=======
+
+        public async Task<List<Booking>> GetAllBookingsAsync(BookingSorting sorting, BookingPaging paging, BookingFilter filter, Guid userId, string userRole)
+>>>>>>> df6306f (Booking done)
         {
             var bookings = new List<Booking>();
+
             using (var connection = new NpgsqlConnection(_connectionString))
             {
                 using (var cmd = new NpgsqlCommand())
@@ -27,6 +33,7 @@ namespace CarGo.Repository
                     cmd.Connection = connection;
 
                     var commandText = new StringBuilder(@"
+<<<<<<< HEAD
                     SELECT
                          b.*,
 
@@ -82,6 +89,54 @@ namespace CarGo.Repository
 
                     ApplyFilters(cmd, commandText, filter);
 
+=======
+                        SELECT 
+                             b.*,
+                             bs.""Name"" AS ""BookingStatus"",
+                             c.""Name"" AS ""CompanyName"",
+                             vm.""Name"" AS ""Model"",
+                             vmm.""Name"" AS ""Make"",
+                             vc.""Name"" AS ""Color"",
+                             cv.""DailyPrice"",
+                             cv.""PlateNumber"",
+                             cv.""ImageUrl"",
+                             cl.""Address"" AS ""LocationAddress"",
+                             cl.""City"" AS ""LocationCity"",
+                             u.""Id"" AS ""UserId"",
+                             u.""FullName"",
+                             u.""Email"",
+                             u.""PhoneNumber"",
+                             r.""Name"" AS ""UserRole""
+                        FROM ""Booking"" b
+                        JOIN ""BookingStatus"" bs ON b.""StatusId"" = bs.""Id""
+                        JOIN ""CompanyVehicle"" cv ON b.""CompanyVehicleId"" = cv.""Id""
+                        JOIN ""Company"" c ON cv.""CompanyId"" = c.""Id""
+                        JOIN ""VehicleModel"" vm ON cv.""VehicleModelId"" = vm.""Id""
+                        JOIN ""VehicleMake"" vmm ON vm.""MakeId"" = vmm.""Id""
+                        JOIN ""VehicleColor"" vc ON cv.""ColorId"" = vc.""Id""
+                        JOIN ""Location"" cl ON cv.""CurrentLocationId"" = cl.""Id""
+                        JOIN ""User"" u ON b.""UserId"" = u.""Id""
+                        JOIN ""Role"" r ON u.""RoleId"" = r.""Id""
+                        WHERE 1 = 1");
+
+                    
+                    if (userRole == "User")
+                    {
+                        commandText.Append(" AND b.\"UserId\" = @userId");
+                        cmd.Parameters.AddWithValue("userId", userId);
+                    }
+
+                  
+                    else if (userRole == "Manager")
+                    {
+                        commandText.Append(@"
+                       AND cv.""CompanyId"" = (SELECT ""CompanyId"" FROM ""UserCompany"" WHERE ""UserId"" = @userId)");
+                        cmd.Parameters.AddWithValue("userId", userId);
+                    }
+
+
+                    ApplyFilters(cmd, commandText, filter);
+>>>>>>> df6306f (Booking done)
                     ApplySorting(cmd, commandText, sorting);
                     ApplyPaging(cmd, commandText, paging);
 
@@ -101,6 +156,11 @@ namespace CarGo.Repository
             return bookings;
         }
 
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> df6306f (Booking done)
         private void ApplySorting(NpgsqlCommand cmd, StringBuilder commandText, BookingSorting sorting)
         {
             if (!string.IsNullOrEmpty(sorting.OrderBy))
@@ -262,7 +322,7 @@ namespace CarGo.Repository
             }
         }
 
-        public async Task AddBookingAsync(Booking booking)
+        public async Task AddBookingAsync(Booking booking, Guid createdByUserId)
         {
             string commandText =
                 "INSERT INTO \"Booking\" (\"Id\", \"UserId\", \"CompanyVehicleId\", \"StartDate\", \"EndDate\", " +
@@ -277,7 +337,7 @@ namespace CarGo.Repository
                 using (var command = new NpgsqlCommand(commandText, connection))
                 {
                     command.Parameters.AddWithValue("@id", booking.Id);
-                    command.Parameters.AddWithValue("@userId", booking.UserId);
+                    command.Parameters.AddWithValue("@userId", createdByUserId);
                     command.Parameters.AddWithValue("@companyVehicleId", booking.CompanyVehicleId);
                     command.Parameters.AddWithValue("@startDate", booking.StartDate);
                     command.Parameters.AddWithValue("@endDate", booking.EndDate);
@@ -285,15 +345,15 @@ namespace CarGo.Repository
                     command.Parameters.AddWithValue("@statusId", booking.StatusId);
                     command.Parameters.AddWithValue("@pickUpLocationId", booking.PickUpLocationId);
                     command.Parameters.AddWithValue("@dropOffLocationId", booking.DropOffLocationId);
-                    command.Parameters.AddWithValue("@createdByUserId", booking.CreatedByUserId);
-                    command.Parameters.AddWithValue("@updatedByUserId", booking.UpdatedByUserId);
+                    command.Parameters.AddWithValue("@createdByUserId", createdByUserId);
+                    command.Parameters.AddWithValue("@updatedByUserId", createdByUserId);
 
                     await command.ExecuteNonQueryAsync();
                 }
             }
         }
 
-        public async Task UpdateBookingAsync(Guid id, Booking updatedBooking)
+        public async Task UpdateBookingAsync(Guid id, Booking updatedBooking, Guid createdByUserId)
         {
             string commandText = "UPDATE \"Booking\" SET " +
                                  "\"IsActive\" = @isActive, " +
@@ -316,7 +376,7 @@ namespace CarGo.Repository
                 using (var command = new NpgsqlCommand(commandText, connection))
                 {
                     command.Parameters.AddWithValue("@isActive", updatedBooking.IsActive);
-                    command.Parameters.AddWithValue("@userId", updatedBooking.UserId);
+                    command.Parameters.AddWithValue("@userId", createdByUserId);
                     command.Parameters.AddWithValue("@companyVehicleId", updatedBooking.CompanyVehicleId);
                     command.Parameters.AddWithValue("@startDate", updatedBooking.StartDate);
                     command.Parameters.AddWithValue("@endDate", updatedBooking.EndDate);
@@ -324,8 +384,28 @@ namespace CarGo.Repository
                     command.Parameters.AddWithValue("@statusId", updatedBooking.StatusId);
                     command.Parameters.AddWithValue("@pickUpLocationId", updatedBooking.PickUpLocationId);
                     command.Parameters.AddWithValue("@dropOffLocationId", updatedBooking.DropOffLocationId);
-                    command.Parameters.AddWithValue("@updatedByUserId", updatedBooking.UpdatedByUserId);
+                    command.Parameters.AddWithValue("@updatedByUserId", createdByUserId);
                     command.Parameters.AddWithValue("@id", id);
+
+                    await command.ExecuteNonQueryAsync();
+                }
+            }
+        }
+
+
+        public async Task UpdateBookingStatusAsync(Guid bookingId, BookingStatus status, Guid updatedByUserId)
+        {
+            string commandText = @"UPDATE ""Booking"" SET ""StatusId"" = @statusId,""UpdatedByUserId"" = @updatedByUserId WHERE ""Id"" = @bookingId";
+
+            using (var connection = new NpgsqlConnection(_connectionString))
+            {
+                await connection.OpenAsync();
+
+                using (var command = new NpgsqlCommand(commandText, connection))
+                {
+                    command.Parameters.AddWithValue("@statusId", status.ID);
+                    command.Parameters.AddWithValue("@updatedByUserId", updatedByUserId);
+                    command.Parameters.AddWithValue("@bookingId", bookingId);
 
                     await command.ExecuteNonQueryAsync();
                 }
