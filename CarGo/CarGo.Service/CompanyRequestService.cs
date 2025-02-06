@@ -1,6 +1,7 @@
 ﻿using CarGo.Model;
 using CarGo.Repository.Common;
 using CarGo.Service.Common;
+using Microsoft.AspNetCore.Mvc;
 
 namespace CarGo.Service
 {
@@ -95,6 +96,62 @@ namespace CarGo.Service
                 return await _notificationService.SendNotificationAsync(notification);
             }
             return false;
+        }
+
+        public async Task<bool> ManageCompanyRequest(Guid userId, bool isAccepted)
+        {
+            try
+            {
+                var companyRequest = await _companyRequestRepository.GetCompanyRequestByIdAsync(userId);
+
+                if (companyRequest == null)
+                {
+                    return false;
+                }
+
+                bool result = false;
+
+                if (isAccepted)
+                {
+                    var newCompany = new Company
+                    {
+                        Id = Guid.NewGuid(),
+                        Name = companyRequest.Name,
+                        Email = companyRequest.Email,
+                        IsActive = true,
+                        CreatedByUserId = userId,
+                        DateCreated = DateTime.UtcNow,
+                        UpdatedByUserId = userId,
+                    };
+
+                    var resultOfCreatingCompany = await CreateCompanyAsync(newCompany);
+
+                    if (resultOfCreatingCompany)
+                    {
+                        companyRequest.IsApproved = true;
+                        companyRequest.IsActive = false;
+                        result = await UpdateCompanyRequestAsync(companyRequest);
+                    }
+                }
+                else
+                {
+                    companyRequest.IsApproved = false;
+                    companyRequest.IsActive = false;
+                    result = await UpdateCompanyRequestAsync(companyRequest);
+                }
+
+                if (result)
+                {
+                    return true;
+                }
+
+                return false;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"Error occurred: {e.Message}");
+                return false;
+            }
         }
     }
 }
