@@ -1,8 +1,8 @@
-using System.Security.Claims;
 using CarGo.Model;
 using CarGo.Service.Common;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace CarGoAPI.Controllers
 {
@@ -45,12 +45,12 @@ namespace CarGoAPI.Controllers
         [HttpPost]
         public async Task<IActionResult> PostAsync(VehicleModel vehicle)
         {
-            
-            if(vehicle.Id == Guid.Empty)
+            if (vehicle.Id == Guid.Empty)
             {
                 vehicle.Id = Guid.NewGuid();
             }
-            try{
+            try
+            {
                 var userId = Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
                 await _service.AddAsync(vehicle);
                 return Ok(vehicle); 
@@ -58,7 +58,6 @@ namespace CarGoAPI.Controllers
             {
                 return BadRequest(ex.Message);
             }
-
         }
 
         [Authorize(Roles = "Administrator,Manager")]
@@ -66,19 +65,20 @@ namespace CarGoAPI.Controllers
         public async Task<IActionResult> DeleteAsync(Guid id)
         {
             var comVehId = await _service.GetByIdAsync(id);
-            if(comVehId == null)
+            if (comVehId == null)
             {
                 return BadRequest("Company Vehicle with inputed id doesnt exist");
             }
-            try{
+            try
+            {
                 var userId = Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
                 await _service.DeleteAsync(id);
                 return Ok("Company Vehicle isActive status changed.");
-            }catch(Exception ex){
+            }
+            catch (Exception ex)
+            {
                 return BadRequest(ex.Message);
             }
-
         }
-
     }
 }
