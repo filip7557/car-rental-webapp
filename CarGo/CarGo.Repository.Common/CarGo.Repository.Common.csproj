@@ -7,6 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Abstractions" Version="2.3.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\CarGo.Common\CarGo.Common.csproj" />
     <ProjectReference Include="..\CarGo.Model\CarGo.Model.csproj" />
   </ItemGroup>

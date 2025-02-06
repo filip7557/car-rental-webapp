@@ -1,6 +1,7 @@
 ﻿using CarGo.Model;
 using CarGo.Repository.Common;
 using CarGo.Service.Common;
+using Microsoft.AspNetCore.Mvc;
 
 namespace CarGo.Service
 {
@@ -28,9 +29,35 @@ namespace CarGo.Service
             return await _repository.CreateCompanyAsync(company);
         }
 
-        public async Task<bool> NewCompanyLocation(CompanyLocations companyLocations)
+        public async Task<bool> NewCompanyLocationAsync(CompanyLocations companyLocations)
         {
-            return await _repository.NewCompanyLocation(companyLocations);
+            return await _repository.NewCompanyLocationAsync(companyLocations);
+        }
+
+        public Task<bool> DeleteCompanyLocationAsync(CompanyLocations companyLocations)
+        {
+            return _repository.DeleteCompanyLocationAsync(companyLocations);
+        }
+
+        public Task<bool> UpdateCompanyLocationAsync(CompanyLocations companyLocations)
+        {
+            return _repository.UpdateCompanyLocationAsync(companyLocations);
+        }
+
+        public Task<bool> CreateCompanyByAdminAsync(Company company)
+        {
+            company.Id = Guid.NewGuid();
+            return _repository.CreateCompanyAsync(company);
+        }
+
+        public Task<List<CompanyLocationsDto>> GetAllCompanyLocationsAsync()
+        {
+            return _repository.GetAllCompanyLocationsAsync();
+        }
+
+        public Task<bool> ChangeCompanyIsActiveStatusAsync(Guid Id, bool isActive)
+        {
+            return _repository.ChangeCompanyIsActiveStatusAsync(Id, isActive);
         }
     }
 }

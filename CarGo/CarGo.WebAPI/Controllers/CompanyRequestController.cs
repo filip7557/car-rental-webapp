@@ -34,6 +34,7 @@ namespace CarGo.WebAPI.Controllers
             return BadRequest("Failed to create company request.");
         }
 
+        [Authorize(Roles = "Administrator")]
         [HttpPut("manage-company-request/{userId}")]
         public async Task<IActionResult> ManageCompanyRequest(Guid userId, [FromBody] bool isAccepted)
         {
