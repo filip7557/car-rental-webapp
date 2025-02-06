@@ -2,11 +2,6 @@
 using CarGo.Model;
 using CarGo.Repository.Common;
 using Npgsql;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.NetworkInformation;
-using System.Reflection;
 using System.Text;
 
 namespace CarGo.Repository
@@ -21,7 +16,6 @@ namespace CarGo.Repository
                                 ?? throw new InvalidOperationException("Database connection string is not set.");
         }
 
-
         public async Task<List<Booking>> GetAllBookingsAsync(BookingSorting sorting, BookingPaging paging,
             BookingFilter filter)
         {
@@ -33,13 +27,11 @@ namespace CarGo.Repository
                     cmd.Connection = connection;
 
                     var commandText = new StringBuilder(@"
-                    SELECT 
+                    SELECT
                          b.*,
-                  
-                         
+
                          bs.""Name"" AS ""BookingStatus"",
-         
-                  
+
                          c.""Name"" AS ""CompanyName"",
                          vm.""Name"" AS ""Model"",
                          vmm.""Name"" AS ""Make"",
@@ -47,51 +39,48 @@ namespace CarGo.Repository
                          cv.""DailyPrice"",
                          cv.""PlateNumber"",
                          cv.""ImageUrl"",
-         
-                      
+
                          cl.""Address"" AS ""LocationAddress"",
                          cl.""City"" AS ""LocationCity"",
-         
-                    
+
                          u.""Id"" AS ""UserId"",
                          u.""FullName"",
                          u.""Email"",
                          u.""PhoneNumber"",
                          r.""Name"" AS ""UserRole""
-         
+
                     FROM ""Booking"" b
-         
-                    JOIN ""BookingStatus"" bs 
+
+                    JOIN ""BookingStatus"" bs
                          ON b.""StatusId"" = bs.""Id""
-         
-                    JOIN ""CompanyVehicle"" cv 
+
+                    JOIN ""CompanyVehicle"" cv
                          ON b.""CompanyVehicleId"" = cv.""Id""
-         
+
                     JOIN ""Company"" c
                          ON cv.""CompanyId"" = c.""Id""
-         
+
                     JOIN ""VehicleModel"" vm
                          ON cv.""VehicleModelId"" = vm.""Id""
-         
+
                     JOIN ""VehicleMake"" vmm
                          ON vm.""MakeId"" = vmm.""Id""
-         
+
                     JOIN ""VehicleColor"" vc
                          ON cv.""ColorId"" = vc.""Id""
-         
+
                     JOIN ""Location"" cl
                          ON cv.""CurrentLocationId"" = cl.""Id""
-         
+
                     JOIN ""User"" u
                          ON b.""UserId"" = u.""Id""
-         
+
                     JOIN ""Role"" r
                          ON u.""RoleId"" = r.""Id""
-         
+
                     WHERE 1 = 1");
 
                     ApplyFilters(cmd, commandText, filter);
-
 
                     ApplySorting(cmd, commandText, sorting);
                     ApplyPaging(cmd, commandText, paging);
@@ -111,7 +100,6 @@ namespace CarGo.Repository
 
             return bookings;
         }
-
 
         private void ApplySorting(NpgsqlCommand cmd, StringBuilder commandText, BookingSorting sorting)
         {
@@ -182,7 +170,6 @@ namespace CarGo.Repository
                 cmd.Parameters.AddWithValue("@endDate", bookingFilter.EndDate.Value);
             }
 
-
             if (!string.IsNullOrWhiteSpace(bookingFilter.BookingStatusName))
             {
                 commandText.Append(" AND bs.\"Name\" = @bookingStatusName");
@@ -206,7 +193,6 @@ namespace CarGo.Repository
                 commandText.Append(" AND cv.\"ImageUrl\" = @imageUrl");
                 cmd.Parameters.AddWithValue("@imageUrl", bookingFilter.ImageUrl);
             }
-
 
             if (bookingFilter.StatusId.HasValue)
             {

@@ -2,7 +2,6 @@
 using CarGo.Model;
 using CarGo.Repository.Common;
 using CarGo.Service.Common;
-using System.Security.Claims;
 
 namespace CarGo.Service
 {

@@ -2,9 +2,7 @@
 using CarGo.Model;
 using CarGo.Service.Common;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System.Net.NetworkInformation;
 using System.Security.Claims;
 
 namespace CarGo.WebAPI.Controllers
@@ -19,7 +17,6 @@ namespace CarGo.WebAPI.Controllers
         {
             _service = service;
         }
-
 
         [HttpGet]
         public async Task<IActionResult> GetBookingsAsync(
@@ -43,7 +40,6 @@ namespace CarGo.WebAPI.Controllers
         )
         {
             var userRole = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value;
-
 
             if (userRole == "Administrator")
             {
@@ -81,7 +77,6 @@ namespace CarGo.WebAPI.Controllers
                     Rpp = rpp
                 };
 
-
                 var bookings = await _service.GetAllBookingsAsync(sorting, paging, bookingFilter);
 
                 return bookings.Count > 0 ? Ok(bookings) : NotFound("No available bookings");
@@ -91,7 +86,6 @@ namespace CarGo.WebAPI.Controllers
                 return StatusCode(500, $"Error when fetching booking: {ex.Message}");
             }
         }
-
 
         [Authorize]
         [HttpGet("{id}")]
@@ -108,7 +102,6 @@ namespace CarGo.WebAPI.Controllers
                 return StatusCode(500, $"Error when fetching booking: {ex.Message}");
             }
         }
-
 
         [Authorize]
         [HttpDelete("{id}")]
@@ -130,7 +123,6 @@ namespace CarGo.WebAPI.Controllers
                 return StatusCode(500, $"Error when deleting booking: {ex.Message}");
             }
         }
-
 
         [Authorize]
         [HttpPost]
@@ -156,7 +148,6 @@ namespace CarGo.WebAPI.Controllers
                 return StatusCode(500, $"Error when adding a Booking: {ex.Message}");
             }
         }
-
 
         [Authorize]
         [HttpPut("{id}")]

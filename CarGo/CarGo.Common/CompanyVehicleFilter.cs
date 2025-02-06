@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace CarGo.Common
+﻿namespace CarGo.Common
 {
     public class CompanyVehicleFilter
     {
@@ -17,6 +11,7 @@ namespace CarGo.Common
         //public decimal? MinDailyPrice { get; set; }
         //public decimal? MaxDailyPrice { get; set; }
         public bool? IsOperational { get; set; }
+
         public Guid? CurrentLocationId { get; set; }
     }
 }
