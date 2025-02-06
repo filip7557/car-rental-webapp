@@ -5,7 +5,7 @@ namespace CarGo.Repository.Common
 {
     public interface IBookRepository
     {
-        Task<List<Booking>> GetAllBookingsAsync(BookingSorting sorting, BookingPaging paging, BookingFilter filter, Guid userId, string userRole);
+        Task<List<Booking>> GetAllBookingsAsync(BookingSorting sorting, BookingPaging paging, BookingFilter filter );
 
         Task<Booking> GetBookingByIdAsync(Guid Id);
 

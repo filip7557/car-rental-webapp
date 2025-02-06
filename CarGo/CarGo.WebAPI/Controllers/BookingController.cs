@@ -40,17 +40,12 @@ namespace CarGo.WebAPI.Controllers
             string? locationAddress = null,
             string? vehicleMakeName = null,
             string? vehicleModelName = null,
-            string? imageUrl = null
+            string? imageUrl = null,
+            string? userRole = null,
+            Guid? companyId = null
         )
         {
-            var userRole = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value;
-            
-
-            if (userRole == "Administrator" || userRole=="Manager")
-            {
-                isActive = null;
-            }
-
+          
             try
             {
                 var bookingFilter = new BookingFilter
@@ -68,6 +63,8 @@ namespace CarGo.WebAPI.Controllers
                     VehicleMakeName = vehicleMakeName,
                     VehicleModelName = vehicleModelName,
                     ImageUrl = imageUrl,
+                    UserRole=userRole,
+                    CompanyId = companyId,
                 };
 
                 var sorting = new BookingSorting
