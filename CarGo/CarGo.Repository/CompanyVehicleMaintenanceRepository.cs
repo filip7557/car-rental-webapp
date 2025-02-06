@@ -99,7 +99,7 @@ namespace CarGo.Repository
                 using (var connection = new NpgsqlConnection(_connectionString))
                 {
                     string commandText =
-                        $"SELECT \"Id\", \"CompanyVehicleId\", \"Title\", \"Description\" \"DateCreated\" FROM \"CompanyVehicleMaintenance\" WHERE \"CompanyVehicleId\" = @companyVehId{(!isActiveFilter ? " AND \"IsActive = @isActive" : "")} ORDER BY \"DateCreated\" DESC LIMIT @rpp OFFSET (@pageNumber - 1) * @rpp";
+                        $"SELECT \"Id\", \"CompanyVehicleId\", \"Title\", \"Description\", \"DateCreated\" FROM \"CompanyVehicleMaintenance\" WHERE \"CompanyVehicleId\" = @companyVehId{(!isActiveFilter ? " AND \"IsActive = @isActive" : "")} ORDER BY \"DateCreated\" DESC LIMIT @rpp OFFSET (@pageNumber - 1) * @rpp";
                     using var command = new NpgsqlCommand(commandText, connection);
 
                     command.Parameters.AddWithValue("companyVehId", NpgsqlTypes.NpgsqlDbType.Uuid, companyVehicleId);
@@ -172,6 +172,45 @@ namespace CarGo.Repository
             {
                 Console.WriteLine(e.Message);
                 return 0;
+            }
+        }
+
+        public async Task<CompanyVehicleMaintenance?> GetCompanyVehicleMaintenanceByIdAsync(Guid id)
+        {
+            CompanyVehicleMaintenance? maintenance = null;
+            try
+            {
+                using (var connection = new NpgsqlConnection(_connectionString))
+                {
+                    string commandText =
+                        $"SELECT \"Id\", \"CompanyVehicleId\", \"Title\", \"Description\", \"DateCreated\" FROM \"CompanyVehicleMaintenance\" WHERE \"Id\" = @id;";
+                    using var command = new NpgsqlCommand(commandText, connection);
+
+                    command.Parameters.AddWithValue("id", NpgsqlTypes.NpgsqlDbType.Uuid, id);
+
+                    var reader = await command.ExecuteReaderAsync();
+
+                    if (reader.HasRows)
+                    {
+                        await reader.ReadAsync();
+                        maintenance = new CompanyVehicleMaintenance
+                        {
+                            Id = Guid.Parse(reader[0].ToString()!),
+                            CompanyVehicleId = Guid.Parse(reader[1].ToString()!),
+                            Title = reader[2].ToString()!,
+                            Description = reader[3].ToString()!
+                        };
+                    }
+
+                    connection.Close();
+
+                    return maintenance;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Exception: " + ex.Message);
+                return maintenance;
             }
         }
     }

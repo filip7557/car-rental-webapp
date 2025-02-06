@@ -18,14 +18,10 @@ namespace CarGo.WebAPI.Controllers
             _companyVehicleMaintenanceService = companyVehicleMaintenanceService;
         }
 
-        // TODO: Add checks for company Id - if manager is that companies manager
-
         [Authorize(Roles = "Administrator,Manager")]
         [HttpPost]
         public async Task<IActionResult> SaveAsync(CompanyVehicleMaintenance maintenance)
         {
-            var userId = Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
-            var roleName = User.FindFirst(ClaimTypes.Role)!.Value; //Equals
             var success = await _companyVehicleMaintenanceService.SaveCompanyVehicleMaintenanceAsync(maintenance);
             if (success)
             {
@@ -59,6 +55,8 @@ namespace CarGo.WebAPI.Controllers
                 PageNumber = pageNumber
             };
             var response = await _companyVehicleMaintenanceService.GetMaintenancesByCompanyVehicleIdAsync(id, paging);
+            if (response == null)
+                return BadRequest();
             if (response.Data.Count == 0)
                 return BadRequest();
             return Ok(response);
