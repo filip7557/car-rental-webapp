@@ -99,7 +99,7 @@ namespace CarGo.Repository
                 using (var connection = new NpgsqlConnection(_connectionString))
                 {
                     string commandText =
-                        $"SELECT \"Id\", \"CompanyVehicleId\", \"Title\", \"Description\", \"DateCreated\" FROM \"CompanyVehicleMaintenance\" WHERE \"CompanyVehicleId\" = @companyVehId{(!isActiveFilter ? " AND \"IsActive = @isActive" : "")} ORDER BY \"DateCreated\" DESC LIMIT @rpp OFFSET (@pageNumber - 1) * @rpp";
+                        $"SELECT \"CompanyVehicleMaintenance\".\"Id\", \"CompanyVehicleId\", \"Title\", \"Description\", \"DateCreated\" FROM \"CompanyVehicleMaintenance\" WHERE \"CompanyVehicleId\" = @companyVehId{(!isActiveFilter ? " AND \"IsActive = @isActive" : "")} ORDER BY \"DateCreated\" DESC LIMIT @rpp OFFSET (@pageNumber - 1) * @rpp";
                     using var command = new NpgsqlCommand(commandText, connection);
 
                     command.Parameters.AddWithValue("companyVehId", NpgsqlTypes.NpgsqlDbType.Uuid, companyVehicleId);

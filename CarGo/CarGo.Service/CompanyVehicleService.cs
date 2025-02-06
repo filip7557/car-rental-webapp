@@ -33,7 +33,7 @@ namespace CarGo.Service
         {
             var userId = _tokenService.GetCurrentUserId();
             var roleName = _tokenService.GetCurrentUserRoleName();
-            if (roleName.Equals(RoleName.Manager))
+            if (roleName.Equals(RoleName.Manager.ToString()))
             {
                 var managers = await _managerService.GetAllCompanyManagersAsync(companyVehicle.CompanyId);
                 if (!managers.Any(p => p.Id == userId))
@@ -46,7 +46,7 @@ namespace CarGo.Service
         {
             var userId = _tokenService.GetCurrentUserId();
             var roleName = _tokenService.GetCurrentUserRoleName();
-            if (roleName.Equals(RoleName.Manager))
+            if (roleName.Equals(RoleName.Manager.ToString()))
             {
                 var managers = await _managerService.GetAllCompanyManagersAsync(updatedCompanyVehicle.CompanyId);
                 if (!managers.Any(p => p.Id == userId))
@@ -60,7 +60,7 @@ namespace CarGo.Service
             // TODO: Dodaj updatedByUserId i soft delete
             var userId = _tokenService.GetCurrentUserId();
             var roleName = _tokenService.GetCurrentUserRoleName();
-            if (roleName.Equals(RoleName.Manager))
+            if (roleName.Equals(RoleName.Manager.ToString()))
             {
                 var companyVehicle = await GetCompanyVehicleByIdAsync(compVehId);
                 if (companyVehicle == null)

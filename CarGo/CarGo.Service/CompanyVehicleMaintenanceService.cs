@@ -33,7 +33,7 @@ namespace CarGo.Service
         {
             var createdByUserId = _tokenService.GetCurrentUserId();
             var roleName = _tokenService.GetCurrentUserRoleName();
-            if (roleName.Equals(RoleName.Manager))
+            if (roleName.Equals(RoleName.Manager.ToString()))
             {
                 var companyVehicle = await _companyVehicleService.GetCompanyVehicleByIdAsync(maintenance.CompanyVehicleId);
                 var managers = await _managerService.GetAllCompanyManagersAsync(companyVehicle.CompanyId);
@@ -50,7 +50,7 @@ namespace CarGo.Service
             if (maintenance == null) return false;
             var userId = _tokenService.GetCurrentUserId();
             var roleName = _tokenService.GetCurrentUserRoleName();
-            if (roleName.Equals(RoleName.Manager))
+            if (roleName.Equals(RoleName.Manager.ToString()))
             {
                 var companyVehicle = await _companyVehicleService.GetCompanyVehicleByIdAsync(maintenance.CompanyVehicleId);
                 var managers = await _managerService.GetAllCompanyManagersAsync(companyVehicle.CompanyId);
@@ -68,7 +68,7 @@ namespace CarGo.Service
             var role = _tokenService.GetCurrentUserRoleName();
             var isActiveFilter = role.Equals(RoleName.Administrator);
             var roleName = _tokenService.GetCurrentUserRoleName();
-            if (roleName.Equals(RoleName.Manager))
+            if (roleName.Equals(RoleName.Manager.ToString()))
             {
                 var companyVehicle = await _companyVehicleService.GetCompanyVehicleByIdAsync(companyVehicleId);
                 var managers = await _managerService.GetAllCompanyManagersAsync(companyVehicle.CompanyId);

@@ -35,7 +35,7 @@ namespace CarGo.Service
         {
             var userId = _tokenService.GetCurrentUserId();
             var role = _tokenService.GetCurrentUserRoleName();
-            if (role.Equals(RoleName.Manager))
+            if (role.Equals(RoleName.Manager.ToString()))
             {
                 var managers = await _managerService.GetAllCompanyManagersAsync(userId);
                 if (!managers.Any(x => x.Id == userId))
@@ -50,7 +50,7 @@ namespace CarGo.Service
         {
             var userId = _tokenService.GetCurrentUserId();
             var role = _tokenService.GetCurrentUserRoleName();
-            if (role.Equals(RoleName.Manager))
+            if (role.Equals(RoleName.Manager.ToString()))
             {
                 var managers = await _managerService.GetAllCompanyManagersAsync(userId);
                 if (!managers.Any(x => x.Id == userId))
@@ -65,7 +65,7 @@ namespace CarGo.Service
         {
             var userId = _tokenService.GetCurrentUserId();
             var role = _tokenService.GetCurrentUserRoleName();
-            if (role.Equals(RoleName.Manager))
+            if (role.Equals(RoleName.Manager.ToString()))
             {
                 var managers = await _managerService.GetAllCompanyManagersAsync(Id);
                 if (!managers.Any(x => x.Id == userId))
@@ -98,7 +98,7 @@ namespace CarGo.Service
         {
             var userId = _tokenService.GetCurrentUserId();
             var role = _tokenService.GetCurrentUserRoleName();
-            if (role.Equals(RoleName.Manager))
+            if (role.Equals(RoleName.Manager.ToString()))
             {
                 var managers = await _managerService.GetAllCompanyManagersAsync(Id);
                 if (!managers.Any(x => x.Id == userId))

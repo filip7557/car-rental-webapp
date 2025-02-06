@@ -22,7 +22,7 @@ namespace CarGo.Repository
                 using (var connection = new NpgsqlConnection(_connectionString))
                 {
                     string commandText =
-                        "SELECT \"Id\", \"FullName\", \"Email\", \"RoleId\" FROM \"User\" INNER JOIN \"UserCompany\" ON \"User\".\"Id\" = \"UserCompany\".\"UserId\" WHERE \"UserCompany\".\"CompanyId\" = @id;";
+                        "SELECT \"User\".\"Id\", \"FullName\", \"Email\", \"RoleId\" FROM \"User\" INNER JOIN \"UserCompany\" ON \"User\".\"Id\" = \"UserCompany\".\"UserId\" WHERE \"UserCompany\".\"CompanyId\" = @id;";
                     using var command = new NpgsqlCommand(commandText, connection);
 
                     command.Parameters.AddWithValue("id", companyId);
