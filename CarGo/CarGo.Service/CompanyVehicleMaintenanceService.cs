@@ -8,18 +8,25 @@ namespace CarGo.Service
     public class CompanyVehicleMaintenanceService : ICompanyVehicleMaintenanceService
     {
         private readonly ICompanyVehicleMaintenanceRepository _companyVehicleMaintenanceRepository;
+        private readonly IManagerService _managerService;
         private readonly ITokenService _tokenService;
 
         public CompanyVehicleMaintenanceService(
-            ICompanyVehicleMaintenanceRepository companyVehicleMaintenanceRepository, ITokenService tokenService)
+            ICompanyVehicleMaintenanceRepository companyVehicleMaintenanceRepository, IManagerService managerService, ITokenService tokenService)
         {
             _companyVehicleMaintenanceRepository = companyVehicleMaintenanceRepository;
+            _managerService = managerService;
             _tokenService = tokenService;
         }
 
         public async Task<bool> SaveCompanyVehicleMaintenanceAsync(CompanyVehicleMaintenance maintenance)
         {
             var createdByUserId = _tokenService.GetCurrentUserId();
+            var roleName = _tokenService.GetCurrentUserRoleName();
+            if (roleName.Equals(RoleName.Manager))
+            {
+                //var managers = _managerService.GetAllCompanyManagersAsync(maintenance.)
+            }
             return await _companyVehicleMaintenanceRepository.SaveCompanyVehicleMaintenanceAsync(maintenance,
                 createdByUserId);
         }
