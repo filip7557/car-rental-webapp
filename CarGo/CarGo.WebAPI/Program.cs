@@ -57,6 +57,8 @@ builder.Host
 
 // Add services to the container.
 
+builder.Services.AddHttpContextAccessor();
+
 var jwtKey = builder.Configuration["Jwt:Key"];
 var jwtIssuer = builder.Configuration["Jwt:Issuer"];
 
