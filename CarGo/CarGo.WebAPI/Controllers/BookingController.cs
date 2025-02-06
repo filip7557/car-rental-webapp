@@ -1,7 +1,10 @@
 ﻿using CarGo.Common;
 using CarGo.Model;
+using CarGo.Service;
 using CarGo.Service.Common;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace CarGo.WebAPI.Controllers
 {
@@ -16,6 +19,9 @@ namespace CarGo.WebAPI.Controllers
             _service = service;
         }
 
+
+
+        [Authorize]
         [HttpGet]
         public async Task<IActionResult> GetBookingsAsync(
             string orderBy = "Id",
@@ -23,16 +29,45 @@ namespace CarGo.WebAPI.Controllers
             int? pageNumber = null,
             int? rpp = null,
             bool? isActive = true,
+            DateTime? startDate = null,
+            DateTime? endDate = null,
+            Guid? statusId = null,
+            Guid? pickUpLocationId = null,
+            Guid? dropOffLocationId = null,
             Guid? userId = null,
-            Guid? companyVehicleId = null)
+            Guid? companyVehicleId = null,
+            string? bookingStatusName = null,
+            string? locationAddress = null,
+            string? vehicleMakeName = null,
+            string? vehicleModelName = null,
+            string? imageUrl = null
+        )
         {
+            var userRole = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value;
+            
+
+            if (userRole == "Administrator" || userRole=="Manager")
+            {
+                isActive = null;
+            }
+
             try
             {
                 var bookingFilter = new BookingFilter
                 {
                     IsActive = isActive,
                     UserId = userId,
-                    CompanyVehicleId = companyVehicleId
+                    CompanyVehicleId = companyVehicleId,
+                    StartDate = startDate,
+                    EndDate = endDate,
+                    StatusId = statusId,
+                    PickUpLocationId = pickUpLocationId,
+                    DropOffLocationId = dropOffLocationId,
+                    BookingStatusName = bookingStatusName,
+                    LocationAddress = locationAddress,
+                    VehicleMakeName = vehicleMakeName,
+                    VehicleModelName = vehicleModelName,
+                    ImageUrl = imageUrl,
                 };
 
                 var sorting = new BookingSorting
@@ -49,14 +84,15 @@ namespace CarGo.WebAPI.Controllers
 
                 var bookings = await _service.GetAllBookingsAsync(sorting, paging, bookingFilter);
 
-                return bookings.Count > 0 ? Ok(bookings) : NotFound("Nema dostupnih rezervacija");
+                return bookings.Count > 0 ? Ok(bookings) : NotFound("No available bookings");
             }
             catch (Exception ex)
             {
-                return StatusCode(500, $"Greška pri dohvaćanju rezervacija: {ex.Message}");
+                return StatusCode(500, $"Error when fetching booking: {ex.Message}");
             }
         }
 
+        [Authorize]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetBookingByIdAsync(Guid id)
         {
@@ -72,8 +108,9 @@ namespace CarGo.WebAPI.Controllers
             }
         }
 
+        [Authorize]
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteBooking(Guid id)
+        public async Task<IActionResult> SoftDeleteBooking(Guid id)
         {
             try
             {
@@ -83,7 +120,7 @@ namespace CarGo.WebAPI.Controllers
                     return NotFound($"The Booking with Id={id} you want to delete does not exist");
                 }
 
-                await _service.DeleteBookingAsync(id);
+                await _service.SoftDeleteBookingAsync(id);
                 return Ok("Booking has been deleted");
             }
             catch (Exception ex)
@@ -92,6 +129,7 @@ namespace CarGo.WebAPI.Controllers
             }
         }
 
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> AddBookingAsync(Booking booking)
         {
@@ -101,10 +139,12 @@ namespace CarGo.WebAPI.Controllers
                 {
                     return BadRequest("The Booking information is incorrect");
                 }
+
                 if (booking.Id == Guid.Empty)
                 {
                     booking.Id = Guid.NewGuid();
                 }
+
                 await _service.AddBookingAsync(booking);
                 return Ok("Booking added succesfully");
             }
@@ -114,6 +154,7 @@ namespace CarGo.WebAPI.Controllers
             }
         }
 
+        [Authorize]
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateBookingAsync(Guid id, Booking updatedBooking)
         {
@@ -127,14 +168,42 @@ namespace CarGo.WebAPI.Controllers
                 var existingBooking = _service.GetBookingByIdAsync(id);
                 if (existingBooking == null)
                 {
-                    return NotFound($"The Booking with Id={id} you want to delete does not exist");
+                    return NotFound($"The Booking with Id={id} you want to update does not exist");
                 }
+
                 await _service.UpdateBookingAsync(id, updatedBooking);
                 return Ok("Booking has been succesfully updated");
             }
             catch (Exception ex)
             {
                 return StatusCode(500, $"Error when updating Booking {ex.Message}");
+            }
+        }
+
+
+
+        [Authorize]
+        [HttpPut("{id}/status")]
+        public async Task<IActionResult> UpdateBookingStatusAsync(Guid id, BookingStatus status)
+        {
+            if (status == null)
+            {
+                return BadRequest("The Booking status information is incorrect");
+            }
+
+            try
+            {
+                var existingBooking = _service.GetBookingByIdAsync(id);
+                if (existingBooking == null)
+                {
+                    return NotFound($"The Booking with Id={id} you want to update does not exist");
+                }
+                await _service.UpdateBookingStatusAsync(id, status);
+                return Ok("Booking status has been succesfully updated");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Error when updating Booking status {ex.Message}");
             }
         }
     }

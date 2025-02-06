@@ -11,7 +11,7 @@ namespace CarGo.Repository
         public UserRepository()
         {
             _connectionString = Environment.GetEnvironmentVariable("ConnectionStrings__PostgresDb")
-            ?? throw new InvalidOperationException("Database connection string is not set.");
+                                ?? throw new InvalidOperationException("Database connection string is not set.");
         }
 
         public async Task<bool> RegisterUserAsync(User user)
@@ -21,9 +21,9 @@ namespace CarGo.Repository
                 using (var connection = new NpgsqlConnection(_connectionString))
                 {
                     string commandText = "INSERT INTO \"User\"" +
-                        " (\"Id\", \"FullName\", \"Email\", \"Password\", \"PhoneNumber\", \"RoleId\")" +
-                        " VALUES" +
-                        " (@id, @fullName, @email, @password, @phoneNumber, @roleId)";
+                                         " (\"Id\", \"FullName\", \"Email\", \"Password\", \"PhoneNumber\", \"RoleId\")" +
+                                         " VALUES" +
+                                         " (@id, @fullName, @email, @password, @phoneNumber, @roleId)";
 
                     using var command = new NpgsqlCommand(commandText, connection);
 
@@ -53,7 +53,9 @@ namespace CarGo.Repository
             {
                 Console.WriteLine("Exception: " + ex.ToString());
                 return false;
-            };
+            }
+
+            ;
         }
 
         public async Task<User?> GetUserByIdAsync(Guid id)
@@ -103,7 +105,8 @@ namespace CarGo.Repository
             {
                 using (var connection = new NpgsqlConnection(_connectionString))
                 {
-                    string commandText = $"UPDATE \"User\" set \"FullName\" = @fullName, {(!string.IsNullOrEmpty(user.Email) ? "\"Email\" = @email, " : "")} {(!string.IsNullOrEmpty(user.Password) ? "\"Password\" = @password, " : "")}\"PhoneNumber\" = @phoneNumber, \"DateUpdated\" = @datetime WHERE \"Id\" = @id;";
+                    string commandText =
+                        $"UPDATE \"User\" set \"FullName\" = @fullName, {(!string.IsNullOrEmpty(user.Email) ? "\"Email\" = @email, " : "")} {(!string.IsNullOrEmpty(user.Password) ? "\"Password\" = @password, " : "")}\"PhoneNumber\" = @phoneNumber, \"DateUpdated\" = @datetime WHERE \"Id\" = @id;";
                     using var command = new NpgsqlCommand(commandText, connection);
 
                     command.Parameters.AddWithValue("fullName", user.FullName);
@@ -140,7 +143,8 @@ namespace CarGo.Repository
             {
                 using (var connection = new NpgsqlConnection(_connectionString))
                 {
-                    string commandText = $"UPDATE \"User\" set \"RoleId\" = @roleId, \"DateUpdated\" = @datetime WHERE \"Id\" = @id;";
+                    string commandText =
+                        $"UPDATE \"User\" set \"RoleId\" = @roleId, \"DateUpdated\" = @datetime WHERE \"Id\" = @id;";
                     using var command = new NpgsqlCommand(commandText, connection);
 
                     command.Parameters.AddWithValue("roleId", roleId);

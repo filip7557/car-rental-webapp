@@ -12,19 +12,20 @@ namespace CarGo.Repository
         public CompanyVehicleMaintenanceRepository()
         {
             _connectionString = Environment.GetEnvironmentVariable("ConnectionStrings__PostgresDb")
-            ?? throw new InvalidOperationException("Database connection string is not set.");
+                                ?? throw new InvalidOperationException("Database connection string is not set.");
         }
 
-        public async Task<bool> SaveCompanyVehicleMaintenanceAsync(CompanyVehicleMaintenance maintenance, Guid createdByUserId)
+        public async Task<bool> SaveCompanyVehicleMaintenanceAsync(CompanyVehicleMaintenance maintenance,
+            Guid createdByUserId)
         {
             try
             {
                 using (var connection = new NpgsqlConnection(_connectionString))
                 {
                     string commandText = "INSERT INTO \"CompanyVehicleMaintenance\"" +
-                        " (\"Id\", \"CompanyVehicleId\", \"Title\", \"Description\", \"CreatedByUserId\", \"UpdatedByUserId\")" +
-                        " VALUES" +
-                        " (@id, @companyVehicleId, @title, @description, @createdBy, @updatedBy)";
+                                         " (\"Id\", \"CompanyVehicleId\", \"Title\", \"Description\", \"CreatedByUserId\", \"UpdatedByUserId\")" +
+                                         " VALUES" +
+                                         " (@id, @companyVehicleId, @title, @description, @createdBy, @updatedBy)";
 
                     using var command = new NpgsqlCommand(commandText, connection);
 
@@ -62,7 +63,8 @@ namespace CarGo.Repository
             {
                 using (var connection = new NpgsqlConnection(_connectionString))
                 {
-                    string commandText = "UPDATE \"CompanyVehicleMaintenance\" set \"IsActive\" = @value, \"UpdatedByUserId\" = @userId WHERE \"Id\" = @id";
+                    string commandText =
+                        "UPDATE \"CompanyVehicleMaintenance\" set \"IsActive\" = @value, \"UpdatedByUserId\" = @userId WHERE \"Id\" = @id";
                     using var command = new NpgsqlCommand(commandText, connection);
 
                     command.Parameters.AddWithValue("value", false);
@@ -88,14 +90,16 @@ namespace CarGo.Repository
             }
         }
 
-        public async Task<List<CompanyVehicleMaintenance>> GetMaintenancesByCompanyVehicleIdAsync(Guid companyVehicleId, Paging paging, bool isActiveFilter)
+        public async Task<List<CompanyVehicleMaintenance>> GetMaintenancesByCompanyVehicleIdAsync(Guid companyVehicleId,
+            Paging paging, bool isActiveFilter)
         {
             var maintenances = new List<CompanyVehicleMaintenance>();
             try
             {
                 using (var connection = new NpgsqlConnection(_connectionString))
                 {
-                    string commandText = $"SELECT \"Id\", \"CompanyVehicleId\", \"Title\", \"Description\" \"DateCreated\" FROM \"CompanyVehicleMaintenance\" WHERE \"CompanyVehicleId\" = @companyVehId{(!isActiveFilter ? " AND \"IsActive = @isActive" : "")} ORDER BY \"DateCreated\" DESC LIMIT @rpp OFFSET (@pageNumber - 1) * @rpp";
+                    string commandText =
+                        $"SELECT \"Id\", \"CompanyVehicleId\", \"Title\", \"Description\", \"DateCreated\" FROM \"CompanyVehicleMaintenance\" WHERE \"CompanyVehicleId\" = @companyVehId{(!isActiveFilter ? " AND \"IsActive = @isActive" : "")} ORDER BY \"DateCreated\" DESC LIMIT @rpp OFFSET (@pageNumber - 1) * @rpp";
                     using var command = new NpgsqlCommand(commandText, connection);
 
                     command.Parameters.AddWithValue("companyVehId", NpgsqlTypes.NpgsqlDbType.Uuid, companyVehicleId);
@@ -139,7 +143,8 @@ namespace CarGo.Repository
             {
                 using (var connection = new NpgsqlConnection(_connectionString))
                 {
-                    string commandText = "SELECT COUNT(\"Id\") FROM \"CompanyVehicleMaintenance\" WHERE \"CompanyVehicleId\" = @compVehId";
+                    string commandText =
+                        "SELECT COUNT(\"Id\") FROM \"CompanyVehicleMaintenance\" WHERE \"CompanyVehicleId\" = @compVehId";
                     using var command = new NpgsqlCommand(commandText, connection);
 
                     command.Parameters.AddWithValue("compVehId", NpgsqlTypes.NpgsqlDbType.Uuid, companyVehicleId);
@@ -157,6 +162,7 @@ namespace CarGo.Repository
                         connection.Close();
                         return 0;
                     }
+
                     connection.Close();
 
                     return count;
@@ -166,6 +172,45 @@ namespace CarGo.Repository
             {
                 Console.WriteLine(e.Message);
                 return 0;
+            }
+        }
+
+        public async Task<CompanyVehicleMaintenance?> GetCompanyVehicleMaintenanceByIdAsync(Guid id)
+        {
+            CompanyVehicleMaintenance? maintenance = null;
+            try
+            {
+                using (var connection = new NpgsqlConnection(_connectionString))
+                {
+                    string commandText =
+                        $"SELECT \"Id\", \"CompanyVehicleId\", \"Title\", \"Description\", \"DateCreated\" FROM \"CompanyVehicleMaintenance\" WHERE \"Id\" = @id;";
+                    using var command = new NpgsqlCommand(commandText, connection);
+
+                    command.Parameters.AddWithValue("id", NpgsqlTypes.NpgsqlDbType.Uuid, id);
+
+                    var reader = await command.ExecuteReaderAsync();
+
+                    if (reader.HasRows)
+                    {
+                        await reader.ReadAsync();
+                        maintenance = new CompanyVehicleMaintenance
+                        {
+                            Id = Guid.Parse(reader[0].ToString()!),
+                            CompanyVehicleId = Guid.Parse(reader[1].ToString()!),
+                            Title = reader[2].ToString()!,
+                            Description = reader[3].ToString()!
+                        };
+                    }
+
+                    connection.Close();
+
+                    return maintenance;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Exception: " + ex.Message);
+                return maintenance;
             }
         }
     }

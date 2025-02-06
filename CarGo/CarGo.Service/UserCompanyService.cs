@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using CarGo.Model;
-using CarGo.Repository;
+﻿using CarGo.Model;
 using CarGo.Repository.Common;
 using CarGo.Service.Common;
 

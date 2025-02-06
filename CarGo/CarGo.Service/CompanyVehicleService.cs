@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using CarGo.Common;
+﻿using CarGo.Common;
 using CarGo.Model;
 using CarGo.Repository.Common;
 using CarGo.Service.Common;
@@ -13,13 +8,16 @@ namespace CarGo.Service
     public class CompanyVehicleService : ICompanyVehicleService
     {
         private ICompanyVehicleRepository _repository;
+        private readonly ITokenService _tokenService;
 
-        public CompanyVehicleService(ICompanyVehicleRepository repository)
+        public CompanyVehicleService(ICompanyVehicleRepository repository, ITokenService tokenService)
         {
             _repository = repository;
+            _tokenService = tokenService;
         }
 
-        public async Task<List<CompanyVehicle>> GetAllCompanyVehiclesAsync(BookingSorting sorting, Paging paging, CompanyVehicleFilter filter)
+        public async Task<List<CompanyVehicle>> GetAllCompanyVehiclesAsync(BookingSorting sorting, Paging paging,
+            CompanyVehicleFilter filter)
         {
             return await _repository.GetAllCompanyVehiclesAsync(sorting, paging, filter);
         }
@@ -29,19 +27,23 @@ namespace CarGo.Service
             return await _repository.GetCompanyVehicleByIdAsync(id);
         }
 
-        public async Task AddCompanyVehicleAsync(CompanyVehicle companyVehicle, Guid userId)
+        public async Task AddCompanyVehicleAsync(CompanyVehicle companyVehicle)
         {
-            await _repository.AddCompanyVehicleAsync(companyVehicle,userId);
+            var userId = _tokenService.GetCurrentUserId();
+            await _repository.AddCompanyVehicleAsync(companyVehicle, userId);
         }
 
-        public async Task UpdateCompanyVehicleAsync(Guid id, CompanyVehicle updatedCompanyVehicle, Guid userId)
+        public async Task UpdateCompanyVehicleAsync(Guid id, CompanyVehicle updatedCompanyVehicle)
         {
+            var userId = _tokenService.GetCurrentUserId();
             await _repository.UpdateCompanyVehicleAsync(id, updatedCompanyVehicle, userId);
         }
 
         public async Task DeleteCompanyVehicleAsync(Guid compVehId, Guid id)
         {
-            await _repository.DeleteCompanyVehicleAsync(compVehId, id);
+            // TODO: Dodaj updatedByUserId i soft delete
+            var userId = _tokenService.GetCurrentUserId();
+            await _repository.DeleteCompanyVehicleAsync(compVehId, userId);
         }
     }
 }

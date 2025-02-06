@@ -12,6 +12,6 @@ namespace CarGo.Service.Common
 
         //Task<bool> Put(Guid id);
 
-        Task<bool> DeleteAsync(Guid locationId, Guid id);
+        Task<bool> DeleteAsync(Guid locationId);
     }
 }

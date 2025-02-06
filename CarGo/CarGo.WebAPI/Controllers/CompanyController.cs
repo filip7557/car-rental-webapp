@@ -1,5 +1,4 @@
-﻿using Autofac.Core;
-using CarGo.Service.Common;
+﻿using CarGo.Service.Common;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CarGo.WebAPI.Controllers

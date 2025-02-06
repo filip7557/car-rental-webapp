@@ -165,7 +165,7 @@ namespace Repository
 
                 bool newIsActive = !(bool)currentStatus;
 
-                // Ažuriraj status
+                // Aï¿½uriraj status
                 using var updateCommand = new NpgsqlCommand(updateCommandText, connection);
                 updateCommand.Parameters.AddWithValue("id", vehicleId);
                 updateCommand.Parameters.AddWithValue("newIsActive", newIsActive);

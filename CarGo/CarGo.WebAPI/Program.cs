@@ -50,12 +50,16 @@ builder.Host
         containerBuilder.RegisterType<UserCompanyRepository>().As<IUserCompanyRepository>();
         containerBuilder.RegisterType<ManagerRepository>().As<IManagerRepository>();
         containerBuilder.RegisterType<ManagerService>().As<IManagerService>();
-
         containerBuilder.RegisterType<CompanyVehicleService>().As<ICompanyVehicleService>();
         containerBuilder.RegisterType<CompanyVehicleRepository>().As<ICompanyVehicleRepository>();
+        containerBuilder.RegisterType<DamageReportRepository>().As<IDamageReportRepository>();
+        containerBuilder.RegisterType<DamageReportService>().As<IDamageReportService>();
+        containerBuilder.RegisterType<HttpContextAccessor>().As<IHttpContextAccessor>().SingleInstance();
     });
 
 // Add services to the container.
+
+builder.Services.AddHttpContextAccessor();
 
 var jwtKey = builder.Configuration["Jwt:Key"];
 var jwtIssuer = builder.Configuration["Jwt:Issuer"];

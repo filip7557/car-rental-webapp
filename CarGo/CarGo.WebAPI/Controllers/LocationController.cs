@@ -1,8 +1,8 @@
-﻿using System.Security.Claims;
-using CarGo.Model;
+﻿using CarGo.Model;
 using CarGo.Service.Common;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace CarGo.WebAPI.Controllers
 {
@@ -43,6 +43,7 @@ namespace CarGo.WebAPI.Controllers
                 {
                     return NotFound("Location not found with the provided ID.");
                 }
+
                 return Ok(locations);
             }
             catch (Exception ex)
@@ -50,6 +51,7 @@ namespace CarGo.WebAPI.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
         [HttpPost]
         [Authorize(Roles = "Administrator,Manager")]
         public async Task<IActionResult> Post(Location location)
@@ -59,10 +61,11 @@ namespace CarGo.WebAPI.Controllers
                 if (location != null)
                 {
                     var userId = Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
-                    await _locationService.PostAsync(location, userId);
+                    await _locationService.PostAsync(location);
 
                     return Ok("Location of company added successfully.");
                 }
+
                 return BadRequest("Failed to add location of company.");
             }
             catch (Exception ex)
@@ -71,21 +74,22 @@ namespace CarGo.WebAPI.Controllers
             }
         }
 
-        
-
         [HttpDelete("{locationId}")]
         [Authorize(Roles = "Administrator,Manager")]
         public async Task<IActionResult> DeleteAsync(Guid locationId)
         {
             try
             {
-                var location =  await _locationService.GetByIdAsync(locationId);
+                var location = await _locationService.GetByIdAsync(locationId);
                 if (location != null)
                 {
-                    var userId = Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value); //(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
-                    await _locationService.DeleteAsync(locationId, userId);
+                    var userId =
+                        Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!
+                            .Value); //(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+                    await _locationService.DeleteAsync(locationId);
                     return Ok("Location isActive status changed successfully.");
                 }
+
                 return NotFound("Location not found with the provided ID.");
             }
             catch (Exception ex)

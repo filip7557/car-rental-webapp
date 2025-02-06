@@ -4,7 +4,7 @@ namespace CarGo.Service.Common
 {
     public interface IImageService
     {
-        public Task<bool> SaveImageAsync(ImageDTO image, Guid createdByUserId);
+        public Task<bool> SaveImageAsync(ImageDTO image);
 
         public Task<List<Guid>> GetImageIdsByDamageReportAsync(Guid damageReportId);
 
@@ -12,6 +12,6 @@ namespace CarGo.Service.Common
 
         public Task<bool> DeleteImageByIdAsync(Guid imageId);
 
-        public Task<bool> SaveImagesAsync(List<ImageDTO> images, Guid userId);
+        public Task<bool> SaveImagesAsync(List<ImageDTO> images);
     }
 }

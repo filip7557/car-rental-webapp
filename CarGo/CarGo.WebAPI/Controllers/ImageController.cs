@@ -26,7 +26,7 @@ namespace CarGo.WebAPI.Controllers
 
             var userId = Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
 
-            var success = await _imageService.SaveImageAsync(image, userId);
+            var success = await _imageService.SaveImageAsync(image);
             if (success)
                 return Ok("Saved.");
             return BadRequest();
@@ -38,7 +38,7 @@ namespace CarGo.WebAPI.Controllers
         {
             if (!images.Any()) return BadRequest();
             var userId = Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
-            var success = await _imageService.SaveImagesAsync(images, userId);
+            var success = await _imageService.SaveImagesAsync(images);
             if (success)
                 return Ok("Saved.");
             return BadRequest();

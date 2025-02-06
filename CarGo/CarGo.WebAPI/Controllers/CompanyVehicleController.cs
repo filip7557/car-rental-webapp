@@ -1,11 +1,9 @@
-﻿using System.ComponentModel.Design;
-using System.Drawing;
-using System.Security.Claims;
-using CarGo.Common;
+﻿using CarGo.Common;
 using CarGo.Model;
 using CarGo.Service.Common;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace CarGo.WebAPI.Controllers
 {
@@ -19,8 +17,8 @@ namespace CarGo.WebAPI.Controllers
         {
             _service = service;
         }
-        
-        [Authorize(Roles ="User,Manager,Administrator")]
+
+        [Authorize(Roles = "User,Manager,Administrator")]
         [HttpGet]
         public async Task<IActionResult> GetCompanyVehiclesAsync(
             string orderBy = "Id",
@@ -84,7 +82,6 @@ namespace CarGo.WebAPI.Controllers
             }
         }
 
-
         [HttpDelete("{id}")]
         [Authorize(Roles = "Administrator,Manager")]
         public async Task<IActionResult> DeleteCompanyVehicle(Guid id)
@@ -117,13 +114,14 @@ namespace CarGo.WebAPI.Controllers
                 {
                     return BadRequest("Podaci o vozilu su neispravni");
                 }
+
                 if (vehicle.Id == Guid.Empty)
                 {
-                    
                     vehicle.Id = Guid.NewGuid();
                 }
+
                 var userId = Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
-                await _service.AddCompanyVehicleAsync(vehicle, userId);
+                await _service.AddCompanyVehicleAsync(vehicle);
                 return Ok("Vozilo je uspješno dodano");
             }
             catch (Exception ex)
@@ -148,8 +146,9 @@ namespace CarGo.WebAPI.Controllers
                 {
                     return NotFound($"Vozilo s Id={id} ne postoji");
                 }
+
                 var userId = Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
-                await _service.UpdateCompanyVehicleAsync(id, updatedVehicle, userId);
+                await _service.UpdateCompanyVehicleAsync(id, updatedVehicle);
                 return Ok("Vozilo je uspješno ažurirano");
             }
             catch (Exception ex)

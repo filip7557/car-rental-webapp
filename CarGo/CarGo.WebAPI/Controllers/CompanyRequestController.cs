@@ -1,9 +1,6 @@
-﻿using System.Security.Claims;
-using CarGo.Model;
+﻿using CarGo.Model;
 using CarGo.Repository.Common;
-using CarGo.Service;
 using CarGo.Service.Common;
-using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Mvc;
 using RouteAttribute = Microsoft.AspNetCore.Mvc.RouteAttribute;
 
@@ -17,7 +14,8 @@ namespace CarGo.WebAPI.Controllers
         private readonly ICompanyRequestRepository _companyRequestRepository;
         private readonly ICompanyService _companyService;
 
-        public CompanyRequestController(ICompanyRequestService companyRequestService, ICompanyRequestRepository companyRequestRepository, ICompanyService companyService)
+        public CompanyRequestController(ICompanyRequestService companyRequestService,
+            ICompanyRequestRepository companyRequestRepository, ICompanyService companyService)
         {
             _companyRequestService = companyRequestService;
             _companyRequestRepository = companyRequestRepository;
@@ -32,6 +30,7 @@ namespace CarGo.WebAPI.Controllers
             {
                 return Ok("Company request created successfully.");
             }
+
             return BadRequest("Failed to create company request.");
         }
 
@@ -77,10 +76,12 @@ namespace CarGo.WebAPI.Controllers
                     companyRequest.IsActive = false;
                     result = await _companyRequestRepository.UpdateCompanyRequestAsync(companyRequest);
                 }
+
                 if (result)
                 {
                     return Ok(isAccepted ? "Company request accepted successfully." : "Company request rejected.");
                 }
+
                 return BadRequest("Failed to update company request.");
             }
             catch (Exception e)

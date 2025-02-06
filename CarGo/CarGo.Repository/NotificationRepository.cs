@@ -12,7 +12,7 @@ namespace CarGo.Repository
         public NotificationRepository()
         {
             _connectionString = Environment.GetEnvironmentVariable("ConnectionStrings__PostgresDb")
-            ?? throw new InvalidOperationException("Database connection string is not set.");
+                                ?? throw new InvalidOperationException("Database connection string is not set.");
         }
 
         public async Task<bool> SaveNotificationAsync(Notification notification)
@@ -21,7 +21,8 @@ namespace CarGo.Repository
             {
                 using (var connection = new NpgsqlConnection(_connectionString))
                 {
-                    string commandText = "INSERT INTO \"Notification\" (\"Id\", \"Title\", \"Text\", \"From\", \"To\") VALUES (@id, @title, @text, @from, @to)";
+                    string commandText =
+                        "INSERT INTO \"Notification\" (\"Id\", \"Title\", \"Text\", \"From\", \"To\") VALUES (@id, @title, @text, @from, @to)";
                     using var command = new NpgsqlCommand(commandText, connection);
 
                     command.Parameters.AddWithValue("id", Guid.NewGuid());
@@ -57,7 +58,8 @@ namespace CarGo.Repository
             {
                 using (var connection = new NpgsqlConnection(_connectionString))
                 {
-                    string commandText = "SELECT \"Id\", \"Title\", \"Text\", \"From\", \"To\" FROM \"Notification\" ORDER BY \"DateCreated\" DESC LIMIT @rpp OFFSET (@pageNumber - 1) * @rpp";
+                    string commandText =
+                        "SELECT \"Id\", \"Title\", \"Text\", \"From\", \"To\" FROM \"Notification\" ORDER BY \"DateCreated\" DESC LIMIT @rpp OFFSET (@pageNumber - 1) * @rpp";
                     using var command = new NpgsqlCommand(commandText, connection);
 
                     command.Parameters.AddWithValue("rpp", paging.Rpp);
@@ -118,6 +120,7 @@ namespace CarGo.Repository
                         connection.Close();
                         return 0;
                     }
+
                     connection.Close();
 
                     return count;

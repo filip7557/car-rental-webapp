@@ -1,5 +1,6 @@
 ﻿using CarGo.Model;
 using CarGo.Service.Common;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -14,12 +15,25 @@ namespace CarGo.Service
         private readonly IConfiguration _config;
         private readonly IRoleService _roleService;
         private readonly IUserService _userService;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public TokenService(IConfiguration config, IRoleService roleService, IUserService userService)
+        public TokenService(IConfiguration config, IRoleService roleService, IUserService userService,
+            IHttpContextAccessor httpContextAccessor)
         {
             _config = config;
             _roleService = roleService;
             _userService = userService;
+            _httpContextAccessor = httpContextAccessor;
+        }
+
+        public Guid GetCurrentUserId()
+        {
+            return Guid.Parse(_httpContextAccessor.HttpContext!.User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+        }
+
+        public string GetCurrentUserRoleName()
+        {
+            return _httpContextAccessor.HttpContext!.User.FindFirst(ClaimTypes.Role)!.Value;
         }
 
         private async Task<string> GenerateTokenAsync(User user)
@@ -29,11 +43,11 @@ namespace CarGo.Service
 
             var claims = new[]
             {
-            new Claim(JwtRegisteredClaimNames.Email, user.Email),
-            new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-            new Claim(ClaimTypes.Role, await _roleService.GetRoleNameByIdAsync(user.RoleId!)),
-            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
-        };
+                new Claim(JwtRegisteredClaimNames.Email, user.Email),
+                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+                new Claim(ClaimTypes.Role, await _roleService.GetRoleNameByIdAsync(user.RoleId!)),
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+            };
 
             var token = new JwtSecurityToken(
                 issuer: _config["Jwt:Issuer"],
@@ -81,6 +95,7 @@ namespace CarGo.Service
                 var token = await GenerateTokenAsync(user);
                 return token;
             }
+
             return "";
         }
     }

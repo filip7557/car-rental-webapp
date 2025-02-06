@@ -1,4 +1,5 @@
 using CarGo.Service.Common;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CarGoAPI.Controllers
@@ -14,6 +15,7 @@ namespace CarGoAPI.Controllers
             _service = carGoService;
         }
 
+        [Authorize(Roles = "User,Manager,Administrator")]
         [HttpGet("bookingStatus")]
         public async Task<IActionResult> GetAllAsync()
         {
@@ -25,6 +27,7 @@ namespace CarGoAPI.Controllers
             return Ok(bookingStatus);
         }
 
+        [Authorize(Roles = "User,Manager,Administrator")]
         [HttpGet("{bookingStatus-id}")]
         public async Task<IActionResult> GetByIdAsync(Guid id)
         {
