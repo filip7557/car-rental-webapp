@@ -159,7 +159,7 @@ namespace CarGo.Repository
                     {
                         command.Parameters.AddWithValue("companyId", NpgsqlTypes.NpgsqlDbType.Uuid, companyLocations.CompanyId);
                         command.Parameters.AddWithValue("locationId", NpgsqlTypes.NpgsqlDbType.Uuid, companyLocations.LocationId);
-                        command.Parameters.AddWithValue("isactive", NpgsqlTypes.NpgsqlDbType.Boolean, companyLocations.IsActive);
+                        command.Parameters.AddWithValue("isactive", companyLocations.IsActive);
                         command.Parameters.AddWithValue("updatedbyuserid", NpgsqlTypes.NpgsqlDbType.Uuid, companyLocations.UpdatedByUserId);
                         command.Parameters.AddWithValue("dateupdated", companyLocations.DateUpdated);
                         connection.Open();

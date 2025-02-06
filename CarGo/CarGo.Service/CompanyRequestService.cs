@@ -10,17 +10,43 @@ namespace CarGo.Service
 
         private readonly ITokenService _tokenService;
 
-        public CompanyRequestService(ICompanyRequestRepository companyRequestRepository, ICompanyService companyService, ITokenService tokenService)
+        private readonly INotificationService _notificationService;
+
+        private readonly IManagerService _managerService;
+
+        private readonly IUserService _userService;
+
+        public CompanyRequestService(ICompanyRequestRepository companyRequestRepository, ITokenService tokenService, INotificationService notificationService, IManagerService managerService, IUserService userService)
         {
             _tokenService = tokenService;
             _companyRequestRepository = companyRequestRepository;
+            _notificationService = notificationService;
+            _managerService = managerService;
+            _userService = userService;
         }
 
         public async Task<bool> UpdateCompanyRequestAsync(CompanyRequest companyRequest)
         {
             var userId = _tokenService.GetCurrentUserId();
             companyRequest.UpdatedByUserId = userId;
-            return await _companyRequestRepository.UpdateCompanyRequestAsync(companyRequest);
+            var result = await _companyRequestRepository.UpdateCompanyRequestAsync(companyRequest);
+            if (result)
+            {
+                if (!companyRequest.IsApproved)
+                {
+                    var notification = new Notification
+                    {
+                        Title = "CarGo - Company Request Rejected",
+                        Text = "Hello!" +
+                        $"\n\nYour request to create company {companyRequest.Name} has been rejected." +
+                        $"\n\nBest regards," +
+                        $"\nCarGo Administration Team.",
+                        To = companyRequest.Email,
+                    };
+                    result = result & await _notificationService.SendNotificationAsync(notification);
+                }
+            }
+            return result;
         }
 
         public async Task<bool> CreateCompanyAsync(Company company)
@@ -29,12 +55,46 @@ namespace CarGo.Service
             company.Id = Guid.NewGuid();
             company.CreatedByUserId = userId;
             company.UpdatedByUserId = userId;
-            return await _companyRequestRepository.CreateCompanyAsync(company);
+            var result =  await _companyRequestRepository.CreateCompanyAsync(company);
+            if (result)
+            {
+                var notification = new Notification
+                {
+                    Title = "CarGo - Company Request Approved",
+                    Text = "Hello!" +
+                    $"\n\nYour request to create company {company.Name} has been approved." +
+                    $"\nYou can now log in and manage your company." +
+                    $"\n\nBest regards," +
+                    $"\nCarGo Administration Team.",
+                    To = company.Email,
+                };
+                var user = await _userService.GetUserByIdAsync(userId);
+                await _managerService.AddManagerToCompanyAsync(company.Id, user!);
+                return await _notificationService.SendNotificationAsync(notification);
+            }
+            return false;
         }
 
         public async Task<bool> NewCompanyRequest(CompanyRequest newCompanyRequest)
         {
-            return await _companyRequestRepository.NewCompanyRequest(newCompanyRequest);
+            var userId = _tokenService.GetCurrentUserId();
+            newCompanyRequest.UserId = userId;
+            var result = await _companyRequestRepository.NewCompanyRequest(newCompanyRequest);
+            if (result)
+            {
+                var notification = new Notification
+                {
+                    Title = "CarGo - Company Request Created",
+                    Text = "Hello!" +
+                    $"\n\nYour request to create company {newCompanyRequest.Name} has been created." +
+                    $"\nWe will notify you once an administrator reviews it." +
+                    $"\n\nBest regards," +
+                    $"\nCarGo Administration Team.",
+                    To = newCompanyRequest.Email,
+                };
+                return await _notificationService.SendNotificationAsync(notification);
+            }
+            return false;
         }
     }
 }

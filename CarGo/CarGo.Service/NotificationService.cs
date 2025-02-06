@@ -2,9 +2,10 @@
 using CarGo.Model;
 using CarGo.Repository.Common;
 using CarGo.Service.Common;
-using MailKit.Net.Smtp;
 using Microsoft.Extensions.Options;
 using MimeKit;
+using System.Net;
+using System.Net.Mail;
 
 namespace CarGo.Service
 {
@@ -20,7 +21,7 @@ namespace CarGo.Service
             _emailSettings = emailSettings.Value;
         }
 
-        public async Task<bool> SendNotificationAsync(Notification notification)
+        public async Task<bool> Test(Notification notification)
         {
             var email = new MimeMessage();
 
@@ -31,7 +32,8 @@ namespace CarGo.Service
             var bodyBuilder = new BodyBuilder { TextBody = notification.Text };
             email.Body = bodyBuilder.ToMessageBody();
 
-            using var smtp = new SmtpClient();
+            using var smtp = new MailKit.Net.Smtp.SmtpClient();
+
             await smtp.ConnectAsync(_emailSettings.SmtpServer, _emailSettings.SmtpPort, _emailSettings.UseSsl);
 
             await smtp.AuthenticateAsync(_emailSettings.SenderEmail, _emailSettings.Password);
@@ -41,6 +43,17 @@ namespace CarGo.Service
             notification.From = _emailSettings.SenderEmail;
 
             return await SaveNotificationAsync(notification);
+        }
+
+        public async Task<bool> SendNotificationAsync(Notification notification)
+        {
+            var client = new SmtpClient("sandbox.smtp.mailtrap.io", 2525)
+            {
+                Credentials = new NetworkCredential("9ac0eca29f2fe8", "434deebf9688bc"),
+                EnableSsl = true
+            };
+            client.Send("from@example.com", "to@example.com", notification.Title, notification.Text);
+            return true;
         }
 
         public async Task<PagedResponse<Notification>> GetAllNotificationsAsync(Paging paging)
