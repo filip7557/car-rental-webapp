@@ -54,6 +54,8 @@ builder.Host
         containerBuilder.RegisterType<CompanyVehicleRepository>().As<ICompanyVehicleRepository>();
         containerBuilder.RegisterType<DamageReportRepository>().As<IDamageReportRepository>();
         containerBuilder.RegisterType<DamageReportService>().As<IDamageReportService>();
+        containerBuilder.RegisterType<ReviewService>().As<IReviewService>();
+        containerBuilder.RegisterType<ReviewRepository>().As<IReviewRepository>();
         containerBuilder.RegisterType<HttpContextAccessor>().As<IHttpContextAccessor>().SingleInstance();
     });
 

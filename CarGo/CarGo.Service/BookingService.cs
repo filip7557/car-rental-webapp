@@ -30,14 +30,34 @@ namespace CarGo.Service
    
         }
 
-        public async Task<List<Booking>> GetAllBookingsAsync(BookingSorting sorting, BookingPaging paging,
-            BookingFilter filter)
+        public async Task<List<Booking>> GetAllBookingsAsync(BookingSorting sorting, BookingPaging paging, BookingFilter filter)
         {
             var userId = _tokenService.GetCurrentUserId();
-            var userRole=_tokenService.GetCurrentUserRoleName();
-            return await _repository.GetAllBookingsAsync(sorting, paging, filter, userId, userRole);
-        }
+            var userRole = _tokenService.GetCurrentUserRoleName();
 
+
+            filter.UserId = userId;
+            filter.UserRole = userRole;
+
+
+            if (userRole == "Administrator")
+            {
+                
+                filter.IsActive = null;
+            }
+            else if (userRole == "User")
+            {
+       
+                filter.IsActive = true;
+            }
+
+            if (userRole == "Administrator")
+            {
+                filter.UserId = null;  
+            }
+
+            return await _repository.GetAllBookingsAsync(sorting, paging, filter);
+        }
         public async Task<Booking> GetBookingByIdAsync(Guid id)
         {
             return await _repository.GetBookingByIdAsync(id);
