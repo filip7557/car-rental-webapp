@@ -16,13 +16,7 @@ namespace CarGo.Repository
                                 ?? throw new InvalidOperationException("Database connection string is not set.");
         }
 
-<<<<<<< HEAD
-        public async Task<List<Booking>> GetAllBookingsAsync(BookingSorting sorting, BookingPaging paging,
-            BookingFilter filter)
-=======
-
         public async Task<List<Booking>> GetAllBookingsAsync(BookingSorting sorting, BookingPaging paging, BookingFilter filter, Guid userId, string userRole)
->>>>>>> df6306f (Booking done)
         {
             var bookings = new List<Booking>();
 
@@ -33,64 +27,7 @@ namespace CarGo.Repository
                     cmd.Connection = connection;
 
                     var commandText = new StringBuilder(@"
-<<<<<<< HEAD
-                    SELECT
-                         b.*,
-
-                         bs.""Name"" AS ""BookingStatus"",
-
-                         c.""Name"" AS ""CompanyName"",
-                         vm.""Name"" AS ""Model"",
-                         vmm.""Name"" AS ""Make"",
-                         vc.""Name"" AS ""Color"",
-                         cv.""DailyPrice"",
-                         cv.""PlateNumber"",
-                         cv.""ImageUrl"",
-
-                         cl.""Address"" AS ""LocationAddress"",
-                         cl.""City"" AS ""LocationCity"",
-
-                         u.""Id"" AS ""UserId"",
-                         u.""FullName"",
-                         u.""Email"",
-                         u.""PhoneNumber"",
-                         r.""Name"" AS ""UserRole""
-
-                    FROM ""Booking"" b
-
-                    JOIN ""BookingStatus"" bs
-                         ON b.""StatusId"" = bs.""Id""
-
-                    JOIN ""CompanyVehicle"" cv
-                         ON b.""CompanyVehicleId"" = cv.""Id""
-
-                    JOIN ""Company"" c
-                         ON cv.""CompanyId"" = c.""Id""
-
-                    JOIN ""VehicleModel"" vm
-                         ON cv.""VehicleModelId"" = vm.""Id""
-
-                    JOIN ""VehicleMake"" vmm
-                         ON vm.""MakeId"" = vmm.""Id""
-
-                    JOIN ""VehicleColor"" vc
-                         ON cv.""ColorId"" = vc.""Id""
-
-                    JOIN ""Location"" cl
-                         ON cv.""CurrentLocationId"" = cl.""Id""
-
-                    JOIN ""User"" u
-                         ON b.""UserId"" = u.""Id""
-
-                    JOIN ""Role"" r
-                         ON u.""RoleId"" = r.""Id""
-
-                    WHERE 1 = 1");
-
-                    ApplyFilters(cmd, commandText, filter);
-
-=======
-                        SELECT 
+                        SELECT
                              b.*,
                              bs.""Name"" AS ""BookingStatus"",
                              c.""Name"" AS ""CompanyName"",
@@ -119,14 +56,11 @@ namespace CarGo.Repository
                         JOIN ""Role"" r ON u.""RoleId"" = r.""Id""
                         WHERE 1 = 1");
 
-                    
                     if (userRole == "User")
                     {
                         commandText.Append(" AND b.\"UserId\" = @userId");
                         cmd.Parameters.AddWithValue("userId", userId);
                     }
-
-                  
                     else if (userRole == "Manager")
                     {
                         commandText.Append(@"
@@ -134,9 +68,7 @@ namespace CarGo.Repository
                         cmd.Parameters.AddWithValue("userId", userId);
                     }
 
-
                     ApplyFilters(cmd, commandText, filter);
->>>>>>> df6306f (Booking done)
                     ApplySorting(cmd, commandText, sorting);
                     ApplyPaging(cmd, commandText, paging);
 
@@ -156,11 +88,6 @@ namespace CarGo.Repository
             return bookings;
         }
 
-<<<<<<< HEAD
-=======
-
-
->>>>>>> df6306f (Booking done)
         private void ApplySorting(NpgsqlCommand cmd, StringBuilder commandText, BookingSorting sorting)
         {
             if (!string.IsNullOrEmpty(sorting.OrderBy))
@@ -391,7 +318,6 @@ namespace CarGo.Repository
                 }
             }
         }
-
 
         public async Task UpdateBookingStatusAsync(Guid bookingId, BookingStatus status, Guid updatedByUserId)
         {
