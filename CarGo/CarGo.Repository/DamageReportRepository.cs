@@ -1,5 +1,4 @@
-﻿
-using CarGo.Model;
+﻿using CarGo.Model;
 using CarGo.Repository.Common;
 using Npgsql;
 
@@ -46,7 +45,7 @@ namespace CarGo.Repository
                 }
             }
             catch (Exception ex)
-            { 
+            {
                 Console.WriteLine("Exception: " + ex.Message);
                 return false;
             }
@@ -93,6 +92,7 @@ namespace CarGo.Repository
                 return damageReport;
             }
         }
+
         public async Task<bool> DeleteDamageReportAsync(Guid damageReportId)
         {
             try

@@ -1,11 +1,9 @@
-﻿using System.ComponentModel.Design;
-using System.Drawing;
-using System.Security.Claims;
-using CarGo.Common;
+﻿using CarGo.Common;
 using CarGo.Model;
 using CarGo.Service.Common;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace CarGo.WebAPI.Controllers
 {
@@ -83,7 +81,6 @@ namespace CarGo.WebAPI.Controllers
                 return StatusCode(500, $"Greška pri dohvaćanju vozila: {ex.Message}");
             }
         }
-
 
         [HttpDelete("{id}")]
         [Authorize(Roles = "Administrator,Manager")]

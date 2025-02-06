@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using CarGo.Common;
+﻿using CarGo.Common;
 using CarGo.Model;
 using CarGo.Repository.Common;
 using Npgsql;
+using System.Text;
 
 namespace CarGo.Repository
 {

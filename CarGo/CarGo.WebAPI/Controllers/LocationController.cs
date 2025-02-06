@@ -1,8 +1,8 @@
-﻿using System.Security.Claims;
-using CarGo.Model;
+﻿using CarGo.Model;
 using CarGo.Service.Common;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace CarGo.WebAPI.Controllers
 {
@@ -73,7 +73,6 @@ namespace CarGo.WebAPI.Controllers
                 return BadRequest(ex.Message);
             }
         }
-
 
         [HttpDelete("{locationId}")]
         [Authorize(Roles = "Administrator,Manager")]

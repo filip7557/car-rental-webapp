@@ -1,5 +1,4 @@
-﻿using CarGo.Common;
-using CarGo.Model;
+﻿using CarGo.Model;
 using CarGo.Service.Common;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -23,7 +22,7 @@ namespace CarGo.WebAPI.Controllers
         {
             if (damageReport == null)
                 return BadRequest();
-            
+
             var success = await _damageReportService.CreateDamageReportAsync(damageReport);
 
             if (success)

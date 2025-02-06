@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using CarGo.Common;
+﻿using CarGo.Common;
 using CarGo.Model;
 
 namespace CarGo.Service.Common

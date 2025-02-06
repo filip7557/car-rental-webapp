@@ -1,5 +1,4 @@
-﻿
-namespace CarGo.Common
+﻿namespace CarGo.Common
 {
     public enum RoleName
     {
