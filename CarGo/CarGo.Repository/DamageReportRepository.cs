@@ -52,7 +52,7 @@ namespace CarGo.Repository
             }
         }
 
-        public async Task<DamageReport?> GetDamageReportByCompanyVehicleIdAsync(Guid companyVehicleId)
+        public async Task<DamageReport?> GetDamageReportByCompanyVehicleIdAsync(Guid companyVehicleId, bool isAdmin)
         {
             DamageReport? damageReport = null;
             try
@@ -63,10 +63,11 @@ namespace CarGo.Repository
                         " FROM \"DamageReport\"" +
                         " INNER JOIN \"Booking\" ON \"DamageReport\".\"BookingId\" = \"Booking\".\"Id\"" +
                         " INNER JOIN \"CompanyVehicle\" ON \"Booking\".\"CompanyVehicleId\" = \"CompanyVehicle\".\"Id\"" +
-                        " WHERE \"CompanyVehicle\".\"Id\" = @id;";
+                        $" WHERE \"CompanyVehicle\".\"Id\" = @id AND {(!isAdmin ? "IsActive = @value" : "")};";
                     using var command = new NpgsqlCommand(commandText, connection);
 
                     command.Parameters.AddWithValue("id", NpgsqlTypes.NpgsqlDbType.Uuid, companyVehicleId);
+                    command.Parameters.AddWithValue("value", true);
 
                     connection.Open();
 

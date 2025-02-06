@@ -1,4 +1,5 @@
-﻿using CarGo.Model;
+﻿using CarGo.Common;
+using CarGo.Model;
 using CarGo.Repository.Common;
 using CarGo.Service.Common;
 
@@ -28,7 +29,9 @@ namespace CarGo.Service
 
         public async Task<DamageReportDTO?> GetDamageReportByCompanyVehicleIdAsync(Guid companyVehicleId)
         {
-            var damageReport = await _damageReportRepository.GetDamageReportByCompanyVehicleIdAsync(companyVehicleId);
+            var roleName = _tokenService.GetCurrentUserRoleName();
+            var isAdmin = roleName.Equals(RoleName.Administrator);
+            var damageReport = await _damageReportRepository.GetDamageReportByCompanyVehicleIdAsync(companyVehicleId, isAdmin);
             if (damageReport == null)
                 return null;
 
