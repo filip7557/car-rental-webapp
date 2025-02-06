@@ -26,7 +26,7 @@ namespace CarGo.Repository
                     ApplyPaging(cmd, commandText, paging);
 
                     cmd.CommandText = commandText.ToString();
-                    await connection.OpenAsync();
+                    connection.Open();
 
                     using (var reader = await cmd.ExecuteReaderAsync())
                     {
@@ -129,7 +129,7 @@ namespace CarGo.Repository
             }
         }
 
-        public async Task AddCompanyVehicleAsync(CompanyVehicle companyVehicle, Guid userId)
+        public async Task<bool> AddCompanyVehicleAsync(CompanyVehicle companyVehicle, Guid userId)
         {
             string commandText =
                 "INSERT INTO \"CompanyVehicle\" (\"Id\", \"CompanyId\", \"VehicleModelId\", \"DailyPrice\", \"ColorId\", \"PlateNumber\", \"ImageUrl\", \"CurrentLocationId\", \"IsOperational\", \"IsActive\", \"CreatedByUserId\", \"UpdatedByUserId\") " +
@@ -154,12 +154,12 @@ namespace CarGo.Repository
                     command.Parameters.AddWithValue("@createdByUserId", userId);
                     command.Parameters.AddWithValue("@updatedByUserId", userId);
 
-                    await command.ExecuteNonQueryAsync();
+                    return await command.ExecuteNonQueryAsync() > 0;
                 }
             }
         }
 
-        public async Task UpdateCompanyVehicleAsync(Guid id, CompanyVehicle updatedCompanyVehicle, Guid userId)
+        public async Task<bool> UpdateCompanyVehicleAsync(Guid id, CompanyVehicle updatedCompanyVehicle, Guid userId)
         {
             string commandText =
                 "UPDATE \"CompanyVehicle\" SET \"CompanyId\" = @companyId, \"VehicleModelId\" = @vehicleModelId, \"DailyPrice\" = @dailyPrice, \"ColorId\" = @colorId, \"PlateNumber\" = @plateNumber, \"ImageUrl\" = @imageUrl, \"CurrentLocationId\" = @currentLocationId, \"IsOperational\" = @isOperational, \"IsActive\" = @isActive, \"UpdatedByUserId\" = @updatedByUserId, \"DateUpdated\" = CURRENT_TIMESTAMP WHERE \"Id\" = @id";
@@ -183,7 +183,7 @@ namespace CarGo.Repository
                     command.Parameters.AddWithValue("@isActive", updatedCompanyVehicle.IsActive);
                     command.Parameters.AddWithValue("@updatedByUserId", userId);
 
-                    await command.ExecuteNonQueryAsync();
+                    return await command.ExecuteNonQueryAsync() > 0;
                 }
             }
         }

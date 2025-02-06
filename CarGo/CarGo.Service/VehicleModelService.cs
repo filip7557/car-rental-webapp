@@ -7,10 +7,12 @@ namespace Service
     public class VehicleModelService : IVehicleModelService
     {
         private IVehicleModelRepository _vehicleModelRepository;
+        private ITokenService _tokenService;
 
-        public VehicleModelService(IVehicleModelRepository repository)
+        public VehicleModelService(IVehicleModelRepository repository, ITokenService tokenService)
         {
             _vehicleModelRepository = repository;
+            _tokenService = tokenService;
         }
 
         public async Task<List<VehicleModel>?> GetAllAsync()
@@ -23,12 +25,14 @@ namespace Service
             return await _vehicleModelRepository.GetByIdAsync(id);
         }
 
-        public async Task AddAsync(VehicleModel vehicleModel, Guid userId)
+        public async Task AddAsync(VehicleModel vehicleModel)
         {
+            var userId = _tokenService.GetCurrentUserId();
             await _vehicleModelRepository.AddAsync(vehicleModel, userId);
         }
-        public async Task DeleteAsync(Guid vehicleId, Guid id){
-            await _vehicleModelRepository.DeleteAsync(vehicleId,id);
+        public async Task DeleteAsync(Guid vehicleId){
+            var userId = _tokenService.GetCurrentUserId();
+            await _vehicleModelRepository.DeleteAsync(vehicleId,userId);
         }
     }
 }

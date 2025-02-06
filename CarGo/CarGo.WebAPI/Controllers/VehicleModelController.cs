@@ -41,6 +41,7 @@ namespace CarGoAPI.Controllers
             return Ok(vehicleModelId);
         }
 
+        [Authorize(Roles = "Administrator,Manager")]
         [HttpPost]
         public async Task<IActionResult> PostAsync(VehicleModel vehicle)
         {
@@ -51,7 +52,7 @@ namespace CarGoAPI.Controllers
             }
             try{
                 var userId = Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
-                await _service.AddAsync(vehicle, userId);
+                await _service.AddAsync(vehicle);
                 return Ok(vehicle); 
             }catch(Exception ex)
             {
@@ -60,6 +61,7 @@ namespace CarGoAPI.Controllers
 
         }
 
+        [Authorize(Roles = "Administrator,Manager")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteAsync(Guid id)
         {
@@ -70,7 +72,7 @@ namespace CarGoAPI.Controllers
             }
             try{
                 var userId = Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
-                await _service.DeleteAsync(id, userId);
+                await _service.DeleteAsync(id);
                 return Ok("Company Vehicle isActive status changed.");
             }catch(Exception ex){
                 return BadRequest(ex.Message);

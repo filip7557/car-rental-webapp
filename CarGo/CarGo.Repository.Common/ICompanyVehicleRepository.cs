@@ -10,9 +10,9 @@ namespace CarGo.Repository.Common
 
         Task<CompanyVehicle> GetCompanyVehicleByIdAsync(Guid id);
 
-        Task AddCompanyVehicleAsync(CompanyVehicle companyVehicle, Guid userId);
+        Task<bool> AddCompanyVehicleAsync(CompanyVehicle companyVehicle, Guid userId);
 
-        Task UpdateCompanyVehicleAsync(Guid id, CompanyVehicle updatedCompanyVehicle, Guid userId);
+        Task<bool> UpdateCompanyVehicleAsync(Guid id, CompanyVehicle updatedCompanyVehicle, Guid userId);
 
         Task<bool> DeleteCompanyVehicleAsync(Guid compVehId, Guid id);
     }
