@@ -29,5 +29,20 @@ namespace CarGo.WebAPI.Controllers
                 return Ok("Created.");
             return BadRequest();
         }
+
+        [Authorize]
+        [HttpGet]
+        public async Task<IActionResult> GetDamageReportByCompanyVehicleIdAsync(Guid companyVehicleId)
+        {
+            if (companyVehicleId == Guid.Empty)
+                return BadRequest();
+
+            var damageReportDTO = await _damageReportService.GetDamageReportByCompanyVehicleIdAsync(companyVehicleId);
+
+            if (damageReportDTO == null)
+                return NotFound();
+
+            return Ok(damageReportDTO);
+        }
     }
 }

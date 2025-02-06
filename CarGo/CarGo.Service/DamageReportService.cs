@@ -21,8 +21,25 @@ namespace CarGo.Service
                 return false;
 
             var userId = _tokenService.GetCurrentUserId();
+            damageReport.Id = Guid.NewGuid();
 
             return await _damageReportRepository.CreateDamageReportAsync(damageReport, userId);
+        }
+
+        public async Task<DamageReportDTO?> GetDamageReportByCompanyVehicleIdAsync(Guid companyVehicleId)
+        {
+            var damageReport = await _damageReportRepository.GetDamageReportByCompanyVehicleIdAsync(companyVehicleId);
+            if (damageReport == null)
+                return null;
+
+            var damageReportDTO = new DamageReportDTO
+            {
+                Id = damageReport.Id,
+                Title = damageReport.Title,
+                Description = damageReport.Description,
+            };
+
+            return damageReportDTO;
         }
     }
 }

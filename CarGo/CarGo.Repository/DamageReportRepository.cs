@@ -21,17 +21,16 @@ namespace CarGo.Repository
             {
                 using (var connection = new NpgsqlConnection(_connectionString))
                 {
-                    string commandText = "INSERT INTO" +
-                        " \"DamageReport\"" +
-                        " (\"Id\", \"Title\", \"Description\", \"BookingId\", \"CreatedByUserId\", \"UpdatedByUserId\"" +
+                    string commandText = "INSERT INTO \"DamageReport\"" +
+                        " (\"Id\", \"Title\", \"Description\", \"BookingId\", \"CreatedByUserId\", \"UpdatedByUserId\")" +
                         " VALUES" +
                         " (@id, @title, @desc, @bookingId, @createdBy, @updatedBy);";
                     using var command = new NpgsqlCommand(commandText, connection);
 
-                    command.Parameters.AddWithValue("id", damageReport.Id);
+                    command.Parameters.AddWithValue("id", NpgsqlTypes.NpgsqlDbType.Uuid, damageReport.Id);
                     command.Parameters.AddWithValue("title", damageReport.Title);
                     command.Parameters.AddWithValue("desc", damageReport.Description);
-                    command.Parameters.AddWithValue("bookingId", damageReport.BookingId);
+                    command.Parameters.AddWithValue("bookingId", NpgsqlTypes.NpgsqlDbType.Uuid, damageReport.BookingId);
                     command.Parameters.AddWithValue("createdBy", createdByUserId);
                     command.Parameters.AddWithValue("updatedBy", createdByUserId);
 
@@ -50,6 +49,47 @@ namespace CarGo.Repository
             { 
                 Console.WriteLine("Exception: " + ex.Message);
                 return false;
+            }
+        }
+
+        public async Task<DamageReport?> GetDamageReportByCompanyVehicleIdAsync(Guid companyVehicleId)
+        {
+            DamageReport? damageReport = null;
+            try
+            {
+                using (var connection = new NpgsqlConnection(_connectionString))
+                {
+                    string commandText = "SELECT \"DamageReport\".\"Id\", \"DamageReport\".\"Title\", \"DamageReport\".\"Description\", \"DamageReport\".\"BookingId\"" +
+                        " FROM \"DamageReport\"" +
+                        " INNER JOIN \"Booking\" ON \"DamageReport\".\"BookingId\" = \"Booking\".\"Id\"" +
+                        " INNER JOIN \"CompanyVehicle\" ON \"Booking\".\"CompanyVehicleId\" = \"CompanyVehicle\".\"Id\"" +
+                        " WHERE \"CompanyVehicle\".\"Id\" = @id;";
+                    using var command = new NpgsqlCommand(commandText, connection);
+
+                    command.Parameters.AddWithValue("id", NpgsqlTypes.NpgsqlDbType.Uuid, companyVehicleId);
+
+                    connection.Open();
+
+                    var reader = await command.ExecuteReaderAsync();
+                    if (reader.HasRows)
+                    {
+                        await reader.ReadAsync();
+                        damageReport = new DamageReport
+                        {
+                            Id = Guid.Parse(reader[0].ToString()!),
+                            Title = reader[1].ToString()!,
+                            Description = reader[2].ToString()!,
+                            BookingId = Guid.Parse(reader[3].ToString()!),
+                        };
+                    }
+
+                    return damageReport;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Exception: " + ex.Message);
+                return damageReport;
             }
         }
     }
