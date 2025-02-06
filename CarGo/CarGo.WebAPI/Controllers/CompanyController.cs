@@ -19,6 +19,8 @@ namespace CarGo.WebAPI.Controllers
         [HttpPost("new-company-location")]
         public async Task<IActionResult> NewCompanyLocation([FromBody] CompanyLocations companyLocations)
         {
+            companyLocations.UpdatedByUserId = Guid.Parse("7dd63591-bce2-44f6-806b-d23063d49cc2");
+            companyLocations.CreatedByUserId = Guid.Parse("7dd63591-bce2-44f6-806b-d23063d49cc2");
             var result = await _companyService.NewCompanyLocation(companyLocations);
             if (result)
             {

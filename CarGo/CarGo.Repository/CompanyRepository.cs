@@ -132,12 +132,18 @@ namespace CarGo.Repository
             {
                 using (var connection = new NpgsqlConnection(connectionString))
                 {
-                    var commandText = "INSERT INTO \"CompanyLocation\" (\"CompanyId\", \"LocationId\") VALUES (@companyId, @locationId);";
+                    var commandText = "INSERT INTO \"CompanyLocation\" (\"CompanyId\", \"LocationId\", \"IsActive\", \"CreatedByUserId\", \"DateCreated\",\"DateUpdated\", \"UpdatedByUserId\") " +
+                        "VALUES (@companyId, @locationId, @isactive, @createdbyuserid, @datecreated, @dateupdated, @updatedbyuserid);";
                     using (var command = new NpgsqlCommand(commandText, connection))
                     {
                         command.Parameters.AddWithValue("companyId", NpgsqlTypes.NpgsqlDbType.Uuid, companyLocations.CompanyId);
                         command.Parameters.AddWithValue("locationId", NpgsqlTypes.NpgsqlDbType.Uuid, companyLocations.LocationId);
-                        await connection.OpenAsync();
+                        command.Parameters.AddWithValue("isactive", NpgsqlTypes.NpgsqlDbType.Boolean, companyLocations.IsActive);
+                        command.Parameters.AddWithValue("createdbyuserid", NpgsqlTypes.NpgsqlDbType.Uuid, companyLocations.CreatedByUserId);
+                        command.Parameters.AddWithValue("updatedbyuserid", NpgsqlTypes.NpgsqlDbType.Uuid, companyLocations.UpdatedByUserId);
+                        command.Parameters.AddWithValue("dateupdated", companyLocations.DateUpdated);
+                        command.Parameters.AddWithValue("datecreated", companyLocations.DateCreated);
+                        connection.Open();
                         await command.ExecuteNonQueryAsync();
                     }
                 }

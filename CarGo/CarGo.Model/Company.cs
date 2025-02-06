@@ -21,6 +21,13 @@
     public class CompanyLocations
     {
         public required Guid CompanyId { get; set; }
-        public required List<Guid> LocationId { get; set; }
+        public required Guid LocationId { get; set; }
+  
+        public DateTime DateCreated { get; set; }
+        public bool IsActive { get; set; }
+        public Guid CreatedByUserId { get; set; }
+        public Guid UpdatedByUserId { get; set; }
+
+        public DateTime DateUpdated { get; set; }
     }
 }
