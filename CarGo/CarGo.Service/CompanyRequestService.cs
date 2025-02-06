@@ -6,16 +6,30 @@ namespace CarGo.Service
 {
     public class CompanyRequestService : ICompanyRequestService
     {
-        private readonly ICompanyService _companyService;
         private readonly ICompanyRequestRepository _companyRequestRepository;
-        private readonly IUserCompanyService _userCompanyService;
 
-        public CompanyRequestService(ICompanyRequestRepository companyRequestRepository, ICompanyService companyService,
-            IUserCompanyService userCompanyService) // Add the missing parameter
+        private readonly ITokenService _tokenService;
+
+        public CompanyRequestService(ICompanyRequestRepository companyRequestRepository, ICompanyService companyService, ITokenService tokenService)
         {
-            _companyService = companyService;
+            _tokenService = tokenService;
             _companyRequestRepository = companyRequestRepository;
-            _userCompanyService = userCompanyService;
+        }
+
+        public async Task<bool> UpdateCompanyRequestAsync(CompanyRequest companyRequest)
+        {
+            var userId = _tokenService.GetCurrentUserId();
+            companyRequest.UpdatedByUserId = userId;
+            return await _companyRequestRepository.UpdateCompanyRequestAsync(companyRequest);
+        }
+
+        public async Task<bool> CreateCompanyAsync(Company company)
+        {
+            var userId = _tokenService.GetCurrentUserId();
+            company.Id = Guid.NewGuid();
+            company.CreatedByUserId = userId;
+            company.UpdatedByUserId = userId;
+            return await _companyRequestRepository.CreateCompanyAsync(company);
         }
 
         public async Task<bool> NewCompanyRequest(CompanyRequest newCompanyRequest)

@@ -10,6 +10,40 @@ namespace CarGo.Repository
 
         private string connectionString = Environment.GetEnvironmentVariable("ConnectionStrings__PostgresDb");
 
+        public async Task<bool> CreateCompanyAsync(Company company)
+        {
+            try
+            {
+                using (var connection = new NpgsqlConnection(connectionString))
+                {
+                    var commandText =
+                        "INSERT INTO \"Company\" (\"Id\", \"Name\", \"Email\", \"IsActive\", \"CreatedByUserId\", \"DateCreated\", \"UpdatedByUserId\") " +
+                        "VALUES (@id, @name, @email, @isactive, @createdbyuserid, @datecreated, @updatedbyuserid);";
+                    using (var command = new NpgsqlCommand(commandText, connection))
+                    {
+                        command.Parameters.AddWithValue("id", NpgsqlTypes.NpgsqlDbType.Uuid, company.Id);
+                        command.Parameters.AddWithValue("name", NpgsqlTypes.NpgsqlDbType.Text, company.Name);
+                        command.Parameters.AddWithValue("email", NpgsqlTypes.NpgsqlDbType.Text, company.Email);
+                        command.Parameters.AddWithValue("isactive", NpgsqlTypes.NpgsqlDbType.Boolean, company.IsActive);
+                        command.Parameters.AddWithValue("createdbyuserid", NpgsqlTypes.NpgsqlDbType.Uuid,
+                            company.CreatedByUserId);
+                        command.Parameters.AddWithValue("updatedbyuserid", NpgsqlTypes.NpgsqlDbType.Uuid,
+                            company.UpdatedByUserId);
+                        command.Parameters.AddWithValue("datecreated", company.DateCreated);
+                        await connection.OpenAsync();
+                        await command.ExecuteNonQueryAsync();
+                    }
+                }
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error creating company: {ex.Message}");
+                return false;
+            }
+        }
+
         public async Task<bool> NewCompanyRequest(CompanyRequest newCompanyRequest)
         {
             try
