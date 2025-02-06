@@ -30,9 +30,11 @@ namespace Service
             var userId = _tokenService.GetCurrentUserId();
             await _vehicleModelRepository.AddAsync(vehicleModel, userId);
         }
-        public async Task DeleteAsync(Guid vehicleId){
+
+        public async Task DeleteAsync(Guid vehicleId)
+        {
             var userId = _tokenService.GetCurrentUserId();
-            await _vehicleModelRepository.DeleteAsync(vehicleId,userId);
+            await _vehicleModelRepository.DeleteAsync(vehicleId, userId);
         }
     }
 }

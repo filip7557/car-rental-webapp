@@ -92,7 +92,7 @@ namespace CarGo.Repository
             return null;
         }
 
-        public async Task<bool> DeleteCompanyVehicleAsync(Guid compVehId ,Guid id)
+        public async Task<bool> DeleteCompanyVehicleAsync(Guid compVehId, Guid id)
         {
             const string selectCommandText = "SELECT \"IsActive\" FROM \"CompanyVehicle\" WHERE \"Id\" = @id";
             const string updateCommandText = "UPDATE \"CompanyVehicle\" SET \"IsActive\" = @newIsActive, \"UpdatedByUserId\" = @updatedByUserId, \"DateUpdated\" = CURRENT_TIMESTAMP WHERE \"Id\" = @id";
