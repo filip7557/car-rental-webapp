@@ -92,5 +92,35 @@ namespace CarGo.Repository
                 return damageReport;
             }
         }
+        public async Task<bool> DeleteDamageReportAsync(Guid damageReportId)
+        {
+            try
+            {
+                using (var connection = new NpgsqlConnection(_connectionString))
+                {
+                    string commandText = "UPDATE \"DamageReport\" set \"IsActive\" = @isActive WHERE \"Id\" = @id;";
+                    using var command = new NpgsqlCommand(commandText, connection);
+
+                    command.Parameters.AddWithValue("isActive", false);
+                    command.Parameters.AddWithValue("id", damageReportId);
+
+                    connection.Open();
+
+                    var affectedRows = await command.ExecuteNonQueryAsync();
+
+                    connection.Close();
+
+                    if (affectedRows != 0)
+                        return true;
+
+                    return true;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Exception: " + ex.Message);
+                return false;
+            }
+        }
     }
 }

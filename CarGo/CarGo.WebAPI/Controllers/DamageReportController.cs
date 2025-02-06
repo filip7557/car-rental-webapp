@@ -1,4 +1,5 @@
-﻿using CarGo.Model;
+﻿using CarGo.Common;
+using CarGo.Model;
 using CarGo.Service.Common;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -43,6 +44,20 @@ namespace CarGo.WebAPI.Controllers
                 return NotFound();
 
             return Ok(damageReportDTO);
+        }
+
+        [Authorize(Roles = "Administrator,Manager")]
+        [HttpDelete("{damageReportId}")]
+        public async Task<IActionResult> DeleteDamageReportAsync(Guid damageReportId)
+        {
+            if (damageReportId == Guid.Empty)
+                return BadRequest();
+
+            var success = await _damageReportService.DeleteDamageReportAsync(damageReportId);
+
+            if (success)
+                return Ok("Deleted.");
+            return BadRequest();
         }
     }
 }

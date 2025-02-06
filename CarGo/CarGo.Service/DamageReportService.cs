@@ -41,5 +41,13 @@ namespace CarGo.Service
 
             return damageReportDTO;
         }
+
+        public async Task<bool> DeleteDamageReportAsync(Guid damageReportId)
+        {
+            if (damageReportId == Guid.Empty)
+                return false;
+
+            return await _damageReportRepository.DeleteDamageReportAsync(damageReportId);
+        }
     }
 }
