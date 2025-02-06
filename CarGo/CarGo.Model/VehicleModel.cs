@@ -9,5 +9,6 @@ namespace CarGo.Model
         public Guid TypeId { get; set; }
         public string? Name { get; set; } = string.Empty;
         public int? EnginePower { get; set; }
+
     }
 }

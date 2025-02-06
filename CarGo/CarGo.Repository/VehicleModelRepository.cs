@@ -21,7 +21,7 @@ namespace Repository
 
             try
             {
-                string commandText = "SELECT \"Id\", \"MakeId\", \"TypeId\", \"Name\", \"EnginePower\" FROM \"VehicleModel\"";
+                string commandText = "SELECT \"Id\", \"MakeId\", \"TypeId\", \"Name\", \"EnginePower\"w FROM \"VehicleModel\"";
 
                 using (var connection = new NpgsqlConnection(connectionString))
 //Console.Write(commandText);
@@ -41,7 +41,8 @@ namespace Repository
                                     MakeId = Guid.Parse(reader[1].ToString()),
                                     TypeId = Guid.Parse(reader[2].ToString()),
                                     Name = reader[3].ToString()!,
-                                    EnginePower = int.TryParse(reader[4].ToString(), out int EnginePower) ? EnginePower : 0,
+                                    EnginePower = int.TryParse(reader[4].ToString(), out int EnginePower) ? EnginePower : 0
+                                    
                                 };
 
                                 vehicleModels.Add(vehicleModel);
