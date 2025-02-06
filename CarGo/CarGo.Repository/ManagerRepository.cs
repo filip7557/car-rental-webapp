@@ -11,7 +11,7 @@ namespace CarGo.Repository
         public ManagerRepository()
         {
             _connectionString = Environment.GetEnvironmentVariable("ConnectionStrings__PostgresDb")
-            ?? throw new InvalidOperationException("Database connection string is not set.");
+                                ?? throw new InvalidOperationException("Database connection string is not set.");
         }
 
         public async Task<List<User>> GetAllCompanyManagersAsync(Guid companyId)
@@ -21,7 +21,8 @@ namespace CarGo.Repository
             {
                 using (var connection = new NpgsqlConnection(_connectionString))
                 {
-                    string commandText = "SELECT \"Id\", \"FullName\", \"Email\", \"RoleId\" FROM \"User\" INNER JOIN \"UserCompany\" ON \"User\".\"Id\" = \"UserCompany\".\"UserId\" WHERE \"UserCompany\".\"CompanyId\" = @id;";
+                    string commandText =
+                        "SELECT \"Id\", \"FullName\", \"Email\", \"RoleId\" FROM \"User\" INNER JOIN \"UserCompany\" ON \"User\".\"Id\" = \"UserCompany\".\"UserId\" WHERE \"UserCompany\".\"CompanyId\" = @id;";
                     using var command = new NpgsqlCommand(commandText, connection);
 
                     command.Parameters.AddWithValue("id", companyId);
@@ -63,7 +64,8 @@ namespace CarGo.Repository
             {
                 using (var connection = new NpgsqlConnection(_connectionString))
                 {
-                    string commandText = "SELECT \"Id\", \"FullName\", \"Email\", \"RoleId\" FROM \"User\" INNER JOIN \"UserCompany\" ON \"User\".\"Id\" = \"UserCompany\".\"UserId\" WHERE \"UserCompany\".\"UserId\" = @id;";
+                    string commandText =
+                        "SELECT \"Id\", \"FullName\", \"Email\", \"RoleId\" FROM \"User\" INNER JOIN \"UserCompany\" ON \"User\".\"Id\" = \"UserCompany\".\"UserId\" WHERE \"UserCompany\".\"UserId\" = @id;";
                     using var command = new NpgsqlCommand(commandText, connection);
 
                     command.Parameters.AddWithValue("id", userId);
@@ -101,7 +103,8 @@ namespace CarGo.Repository
             {
                 using (var connection = new NpgsqlConnection(_connectionString))
                 {
-                    string commandText = "INSERT INTO \"UserCompany\" (\"UserId\", \"CompanyId\") VALUES (@userId, @companyId);";
+                    string commandText =
+                        "INSERT INTO \"UserCompany\" (\"UserId\", \"CompanyId\") VALUES (@userId, @companyId);";
                     using var command = new NpgsqlCommand(commandText, connection);
 
                     command.Parameters.AddWithValue("userId", managerId);
@@ -131,7 +134,8 @@ namespace CarGo.Repository
             {
                 using (var connection = new NpgsqlConnection(_connectionString))
                 {
-                    string commandText = "DELETE FROM \"UserCompany\" WHERE \"UserId\" = @userId AND \"CompanyId\" = @companyId";
+                    string commandText =
+                        "DELETE FROM \"UserCompany\" WHERE \"UserId\" = @userId AND \"CompanyId\" = @companyId";
                     using var command = new NpgsqlCommand(commandText, connection);
 
                     command.Parameters.AddWithValue("userId", managerId);

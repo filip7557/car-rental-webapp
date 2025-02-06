@@ -17,7 +17,8 @@ namespace CarGo.Service
         private readonly IUserService _userService;
         private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public TokenService(IConfiguration config, IRoleService roleService, IUserService userService, IHttpContextAccessor httpContextAccessor)
+        public TokenService(IConfiguration config, IRoleService roleService, IUserService userService,
+            IHttpContextAccessor httpContextAccessor)
         {
             _config = config;
             _roleService = roleService;
@@ -42,11 +43,11 @@ namespace CarGo.Service
 
             var claims = new[]
             {
-            new Claim(JwtRegisteredClaimNames.Email, user.Email),
-            new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-            new Claim(ClaimTypes.Role, await _roleService.GetRoleNameByIdAsync(user.RoleId!)),
-            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
-        };
+                new Claim(JwtRegisteredClaimNames.Email, user.Email),
+                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+                new Claim(ClaimTypes.Role, await _roleService.GetRoleNameByIdAsync(user.RoleId!)),
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+            };
 
             var token = new JwtSecurityToken(
                 issuer: _config["Jwt:Issuer"],
@@ -94,6 +95,7 @@ namespace CarGo.Service
                 var token = await GenerateTokenAsync(user);
                 return token;
             }
+
             return "";
         }
     }

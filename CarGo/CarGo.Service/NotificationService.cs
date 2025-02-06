@@ -13,7 +13,8 @@ namespace CarGo.Service
         private readonly INotificationRepository _notificationRepository;
         private readonly EmailSettings _emailSettings;
 
-        public NotificationService(INotificationRepository notificationRepository, IOptions<EmailSettings> emailSettings)
+        public NotificationService(INotificationRepository notificationRepository,
+            IOptions<EmailSettings> emailSettings)
         {
             _notificationRepository = notificationRepository;
             _emailSettings = emailSettings.Value;

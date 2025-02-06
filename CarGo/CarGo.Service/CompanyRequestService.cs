@@ -16,7 +16,8 @@ namespace CarGo.Service
         private readonly ICompanyRequestRepository _companyRequestRepository;
         private readonly IUserCompanyService _userCompanyService;
 
-        public CompanyRequestService(ICompanyRequestRepository companyRequestRepository, ICompanyService companyService, IUserCompanyService userCompanyService) // Add the missing parameter
+        public CompanyRequestService(ICompanyRequestRepository companyRequestRepository, ICompanyService companyService,
+            IUserCompanyService userCompanyService) // Add the missing parameter
         {
             _companyService = companyService;
             _companyRequestRepository = companyRequestRepository;

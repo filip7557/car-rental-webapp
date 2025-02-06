@@ -11,7 +11,8 @@ namespace CarGo.Service
         private readonly ICompanyVehicleMaintenanceRepository _companyVehicleMaintenanceRepository;
         private readonly ITokenService _tokenService;
 
-        public CompanyVehicleMaintenanceService(ICompanyVehicleMaintenanceRepository companyVehicleMaintenanceRepository, ITokenService tokenService)
+        public CompanyVehicleMaintenanceService(
+            ICompanyVehicleMaintenanceRepository companyVehicleMaintenanceRepository, ITokenService tokenService)
         {
             _companyVehicleMaintenanceRepository = companyVehicleMaintenanceRepository;
             _tokenService = tokenService;
@@ -20,20 +21,25 @@ namespace CarGo.Service
         public async Task<bool> SaveCompanyVehicleMaintenanceAsync(CompanyVehicleMaintenance maintenance)
         {
             var createdByUserId = _tokenService.GetCurrentUserId();
-            return await _companyVehicleMaintenanceRepository.SaveCompanyVehicleMaintenanceAsync(maintenance, createdByUserId);
+            return await _companyVehicleMaintenanceRepository.SaveCompanyVehicleMaintenanceAsync(maintenance,
+                createdByUserId);
         }
 
         public async Task<bool> DeleteCompanyVehicleMaintenanceByIdAsync(Guid maintenanceId)
         {
             var userId = _tokenService.GetCurrentUserId();
-            return await _companyVehicleMaintenanceRepository.DeleteCompanyVehicleMaintenanceByIdAsync(maintenanceId, userId);
+            return await _companyVehicleMaintenanceRepository.DeleteCompanyVehicleMaintenanceByIdAsync(maintenanceId,
+                userId);
         }
 
-        public async Task<PagedResponse<CompanyVehicleMaintenance>> GetMaintenancesByCompanyVehicleIdAsync(Guid companyVehicleId, Paging paging)
+        public async Task<PagedResponse<CompanyVehicleMaintenance>> GetMaintenancesByCompanyVehicleIdAsync(
+            Guid companyVehicleId, Paging paging)
         {
             var role = _tokenService.GetCurrentUserRoleName();
             var isActiveFilter = role.Equals(RoleName.Administrator);
-            var maintenances = await _companyVehicleMaintenanceRepository.GetMaintenancesByCompanyVehicleIdAsync(companyVehicleId, paging, isActiveFilter);
+            var maintenances =
+                await _companyVehicleMaintenanceRepository.GetMaintenancesByCompanyVehicleIdAsync(companyVehicleId,
+                    paging, isActiveFilter);
             return new PagedResponse<CompanyVehicleMaintenance>
             {
                 Data = maintenances,

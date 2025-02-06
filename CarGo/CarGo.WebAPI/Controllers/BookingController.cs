@@ -31,20 +31,18 @@ namespace CarGo.WebAPI.Controllers
             DateTime? startDate = null,
             DateTime? endDate = null,
             Guid? statusId = null,
-            Guid? pickUpLocationId =null,
-            Guid? dropOffLocationId=null,
+            Guid? pickUpLocationId = null,
+            Guid? dropOffLocationId = null,
             Guid? userId = null,
             Guid? companyVehicleId = null,
-            string? bookingStatusName=null,
-            string? locationAddress=null,
-            string? vehicleMakeName=null,
-            string? vehicleModelName=null,
-            string? imageUrl=null
-            )
+            string? bookingStatusName = null,
+            string? locationAddress = null,
+            string? vehicleMakeName = null,
+            string? vehicleModelName = null,
+            string? imageUrl = null
+        )
         {
-
             var userRole = User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value;
-
 
 
             if (userRole == "Administrator")
@@ -59,12 +57,12 @@ namespace CarGo.WebAPI.Controllers
                     IsActive = isActive,
                     UserId = userId,
                     CompanyVehicleId = companyVehicleId,
-                    StartDate=startDate,
+                    StartDate = startDate,
                     EndDate = endDate,
-                    StatusId=statusId,
-                    PickUpLocationId=pickUpLocationId,
-                    DropOffLocationId=dropOffLocationId,
-                     BookingStatusName = bookingStatusName,
+                    StatusId = statusId,
+                    PickUpLocationId = pickUpLocationId,
+                    DropOffLocationId = dropOffLocationId,
+                    BookingStatusName = bookingStatusName,
                     LocationAddress = locationAddress,
                     VehicleMakeName = vehicleMakeName,
                     VehicleModelName = vehicleModelName,
@@ -83,7 +81,6 @@ namespace CarGo.WebAPI.Controllers
                     Rpp = rpp
                 };
 
-            
 
                 var bookings = await _service.GetAllBookingsAsync(sorting, paging, bookingFilter);
 
@@ -115,7 +112,7 @@ namespace CarGo.WebAPI.Controllers
 
         [Authorize]
         [HttpDelete("{id}")]
-        public async Task <IActionResult> SoftDeleteBooking(Guid id)
+        public async Task<IActionResult> SoftDeleteBooking(Guid id)
         {
             try
             {
@@ -145,10 +142,12 @@ namespace CarGo.WebAPI.Controllers
                 {
                     return BadRequest("The Booking information is incorrect");
                 }
+
                 if (booking.Id == Guid.Empty)
                 {
                     booking.Id = Guid.NewGuid();
                 }
+
                 await _service.AddBookingAsync(booking);
                 return Ok("Booking added succesfully");
             }
@@ -175,6 +174,7 @@ namespace CarGo.WebAPI.Controllers
                 {
                     return NotFound($"The Booking with Id={id} you want to delete does not exist");
                 }
+
                 await _service.UpdateBookingAsync(id, updatedBooking);
                 return Ok("Booking has been succesfully updated");
             }

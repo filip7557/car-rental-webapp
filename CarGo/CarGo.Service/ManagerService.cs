@@ -35,6 +35,7 @@ namespace CarGo.Service
                 var role = await _roleService.GetRoleByNameAsync("Manager");
                 return await _userService.UpdateUserRoleByUserIdAsync(user.Id, role.Id);
             }
+
             return false;
         }
 
@@ -46,6 +47,7 @@ namespace CarGo.Service
                 var roleId = await _roleService.GetDefaultRoleIdAsync();
                 return await _userService.UpdateUserRoleByUserIdAsync(user.Id, roleId);
             }
+
             return false;
         }
     }

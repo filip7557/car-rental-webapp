@@ -22,12 +22,15 @@ namespace Service
         {
             return await _vehicleModelRepository.GetByIdAsync(id);
         }
-        public async Task AddAsync(VehicleModel vehicleModel, Guid userId){
+
+        public async Task AddAsync(VehicleModel vehicleModel, Guid userId)
+        {
             await _vehicleModelRepository.AddAsync(vehicleModel, userId);
         }
-        public async Task DeleteAsync(Guid id){
+
+        public async Task DeleteAsync(Guid id)
+        {
             await _vehicleModelRepository.DeleteAsync(id);
         }
-
     }
 }

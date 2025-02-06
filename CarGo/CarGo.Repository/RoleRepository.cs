@@ -11,7 +11,7 @@ namespace CarGo.Repository
         public RoleRepository()
         {
             _connectionString = Environment.GetEnvironmentVariable("ConnectionStrings__PostgresDb")
-            ?? throw new InvalidOperationException("Database connection string is not set.");
+                                ?? throw new InvalidOperationException("Database connection string is not set.");
         }
 
         public async Task<Guid> GetDefaultRoleIdAsync()
@@ -79,6 +79,7 @@ namespace CarGo.Repository
 
                             roles.Add(role);
                         }
+
                         return roles;
                     }
                     else

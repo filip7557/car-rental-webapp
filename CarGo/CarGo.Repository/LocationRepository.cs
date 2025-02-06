@@ -19,7 +19,9 @@ namespace CarGo.Repository
         public async Task<List<Location>> GetLocationAsync()
         {
             var locationList = new List<Location>();
-            StringBuilder query = new StringBuilder($"SELECT \"Id\", \"Address\", \"City\", \"Country\" FROM \"Location\" Where \"IsActive\" = true");
+            StringBuilder query =
+                new StringBuilder(
+                    $"SELECT \"Id\", \"Address\", \"City\", \"Country\" FROM \"Location\" Where \"IsActive\" = true");
             using (var connection = new NpgsqlConnection(connectionString))
             using (var command = new NpgsqlCommand(query.ToString(), connection))
             {
@@ -43,7 +45,8 @@ namespace CarGo.Repository
 
         public async Task<Location> GetByIdLocationAsync(Guid id)
         {
-            string commandText = $"SELECT \"Id\", \"Address\", \"City\", \"Country\" FROM \"Location\" WHERE \"Id\" = @id ";
+            string commandText =
+                $"SELECT \"Id\", \"Address\", \"City\", \"Country\" FROM \"Location\" WHERE \"Id\" = @id ";
             using (var connection = new NpgsqlConnection(connectionString))
             using (var command = new NpgsqlCommand(commandText, connection))
             {
@@ -61,12 +64,14 @@ namespace CarGo.Repository
                     };
                 }
             }
+
             throw new Exception("Location with inputed id not found");
         }
 
         public async Task<bool> PostLocationAsync(Location entity, Guid id)
         {
-            string commandText = $"INSERT INTO {TableName} (\"Id\", \"Address\", \"City\", \"Country\", \"IsActive\",\"CreatedByUserId\", \"UpdatedByUserId\") VALUES (@id, @address, @city, @country, @isActive,@createdByUserId, @UpdatedByUserId)";
+            string commandText =
+                $"INSERT INTO {TableName} (\"Id\", \"Address\", \"City\", \"Country\", \"IsActive\",\"CreatedByUserId\", \"UpdatedByUserId\") VALUES (@id, @address, @city, @country, @isActive,@createdByUserId, @UpdatedByUserId)";
             using (var connection = new NpgsqlConnection(connectionString))
             using (var command = new NpgsqlCommand(commandText, connection))
             {
@@ -88,7 +93,8 @@ namespace CarGo.Repository
         {
             Console.WriteLine(id);
             string selectCommandText = $"SELECT \"IsActive\" FROM \"Location\" WHERE \"Id\" = @id  ";
-            string commandText = $"UPDATE {TableName} SET \"IsActive\"  = @newIsActive, \"UpdatedByUserId\" = @updatedByUserId WHERE \"Id\" = @id";
+            string commandText =
+                $"UPDATE {TableName} SET \"IsActive\"  = @newIsActive, \"UpdatedByUserId\" = @updatedByUserId WHERE \"Id\" = @id";
             using (var connection = new NpgsqlConnection(connectionString))
             using (var selectCommand = new NpgsqlCommand(selectCommandText, connection))
             {
@@ -99,6 +105,7 @@ namespace CarGo.Repository
                 {
                     throw new Exception("Location not found");
                 }
+
                 bool newIsActive = !(bool)currentStatus;
 
                 using (var updateCommand = new NpgsqlCommand(commandText, connection))

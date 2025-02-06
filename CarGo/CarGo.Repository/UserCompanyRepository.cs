@@ -9,6 +9,5 @@ namespace CarGo.Repository
 {
     public class UserCompanyRepository : IUserCompanyRepository
     {
-
     }
 }

@@ -9,6 +9,7 @@ namespace CarGo.Service.Common
 
         public Task<bool> DeleteCompanyVehicleMaintenanceByIdAsync(Guid maintenanceId);
 
-        public Task<PagedResponse<CompanyVehicleMaintenance>> GetMaintenancesByCompanyVehicleIdAsync(Guid companyVehicleId, Paging paging);
+        public Task<PagedResponse<CompanyVehicleMaintenance>> GetMaintenancesByCompanyVehicleIdAsync(
+            Guid companyVehicleId, Paging paging);
     }
 }

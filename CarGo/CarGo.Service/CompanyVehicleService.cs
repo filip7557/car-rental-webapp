@@ -16,7 +16,8 @@ namespace CarGo.Service
             _tokenService = tokenService;
         }
 
-        public async Task<List<CompanyVehicle>> GetAllCompanyVehiclesAsync(BookingSorting sorting, Paging paging, CompanyVehicleFilter filter)
+        public async Task<List<CompanyVehicle>> GetAllCompanyVehiclesAsync(BookingSorting sorting, Paging paging,
+            CompanyVehicleFilter filter)
         {
             return await _repository.GetAllCompanyVehiclesAsync(sorting, paging, filter);
         }
@@ -29,7 +30,7 @@ namespace CarGo.Service
         public async Task AddCompanyVehicleAsync(CompanyVehicle companyVehicle)
         {
             var userId = _tokenService.GetCurrentUserId();
-            await _repository.AddCompanyVehicleAsync(companyVehicle,userId);
+            await _repository.AddCompanyVehicleAsync(companyVehicle, userId);
         }
 
         public async Task UpdateCompanyVehicleAsync(Guid id, CompanyVehicle updatedCompanyVehicle)

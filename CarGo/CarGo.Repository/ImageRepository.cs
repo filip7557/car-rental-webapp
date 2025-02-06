@@ -10,7 +10,7 @@ namespace CarGo.Repository
         public ImageRepository()
         {
             _connectionString = Environment.GetEnvironmentVariable("ConnectionStrings__PostgresDb")
-            ?? throw new InvalidOperationException("Database connection string is not set.");
+                                ?? throw new InvalidOperationException("Database connection string is not set.");
         }
 
         public async Task<bool> SaveImageAsync(Image image, Guid createdByUserId)
@@ -19,7 +19,8 @@ namespace CarGo.Repository
             {
                 using (var connection = new NpgsqlConnection(_connectionString))
                 {
-                    string commandText = $"INSERT INTO \"Image\" (\"Id\", \"ImageFile\", \"DamageReportId\", \"CreatedByUserId\", \"UpdatedByUserId\") VALUES (@id, @file, @damageReportId, @createdBy, @updatedBy)";
+                    string commandText =
+                        $"INSERT INTO \"Image\" (\"Id\", \"ImageFile\", \"DamageReportId\", \"CreatedByUserId\", \"UpdatedByUserId\") VALUES (@id, @file, @damageReportId, @createdBy, @updatedBy)";
                     using var command = new NpgsqlCommand(commandText, connection);
 
                     command.Parameters.AddWithValue("id", NpgsqlTypes.NpgsqlDbType.Uuid, Guid.NewGuid());
@@ -70,6 +71,7 @@ namespace CarGo.Repository
                             imageIds.Add(Guid.Parse(reader[0].ToString() ?? Guid.Empty.ToString()));
                         }
                     }
+
                     connection.Close();
                     return imageIds;
                 }
@@ -107,6 +109,7 @@ namespace CarGo.Repository
                             };
                         }
                     }
+
                     connection.Close();
                     return image;
                 }

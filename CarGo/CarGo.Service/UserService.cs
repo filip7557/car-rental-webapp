@@ -33,6 +33,7 @@ namespace CarGo.Service
             {
                 return false;
             }
+
             return await _userRepository.UpdateUserByIdAsync(userId, newUser);
         }
 

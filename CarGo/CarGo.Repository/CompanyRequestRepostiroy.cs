@@ -19,13 +19,15 @@ namespace CarGo.Repository
         {
             try
             {
-                string commandText = "INSERT INTO \"CompanyRequest\" (\"UserId\", \"Name\", \"Email\") VALUES (@userid, @name, @email);";
+                string commandText =
+                    "INSERT INTO \"CompanyRequest\" (\"UserId\", \"Name\", \"Email\") VALUES (@userid, @name, @email);";
 
                 using (var connection = new NpgsqlConnection(connectionString))
                 {
                     using (var command = new NpgsqlCommand(commandText, connection))
                     {
-                        command.Parameters.AddWithValue("userid", NpgsqlTypes.NpgsqlDbType.Uuid, newCompanyRequest.UserId);
+                        command.Parameters.AddWithValue("userid", NpgsqlTypes.NpgsqlDbType.Uuid,
+                            newCompanyRequest.UserId);
                         command.Parameters.AddWithValue("name", newCompanyRequest.Name);
                         command.Parameters.AddWithValue("email", newCompanyRequest.Email);
 
@@ -36,6 +38,7 @@ namespace CarGo.Repository
                         {
                             return false;
                         }
+
                         return true;
                     }
                 }
@@ -52,7 +55,8 @@ namespace CarGo.Repository
             using (var connection = new NpgsqlConnection(connectionString))
             {
                 await connection.OpenAsync();
-                var query = "UPDATE \"CompanyRequest\" SET \"IsActive\" = @isActive, \"IsApproved\" = @isApproved WHERE \"UserId\" = @userId;";
+                var query =
+                    "UPDATE \"CompanyRequest\" SET \"IsActive\" = @isActive, \"IsApproved\" = @isApproved WHERE \"UserId\" = @userId;";
                 using (var command = new NpgsqlCommand(query, connection))
                 {
                     command.Parameters.AddWithValue("isActive", companyRequest.IsActive);
@@ -64,6 +68,7 @@ namespace CarGo.Repository
                     {
                         return false;
                     }
+
                     return true;
                 }
             }
@@ -74,7 +79,8 @@ namespace CarGo.Repository
             using (var connection = new NpgsqlConnection(connectionString))
             {
                 await connection.OpenAsync();
-                var query = "SELECT \"UserId\", \"Name\", \"Email\", \"IsActive\", \"IsApproved\" FROM \"CompanyRequest\" WHERE \"UserId\" = @userId;";
+                var query =
+                    "SELECT \"UserId\", \"Name\", \"Email\", \"IsActive\", \"IsApproved\" FROM \"CompanyRequest\" WHERE \"UserId\" = @userId;";
                 using (var command = new NpgsqlCommand(query, connection))
                 {
                     command.Parameters.AddWithValue("userId", NpgsqlTypes.NpgsqlDbType.Uuid, id);
@@ -91,6 +97,7 @@ namespace CarGo.Repository
                                 IsApproved = reader.GetBoolean(4)
                             };
                         }
+
                         return null;
                     }
                 }

@@ -34,6 +34,7 @@ namespace CarGo.Service
             {
                 results.Add(await SaveImageAsync(image));
             }
+
             return !results.Any(p => p == false);
         }
 

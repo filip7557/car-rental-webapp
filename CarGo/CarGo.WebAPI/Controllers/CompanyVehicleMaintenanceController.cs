@@ -31,6 +31,7 @@ namespace CarGo.WebAPI.Controllers
             {
                 return Ok("Saved.");
             }
+
             return BadRequest("Invalid data.");
         }
 
@@ -44,6 +45,7 @@ namespace CarGo.WebAPI.Controllers
             {
                 return Ok("Deleted.");
             }
+
             return BadRequest();
         }
 

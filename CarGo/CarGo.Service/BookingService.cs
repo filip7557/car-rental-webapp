@@ -14,7 +14,8 @@ namespace CarGo.Service
             _repository = repository;
         }
 
-        public async Task<List<Booking>> GetAllBookingsAsync(BookingSorting sorting, BookingPaging paging, BookingFilter filter)
+        public async Task<List<Booking>> GetAllBookingsAsync(BookingSorting sorting, BookingPaging paging,
+            BookingFilter filter)
         {
             return await _repository.GetAllBookingsAsync(sorting, paging, filter);
         }
@@ -36,7 +37,7 @@ namespace CarGo.Service
 
         public async Task SoftDeleteBookingAsync(Guid id)
         {
-             await _repository.SoftDeleteBookingAsync(id);
+            await _repository.SoftDeleteBookingAsync(id);
         }
     }
 }

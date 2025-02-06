@@ -13,16 +13,17 @@ namespace CarGo.Repository
 {
     public class BookingRepository : IBookRepository
     {
-
         private string? _connectionString;
+
         public BookingRepository()
         {
             _connectionString = Environment.GetEnvironmentVariable("ConnectionStrings__PostgresDb")
-            ?? throw new InvalidOperationException("Database connection string is not set.");
+                                ?? throw new InvalidOperationException("Database connection string is not set.");
         }
 
 
-        public async Task<List<Booking>> GetAllBookingsAsync(BookingSorting sorting, BookingPaging paging, BookingFilter filter)
+        public async Task<List<Booking>> GetAllBookingsAsync(BookingSorting sorting, BookingPaging paging,
+            BookingFilter filter)
         {
             var bookings = new List<Booking>();
             using (var connection = new NpgsqlConnection(_connectionString))
@@ -91,7 +92,7 @@ namespace CarGo.Repository
 
                     ApplyFilters(cmd, commandText, filter);
 
-           
+
                     ApplySorting(cmd, commandText, sorting);
                     ApplyPaging(cmd, commandText, paging);
 
@@ -107,10 +108,9 @@ namespace CarGo.Repository
                     }
                 }
             }
+
             return bookings;
         }
-
-
 
 
         private void ApplySorting(NpgsqlCommand cmd, StringBuilder commandText, BookingSorting sorting)
@@ -182,18 +182,17 @@ namespace CarGo.Repository
                 cmd.Parameters.AddWithValue("@endDate", bookingFilter.EndDate.Value);
             }
 
-         
 
             if (!string.IsNullOrWhiteSpace(bookingFilter.BookingStatusName))
             {
                 commandText.Append(" AND bs.\"Name\" = @bookingStatusName");
-                cmd.Parameters.AddWithValue("@bookingStatusName",  bookingFilter.BookingStatusName );
+                cmd.Parameters.AddWithValue("@bookingStatusName", bookingFilter.BookingStatusName);
             }
 
             if (!string.IsNullOrWhiteSpace(bookingFilter.VehicleMakeName))
             {
                 commandText.Append(" AND vmm.\"Name\" = @vehicleMakeName");
-                cmd.Parameters.AddWithValue("@vehicleMakeName",  bookingFilter.VehicleMakeName );
+                cmd.Parameters.AddWithValue("@vehicleMakeName", bookingFilter.VehicleMakeName);
             }
 
             if (!string.IsNullOrWhiteSpace(bookingFilter.VehicleModelName))
@@ -205,9 +204,9 @@ namespace CarGo.Repository
             if (!string.IsNullOrWhiteSpace(bookingFilter.ImageUrl))
             {
                 commandText.Append(" AND cv.\"ImageUrl\" = @imageUrl");
-                cmd.Parameters.AddWithValue("@imageUrl",  bookingFilter.ImageUrl);
+                cmd.Parameters.AddWithValue("@imageUrl", bookingFilter.ImageUrl);
             }
-        
+
 
             if (bookingFilter.StatusId.HasValue)
             {
@@ -259,13 +258,14 @@ namespace CarGo.Repository
                     }
                 }
             }
+
             return null;
         }
 
         public async Task SoftDeleteBookingAsync(Guid id)
         {
             string commandText = "UPDATE \"Booking\" SET \"IsActive\" = FALSE WHERE  \"Id\" = @id";
-            using (var connection= new NpgsqlConnection(_connectionString))
+            using (var connection = new NpgsqlConnection(_connectionString))
             {
                 connection.Open();
                 using (var cmd = new NpgsqlCommand(commandText, connection))
@@ -278,10 +278,11 @@ namespace CarGo.Repository
 
         public async Task AddBookingAsync(Booking booking)
         {
-            string commandText = "INSERT INTO \"Booking\" (\"Id\", \"UserId\", \"CompanyVehicleId\", \"StartDate\", \"EndDate\", " +
-                                 "\"TotalPrice\", \"StatusId\", \"PickUpLocationId\", \"DropOffLocationId\", \"CreatedByUserId\", \"UpdatedByUserId\") " +
-                                 "VALUES (@id, @userId, @companyVehicleId, @startDate, @endDate, " +
-                                 "@totalPrice, @statusId, @pickUpLocationId, @dropOffLocationId, @createdByUserId, @updatedByUserId)";
+            string commandText =
+                "INSERT INTO \"Booking\" (\"Id\", \"UserId\", \"CompanyVehicleId\", \"StartDate\", \"EndDate\", " +
+                "\"TotalPrice\", \"StatusId\", \"PickUpLocationId\", \"DropOffLocationId\", \"CreatedByUserId\", \"UpdatedByUserId\") " +
+                "VALUES (@id, @userId, @companyVehicleId, @startDate, @endDate, " +
+                "@totalPrice, @statusId, @pickUpLocationId, @dropOffLocationId, @createdByUserId, @updatedByUserId)";
 
             using (var connection = new NpgsqlConnection(_connectionString))
             {
