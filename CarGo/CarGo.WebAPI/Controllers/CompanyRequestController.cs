@@ -1,6 +1,7 @@
 ﻿using CarGo.Model;
 using CarGo.Repository.Common;
 using CarGo.Service.Common;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RouteAttribute = Microsoft.AspNetCore.Mvc.RouteAttribute;
 
@@ -12,16 +13,15 @@ namespace CarGo.WebAPI.Controllers
     {
         private readonly ICompanyRequestService _companyRequestService;
         private readonly ICompanyRequestRepository _companyRequestRepository;
-        private readonly ICompanyService _companyService;
 
         public CompanyRequestController(ICompanyRequestService companyRequestService,
-            ICompanyRequestRepository companyRequestRepository, ICompanyService companyService)
+            ICompanyRequestRepository companyRequestRepository)
         {
             _companyRequestService = companyRequestService;
             _companyRequestRepository = companyRequestRepository;
-            _companyService = companyService;
         }
 
+        [Authorize]
         [HttpPost("new-company-request")]
         public async Task<IActionResult> NewCompanyRequest([FromBody] CompanyRequest newCompanyRequest)
         {
@@ -62,20 +62,20 @@ namespace CarGo.WebAPI.Controllers
                         UpdatedByUserId = userId,
                     };
 
-                    var resultOfCreatingCompany = await _companyService.CreateCompanyAsync(newCompany);
+                    var resultOfCreatingCompany = await _companyRequestService.CreateCompanyAsync(newCompany);
 
                     if (resultOfCreatingCompany)
                     {
                         companyRequest.IsApproved = true;
                         companyRequest.IsActive = false;
-                        result = await _companyRequestRepository.UpdateCompanyRequestAsync(companyRequest);
+                        result = await _companyRequestService.UpdateCompanyRequestAsync(companyRequest);
                     }
                 }
                 else
                 {
                     companyRequest.IsApproved = false;
                     companyRequest.IsActive = false;
-                    result = await _companyRequestRepository.UpdateCompanyRequestAsync(companyRequest);
+                    result = await _companyRequestService.UpdateCompanyRequestAsync(companyRequest);
                 }
 
                 if (result)

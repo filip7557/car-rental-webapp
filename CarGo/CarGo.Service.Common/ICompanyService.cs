@@ -12,8 +12,6 @@ namespace CarGo.Service.Common
     {
         Task<CompanyInfoDto?> GetCompanyAsync(Guid id);
 
-        Task<bool> CreateCompanyAsync(Company company);
-
         Task<bool> CreateCompanyByAdminAsync(Company company);
 
         Task<List<CompanyInfoIdAndNameDto>> GetCompaniesAsync();
@@ -22,7 +20,7 @@ namespace CarGo.Service.Common
 
         Task<bool> DeleteCompanyLocationAsync(CompanyLocations companyLocations);
 
-        Task<bool> UpdateCompanyLocationAsync(CompanyLocations companyLocations);
+        Task<bool> UpdateCompanyLocationAsync(Guid Id, CompanyLocations companyLocations);
 
         Task<List<CompanyLocationsDto>> GetAllCompanyLocationsAsync();
 

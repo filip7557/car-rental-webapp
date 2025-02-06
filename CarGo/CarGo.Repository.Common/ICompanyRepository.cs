@@ -12,8 +12,6 @@ namespace CarGo.Repository.Common
     {
         public Task<CompanyInfoDto?> GetCompanyAsync(Guid id);
 
-        public Task<bool> CreateCompanyAsync(Company company);
-
         public Task<List<CompanyInfoIdAndNameDto>> GetCompaniesAsync();
 
         public Task<bool> NewCompanyLocationAsync(CompanyLocations companyLocations);
@@ -24,6 +22,6 @@ namespace CarGo.Repository.Common
 
         public Task<List<CompanyLocationsDto>> GetAllCompanyLocationsAsync();
 
-        public Task<bool> ChangeCompanyIsActiveStatusAsync(Guid Id, bool isActive);
+        public Task<bool> ChangeCompanyIsActiveStatusAsync(Guid Id, bool isActive, Guid UpdatedByUserId);
     }
 }

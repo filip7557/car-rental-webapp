@@ -21,8 +21,6 @@ namespace CarGo.WebAPI.Controllers
         [HttpPost("new-company-location")]
         public async Task<IActionResult> NewCompanyLocation([FromBody] CompanyLocations companyLocations)
         {
-            companyLocations.UpdatedByUserId = Guid.Parse("7dd63591-bce2-44f6-806b-d23063d49cc2");
-            companyLocations.CreatedByUserId = Guid.Parse("7dd63591-bce2-44f6-806b-d23063d49cc2");
             var result = await _companyService.NewCompanyLocationAsync(companyLocations);
             if (result)
             {
@@ -45,11 +43,9 @@ namespace CarGo.WebAPI.Controllers
 
         [Authorize(Roles = "Administrator,Manager")]
         [HttpPut("edit-company-location")]
-        public async Task<IActionResult> UpdateCompanyLocation([FromBody] CompanyLocations companyLocations)
+        public async Task<IActionResult> UpdateCompanyLocation(Guid Id, [FromBody] CompanyLocations companyLocations)
         {
-            companyLocations.UpdatedByUserId = Guid.Parse("7dd63591-bce2-44f6-806b-d23063d49cc2");
-            companyLocations.DateUpdated = DateTime.UtcNow;
-            var result = await _companyService.UpdateCompanyLocationAsync(companyLocations);
+            var result = await _companyService.UpdateCompanyLocationAsync(Id, companyLocations);
             if (result)
             {
                 return Ok("Company location updated successfully.");
@@ -57,6 +53,7 @@ namespace CarGo.WebAPI.Controllers
             return BadRequest("Failed to update company location.");
         }
 
+        [Authorize]
         [HttpGet("get-all-companyes")]
         public async Task<IActionResult> GetCompanyesAsync()
         {
@@ -74,6 +71,7 @@ namespace CarGo.WebAPI.Controllers
             });
         }
 
+        [Authorize]
         [HttpGet("get-company-info-by-{id}")]
         public async Task<IActionResult> GetCompany(Guid id)
         {
@@ -86,6 +84,7 @@ namespace CarGo.WebAPI.Controllers
             return NotFound("Company not found.");
         }
 
+        [Authorize]
         [HttpGet("get-all-company-locations")]
         public async Task<IActionResult> GetAllCompanyLocationsAsync()
         {
@@ -101,8 +100,6 @@ namespace CarGo.WebAPI.Controllers
         [HttpPost("create-company-by-admin")]
         public async Task<IActionResult> CreateCompanyByAdminAsync([FromBody] Company company)
         {
-            company.UpdatedByUserId = Guid.Parse("7dd63591-bce2-44f6-806b-d23063d49cc2");
-            company.CreatedByUserId = Guid.Parse("7dd63591-bce2-44f6-806b-d23063d49cc2");
             var result = await _companyService.CreateCompanyByAdminAsync(company);
             if (result)
             {
