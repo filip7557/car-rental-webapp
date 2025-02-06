@@ -23,9 +23,9 @@ namespace CarGo.Service
             return await _locationRepository.GetByIdLocationAsync(id);
         }
 
-        public async Task<bool> PostAsync(Location entity, Guid id)
+        public async Task<bool> PostAsync(Location entity, Guid userId)
         {
-            return await _locationRepository.PostLocationAsync(entity, id);
+            return await _locationRepository.PostLocationAsync(entity, userId);
         }
 
         public async Task<bool> DeleteAsync(Guid locationId, Guid id)

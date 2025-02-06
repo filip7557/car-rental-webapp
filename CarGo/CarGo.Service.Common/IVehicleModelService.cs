@@ -8,6 +8,6 @@ namespace CarGo.Service.Common
 
         public Task<VehicleModel?> GetByIdAsync(Guid id);
         Task AddAsync(VehicleModel vehicleModel, Guid userId); 
-        Task DeleteAsync(Guid id); 
+        Task DeleteAsync(Guid vehicleId, Guid id); 
     }
 }

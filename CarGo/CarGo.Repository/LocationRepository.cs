@@ -33,6 +33,7 @@ namespace CarGo.Repository
                         Address = reader.GetString(reader.GetOrdinal("Address")),
                         City = reader.GetString(reader.GetOrdinal("City")),
                         Country = reader.GetString(reader.GetOrdinal("Country")),
+                        
                     };
                     locationList.Add(location);
                 }
@@ -64,9 +65,9 @@ namespace CarGo.Repository
             throw new Exception("Location with inputed id not found");
         }
 
-        public async Task<bool> PostLocationAsync(Location entity, Guid id)
+        public async Task<bool> PostLocationAsync(Location entity, Guid userId)
         {
-            string commandText = $"INSERT INTO {TableName} (\"Id\", \"Address\", \"City\", \"Country\", \"IsActive\",\"CreatedByUserId\", \"UpdatedByUserId\") VALUES (@id, @address, @city, @country, @isActive,@createdByUserId, @UpdatedByUserId)";
+            string commandText = $"INSERT INTO {TableName} (\"Id\", \"Address\", \"City\", \"Country\", \"IsActive\",\"CreatedByUserId\", \"UpdatedByUserId\") VALUES (@id, @address, @city, @country, @isActive,@createdByUserId, @updatedByUserId)";
             using (var connection = new NpgsqlConnection(connectionString))
             using (var command = new NpgsqlCommand(commandText, connection))
             {
@@ -77,8 +78,8 @@ namespace CarGo.Repository
                 command.Parameters.AddWithValue("country", entity.Country);
                 command.Parameters.AddWithValue("isActive", true);
 
-                command.Parameters.AddWithValue("createdByUserId", id);
-                command.Parameters.AddWithValue("updatedByUserId", id);
+                command.Parameters.AddWithValue("createdByUserId", userId);
+                command.Parameters.AddWithValue("updatedByUserId", userId);
 
                 return await command.ExecuteNonQueryAsync() > 0;
             }

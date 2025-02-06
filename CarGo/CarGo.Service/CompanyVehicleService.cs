@@ -39,9 +39,9 @@ namespace CarGo.Service
             await _repository.UpdateCompanyVehicleAsync(id, updatedCompanyVehicle, userId);
         }
 
-        public async Task DeleteCompanyVehicleAsync(Guid id)
+        public async Task DeleteCompanyVehicleAsync(Guid compVehId, Guid id)
         {
-            await _repository.DeleteCompanyVehicleAsync(id);
+            await _repository.DeleteCompanyVehicleAsync(compVehId, id);
         }
     }
 }

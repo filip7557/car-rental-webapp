@@ -96,8 +96,9 @@ namespace CarGo.WebAPI.Controllers
                 {
                     return NotFound($"Vozilo s Id={id} ne postoji");
                 }
+                var userId = Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
 
-                await _service.DeleteCompanyVehicleAsync(id);
+                await _service.DeleteCompanyVehicleAsync(id, userId);
                 return Ok("Vozilo je uspješno obrisano");
             }
             catch (Exception ex)

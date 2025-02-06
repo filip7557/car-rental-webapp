@@ -18,6 +18,6 @@ namespace CarGo.Service.Common
 
         Task UpdateCompanyVehicleAsync(Guid id, CompanyVehicle updatedCompanyVehicle, Guid userId);
 
-        Task DeleteCompanyVehicleAsync(Guid id);
+        Task DeleteCompanyVehicleAsync(Guid compVehId, Guid id);
     }
 }

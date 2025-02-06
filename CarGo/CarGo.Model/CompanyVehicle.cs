@@ -20,7 +20,7 @@ namespace CarGo.Model
 
         public string PlateNumber { get; set; }
 
-        public string ImageUrl { get; set; }
+        public string? ImageUrl { get; set; }
 
         public Guid? CurrentLocationId { get; set; }
 

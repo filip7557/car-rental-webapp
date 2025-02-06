@@ -93,17 +93,40 @@ namespace CarGo.Repository
             return null;
         }
 
-        public async Task DeleteCompanyVehicleAsync(Guid id)
+        public async Task<bool> DeleteCompanyVehicleAsync(Guid compVehId ,Guid id)
         {
-            string commandText = "DELETE FROM \"CompanyVehicle\" WHERE \"Id\" = @id";
-            using (var connection = new NpgsqlConnection(connectionString))
+            const string selectCommandText = "SELECT \"IsActive\" FROM \"CompanyVehicle\" WHERE \"Id\" = @id";
+            const string updateCommandText = "UPDATE \"CompanyVehicle\" SET \"IsActive\" = @newIsActive, \"UpdatedByUserId\" = @updatedByUserId, \"DateUpdated\" = CURRENT_TIMESTAMP WHERE \"Id\" = @id";
+
+            try
             {
-                connection.Open();
-                using (var cmd = new NpgsqlCommand(commandText, connection))
+                using var connection = new NpgsqlConnection(connectionString);
+                await connection.OpenAsync();
+
+                // Dohvati trenutni status
+                using var selectCommand = new NpgsqlCommand(selectCommandText, connection);
+                selectCommand.Parameters.AddWithValue("id", compVehId);
+                var currentStatus = await selectCommand.ExecuteScalarAsync();
+
+                if (currentStatus == null)
                 {
-                    cmd.Parameters.AddWithValue("id", id);
-                    await cmd.ExecuteNonQueryAsync();
+                    throw new Exception("Company Vehicle not found");
                 }
+
+                bool newIsActive = !(bool)currentStatus; // Ako je trenutno aktivno, postavi na neaktivno (false)
+
+                // Ažuriraj status
+                using var updateCommand = new NpgsqlCommand(updateCommandText, connection);
+                updateCommand.Parameters.AddWithValue("id", compVehId);
+                updateCommand.Parameters.AddWithValue("newIsActive", newIsActive);
+                updateCommand.Parameters.AddWithValue("updatedByUserId", id);
+
+                // Provjeri ako je izvršen upit
+                return await updateCommand.ExecuteNonQueryAsync() > 0;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Error while deactivating company vehicle", ex);
             }
         }
 

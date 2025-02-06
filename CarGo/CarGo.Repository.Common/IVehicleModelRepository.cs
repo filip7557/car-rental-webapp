@@ -7,7 +7,7 @@ namespace CarGo.Repository.Common
         public Task<List<VehicleModel>> GetAllAsync();
 
         public Task<VehicleModel?> GetByIdAsync(Guid id);
-        Task AddAsync(VehicleModel vehicleModel, Guid userId); 
-        Task DeleteAsync(Guid id); 
+        Task<bool> AddAsync(VehicleModel vehicleModel, Guid userId); 
+        Task<bool> DeleteAsync(Guid vehicleId, Guid id); 
     }
 }

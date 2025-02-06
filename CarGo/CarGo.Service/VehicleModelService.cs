@@ -25,8 +25,8 @@ namespace Service
         public async Task AddAsync(VehicleModel vehicleModel, Guid userId){
             await _vehicleModelRepository.AddAsync(vehicleModel, userId);
         }
-        public async Task DeleteAsync(Guid id){
-            await _vehicleModelRepository.DeleteAsync(id);
+        public async Task DeleteAsync(Guid vehicleId, Guid id){
+            await _vehicleModelRepository.DeleteAsync(vehicleId,id);
         }
 
     }
