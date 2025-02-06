@@ -14,5 +14,7 @@ namespace CarGo.Repository.Common
             Paging paging, bool isActiveFilter);
 
         public Task<int> CountAsync(Guid companyVehicleId);
+
+        public Task<CompanyVehicleMaintenance?> GetCompanyVehicleMaintenanceByIdAsync(Guid id);
     }
 }
