@@ -50,9 +50,10 @@ builder.Host
         containerBuilder.RegisterType<UserCompanyRepository>().As<IUserCompanyRepository>();
         containerBuilder.RegisterType<ManagerRepository>().As<IManagerRepository>();
         containerBuilder.RegisterType<ManagerService>().As<IManagerService>();
-
         containerBuilder.RegisterType<CompanyVehicleService>().As<ICompanyVehicleService>();
         containerBuilder.RegisterType<CompanyVehicleRepository>().As<ICompanyVehicleRepository>();
+        containerBuilder.RegisterType<DamageReportRepository>().As<IDamageReportRepository>();
+        containerBuilder.RegisterType<DamageReportService>().As<IDamageReportService>();
     });
 
 // Add services to the container.
