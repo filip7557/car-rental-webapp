@@ -29,7 +29,8 @@ function LoginForm() {
                 alert("Invalid credentials.");
             }
             else {
-                localStorage.setItem("token", response);
+                localStorage.setItem("token", response.token);
+                localStorage.setItem("userId", response.userId);
                 navigate("/home")
             }
         })

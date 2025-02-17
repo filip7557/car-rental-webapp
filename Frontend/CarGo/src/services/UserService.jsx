@@ -28,6 +28,10 @@ class UserService {
       return error.response.data;
     }
   }
+
+  logoutUser() {
+    localStorage.clear();
+  }
 }
 
 const userService = new UserService();
