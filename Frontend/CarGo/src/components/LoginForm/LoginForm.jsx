@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import userService from "../../services/UserService";
+import roleService from "../../services/RoleService";
 
 import "./LoginForm.css";
 
@@ -25,12 +26,16 @@ function LoginForm() {
     }
     userService.loginUser(email, password)
         .then((response) => {
-            if (response == "Invalid credentials.") {
+            if (response === "Invalid credentials.") {
                 alert("Invalid credentials.");
             }
             else {
                 localStorage.setItem("token", response.token);
                 localStorage.setItem("userId", response.userId);
+                roleService.getRole(localStorage.getItem("userId"))
+                    .then((role) => {
+                        localStorage.setItem("role", role);
+                    })
                 navigate("/home")
             }
         })
