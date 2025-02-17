@@ -1,4 +1,5 @@
 import axiosClient from "../axiosClient.jsx";
+import roleService from "./RoleService.jsx";
 
 class UserService {
   async registerUser(user) {
@@ -23,6 +24,12 @@ class UserService {
           password: password,
         },
       });
+      if (response.data.userId) {
+        localStorage.setItem("token", response.data.token);
+        localStorage.setItem("userId", response.data.userId);
+        const user = await this.getUser(response.data.userId);
+        localStorage.setItem("role", user.role);
+      }
       return response.data;
     } catch (error) {
       return error.response.data;
@@ -31,6 +38,15 @@ class UserService {
 
   logoutUser() {
     localStorage.clear();
+  }
+
+  async getUser(id) {
+    try {
+      const response = await axiosClient.get(`/api/User/${id}`);
+      return response.data;
+    } catch (error) {
+      console.log(error);
+    }
   }
 }
 

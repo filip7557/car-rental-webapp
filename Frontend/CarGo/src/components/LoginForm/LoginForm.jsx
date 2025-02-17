@@ -28,14 +28,9 @@ function LoginForm() {
         .then((response) => {
             if (response === "Invalid credentials.") {
                 alert("Invalid credentials.");
+                localStorage.clear();
             }
             else {
-                localStorage.setItem("token", response.token);
-                localStorage.setItem("userId", response.userId);
-                roleService.getRole(localStorage.getItem("userId"))
-                    .then((role) => {
-                        localStorage.setItem("role", role);
-                    })
                 navigate("/home")
             }
         })
