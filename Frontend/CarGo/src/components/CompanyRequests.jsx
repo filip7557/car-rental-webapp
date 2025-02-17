@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import CompanyRequestService from "../services/CompanyRegisterAndRequestService";
+import './CompanyRequests.css';
 
 const CompanyRequests = () => {
   const [companyRequests, setCompanyRequests] = useState([]);

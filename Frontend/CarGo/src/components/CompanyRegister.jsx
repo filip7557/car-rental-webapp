@@ -28,7 +28,7 @@ const CompanyRegister = () => {
   };
 
   return (
-    <div className="container">
+    <div>
       <h1>Register Company</h1>
       <form onSubmit={handleSubmit}>
         <input
