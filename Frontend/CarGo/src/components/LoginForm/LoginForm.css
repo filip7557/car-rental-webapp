@@ -1,0 +1,15 @@
+.loginFormTable td {
+    text-align: start;
+    padding: 0.5rem 1rem;
+}
+
+.loginForm button {
+    margin: 0.5rem;
+}
+
+.loginForm label {
+    margin: 0.5rem;
+    text-decoration: underline;
+    color: blue;
+    cursor: pointer;
+}

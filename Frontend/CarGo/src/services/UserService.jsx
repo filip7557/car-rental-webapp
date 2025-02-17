@@ -9,10 +9,23 @@ class UserService {
         email: user.email,
         password: user.password,
       });
-      console.log(response);
       return response.data;
     } catch (error) {
       console.log(error);
+    }
+  }
+
+  async loginUser(email, password) {
+    try {
+      const response = await axiosClient.get("/api/Auth/login", {
+        params: {
+          email: email,
+          password: password,
+        },
+      });
+      return response.data;
+    } catch (error) {
+      return error.response.data;
     }
   }
 }
