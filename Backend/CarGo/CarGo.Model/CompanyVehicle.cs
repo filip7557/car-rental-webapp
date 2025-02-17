@@ -28,5 +28,6 @@
         public Guid CreatedByUserId { get; set; }
 
         public Guid UpdatedByUserId { get; set; }
+
     }
 }

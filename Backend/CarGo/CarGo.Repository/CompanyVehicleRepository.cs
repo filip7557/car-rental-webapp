@@ -19,7 +19,52 @@ namespace CarGo.Repository
                 using (var cmd = new NpgsqlCommand())
                 {
                     cmd.Connection = connection;
-                    var commandText = new StringBuilder("SELECT * FROM \"CompanyVehicle\" WHERE 1=1");
+                    var commandText = new StringBuilder("SELECT " +
+                        "cv.*, " +
+                        "cv.\"DailyPrice\", " +
+                        "cv.\"PlateNumber\", " +
+                        "cv.\"ImageUrl\", cv.\"IsOperational\", cv.\"IsActive\", " +
+                        "c.\"Name\" AS \"CompanyName\", " +
+                        "vm.\"Name\" AS \"Model\", " +
+                        "vmm.\"Name\" AS \"Make\", " +
+                        "vc.\"Name\" AS \"Color\", " +
+                        "cl.\"Address\" AS \"LocationAddress\", " +
+                        "cl.\"City\" AS \"LocationCity\", " +
+                        "u.\"Id\" AS \"CreatedByUserId\", " +
+                        "u.\"FullName\" AS \"CreatedByUser\", " +
+                        "uu.\"Id\" AS \"UpdatedByUserId\", " +
+                        "uu.\"FullName\" AS \"UpdatedByUser\" " +
+                        "FROM \"CompanyVehicle\" cv " +
+                        "JOIN \"Company\" c ON cv.\"CompanyId\" = c.\"Id\" " +
+                        "JOIN \"VehicleModel\" vm ON cv.\"VehicleModelId\" = vm.\"Id\" " +
+                        "JOIN \"VehicleMake\" vmm ON vm.\"MakeId\" = vmm.\"Id\" " +
+                        "JOIN \"VehicleColor\" vc ON cv.\"ColorId\" = vc.\"Id\" " +
+                        "LEFT JOIN \"Location\" cl ON cv.\"CurrentLocationId\" = cl.\"Id\" " +
+                        "JOIN \"User\" u ON cv.\"CreatedByUserId\" = u.\"Id\" " +
+                        "JOIN \"User\" uu ON cv.\"UpdatedByUserId\" = uu.\"Id\" " +
+                        "WHERE 1 = 1");
+
+                    if (filter.UserRole == "User")
+                    {
+                        commandText.Append(" AND b.\"UserId\" = @userId");
+                        cmd.Parameters.AddWithValue("userId", filter.UserId);
+                    }
+
+                    else if (filter.UserRole == "Manager")
+                    {
+                        commandText.Append(@"
+                    AND cv.""CompanyId"" IN (SELECT ""CompanyId"" FROM ""UserCompany"" WHERE ""UserId"" = @userId)");
+                        cmd.Parameters.AddWithValue("userId", filter.UserId);
+                    }
+
+                    else if (filter.UserRole == "Administrator")
+                    {
+                        if (filter.CompanyId.HasValue)
+                        {
+                            commandText.Append(" AND cv.\"CompanyId\" = @companyId");
+                            cmd.Parameters.AddWithValue("companyId", filter.CompanyId.Value);
+                        }
+                    }
 
                     ApplyFilters(cmd, commandText, filter);
                     ApplySorting(cmd, commandText, sorting);
@@ -60,14 +105,93 @@ namespace CarGo.Repository
             }
         }
 
-        private void ApplyFilters(NpgsqlCommand cmd, StringBuilder commandText, CompanyVehicleFilter filter)
+        private void ApplyFilters(NpgsqlCommand cmd, StringBuilder commandText, CompanyVehicleFilter vehicleFilter)
         {
-            if (filter.IsActive.HasValue)
+            if (vehicleFilter.IsActive.HasValue)
             {
-                commandText.Append(" AND \"IsActive\" = @isActive");
-                cmd.Parameters.AddWithValue("@isActive", filter.IsActive.Value);
+                commandText.Append(" AND cv.\"IsActive\" = @isActive");
+                cmd.Parameters.AddWithValue("@isActive", vehicleFilter.IsActive.Value);
+            }
+
+            if (vehicleFilter.IsOperational.HasValue)
+            {
+                commandText.Append(" AND cv.\"IsOperational\" = @isOperational");
+                cmd.Parameters.AddWithValue("@isOperational", vehicleFilter.IsOperational.Value);
+            }
+
+            if (vehicleFilter.CompanyId.HasValue)
+            {
+                commandText.Append(" AND cv.\"CompanyId\" = @companyId");
+                cmd.Parameters.AddWithValue("@companyId", vehicleFilter.CompanyId.Value);
+            }
+
+            if (vehicleFilter.VehicleModelId.HasValue)
+            {
+                commandText.Append(" AND cv.\"VehicleModelId\" = @vehicleModelId");
+                cmd.Parameters.AddWithValue("@vehicleModelId", vehicleFilter.VehicleModelId.Value);
+            }
+
+            if (!string.IsNullOrWhiteSpace(vehicleFilter.VehicleMakeName))
+            {
+                commandText.Append(" AND vmm.\"Name\" = @vehicleMakeName");
+                cmd.Parameters.AddWithValue("@vehicleMakeName", vehicleFilter.VehicleMakeName);
+            }
+
+            if (!string.IsNullOrWhiteSpace(vehicleFilter.VehicleModelName))
+            {
+                commandText.Append(" AND vm.\"Name\" = @vehicleModelName");
+                cmd.Parameters.AddWithValue("@vehicleModelName", vehicleFilter.VehicleModelName);
+            }
+
+            if (!string.IsNullOrWhiteSpace(vehicleFilter.ColorName))
+            {
+                commandText.Append(" AND vc.\"Name\" = @colorName");
+                cmd.Parameters.AddWithValue("@colorName", vehicleFilter.ColorName);
+            }
+
+            if (vehicleFilter.MinDailyPrice.HasValue)
+            {
+                commandText.Append(" AND cv.\"DailyPrice\" >= @minDailyPrice");
+                cmd.Parameters.AddWithValue("@minDailyPrice", vehicleFilter.MinDailyPrice.Value);
+            }
+
+            if (vehicleFilter.MaxDailyPrice.HasValue)
+            {
+                commandText.Append(" AND cv.\"DailyPrice\" <= @maxDailyPrice");
+                cmd.Parameters.AddWithValue("maxDailyPrice", vehicleFilter.MaxDailyPrice.Value);
+            }
+
+            if (!string.IsNullOrWhiteSpace(vehicleFilter.PlateNumber))
+            {
+                commandText.Append(" AND cv.\"PlateNumber\" = @plateNumber");
+                cmd.Parameters.AddWithValue("@plateNumber", vehicleFilter.PlateNumber);
+            }
+
+            if (!string.IsNullOrWhiteSpace(vehicleFilter.ImageUrl))
+            {
+                commandText.Append(" AND cv.\"ImageUrl\" = @imageUrl");
+                cmd.Parameters.AddWithValue("@imageUrl", vehicleFilter.ImageUrl);
+            }
+
+            if (vehicleFilter.CurrentLocationId.HasValue)
+            {
+                commandText.Append(" AND cv.\"CurrentLocationId\" = @currentLocationId");
+                cmd.Parameters.AddWithValue("@currentLocationId", vehicleFilter.CurrentLocationId.Value);
+            }
+
+            if (!string.IsNullOrWhiteSpace(vehicleFilter.LocationCity))
+            {
+                commandText.Append(" AND cl.\"City\" = @locationCity");
+                cmd.Parameters.AddWithValue("@locationCity", vehicleFilter.LocationCity);
+            }
+
+            if (!string.IsNullOrWhiteSpace(vehicleFilter.LocationAddress))
+            {
+                commandText.Append(" AND cl.\"Address\" ILIKE @locationAddress");
+                cmd.Parameters.AddWithValue("@locationAddress", "%" + vehicleFilter.LocationAddress + "%");
             }
         }
+
 
         public async Task<CompanyVehicle?> GetCompanyVehicleByIdAsync(Guid id)
         {
