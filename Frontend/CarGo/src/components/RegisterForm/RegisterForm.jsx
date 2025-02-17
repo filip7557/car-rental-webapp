@@ -20,8 +20,7 @@ function RegisterForm() {
         }
         userService.registerUser(user)
             .then((response) => {
-                console.log("Response: " + response);
-                if (response === "true") {
+                if (response === "Registered.") {
                     navigate("/login");
                 }
                 else if (response === "Email is already in use.") {
