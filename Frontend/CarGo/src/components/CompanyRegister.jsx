@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import CompanyRegisterService from "../services/CompanyRegisterService"; // Import service
+import CompanyRegisterService from "../services/CompanyRegisterService";
 
 const CompanyRegister = () => {
   const [name, setName] = useState("");
@@ -14,12 +14,13 @@ const CompanyRegister = () => {
       name: name,
       email: email,
       isActive: true,
-      isApproved: true,
+      isApproved: false,
     };
 
     try {
       await CompanyRegisterService.createCompanyRequest(companyData);
       alert("Company registered successfully!");
+      navigate("/");
       
     } catch (error) {
       alert("Error: " + (error.response?.data || "Request failed"));
