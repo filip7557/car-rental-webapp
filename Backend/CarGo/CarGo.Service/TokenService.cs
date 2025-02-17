@@ -1,5 +1,6 @@
 ﻿using CarGo.Model;
 using CarGo.Service.Common;
+using CarGo.Common;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
@@ -87,16 +88,21 @@ namespace CarGo.Service
             return Convert.ToBase64String(hashedBytes);
         }
 
-        public async Task<string> LoginAsync(string email, string password)
+        public async Task<LoginResponse> LoginAsync(string email, string password)
         {
             var user = await _userService.GetUserByEmailAndPasswordAsync(email, HashPassword(password));
             if (user != null)
             {
                 var token = await GenerateTokenAsync(user);
-                return token;
+                var loginResponse = new LoginResponse
+                {
+                    UserId = user.Id,
+                    Token = token
+                };
+                return loginResponse;
             }
 
-            return "";
+            return new LoginResponse { Token="", UserId=Guid.Empty };
         }
     }
 }

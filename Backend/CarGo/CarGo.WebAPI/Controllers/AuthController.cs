@@ -18,9 +18,9 @@ namespace CarGo.WebAPI.Controllers
         [HttpGet("login")]
         public async Task<IActionResult> LoginAsync(string email, string password)
         {
-            var token = await _tokenService.LoginAsync(email, password);
-            if (!string.IsNullOrWhiteSpace(token))
-                return Ok(token);
+            var loginResponse = await _tokenService.LoginAsync(email, password);
+            if (!string.IsNullOrWhiteSpace(loginResponse.Token))
+                return Ok(loginResponse);
 
             return Unauthorized("Invalid credentials.");
         }

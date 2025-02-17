@@ -1,4 +1,5 @@
 ﻿using CarGo.Model;
+using CarGo.Common;
 
 namespace CarGo.Service.Common
 {
@@ -6,7 +7,7 @@ namespace CarGo.Service.Common
     {
         public Task<bool> RegisterAsync(UserDTO user);
 
-        public Task<string> LoginAsync(string email, string password);
+        public Task<LoginResponse> LoginAsync(string email, string password);
 
         public Guid GetCurrentUserId();
 
