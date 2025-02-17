@@ -15,7 +15,7 @@ namespace CarGoAPI.Controllers
             _service = roleService;
         }
 
-        [Authorize(Roles = "Manager,Administrator")]
+        [Authorize]
         [HttpGet]
         public async Task<IActionResult> GetAllAsync()
         {
@@ -27,7 +27,7 @@ namespace CarGoAPI.Controllers
             return Ok(roles);
         }
 
-        [Authorize(Roles = "Manager,Administrator")]
+        [Authorize]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetByIdAsync(Guid id)
         {
