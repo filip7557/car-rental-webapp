@@ -10,6 +10,8 @@ namespace CarGo.Repository.Common
 
         Task<CompanyRequest?> GetCompanyRequestByIdAsync(Guid id);
 
+        Task<List<CompanyRequest>> GetCompanyRequestsAsync();
+
         public Task<bool> CreateCompanyAsync(Company company);
     }
 }

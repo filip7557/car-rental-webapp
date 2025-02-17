@@ -132,5 +132,42 @@ namespace CarGo.Repository
                 }
             }
         }
+
+        public async Task<List<CompanyRequest>> GetCompanyRequestsAsync()
+        {
+            try
+            {
+                using (var connection = new NpgsqlConnection(connectionString))
+                {
+                    var commandText = "SELECT \"UserId\", \"Name\", \"Email\", \"IsActive\", \"IsApproved\" FROM \"CompanyRequest\"";
+                    using (var command = new NpgsqlCommand(commandText, connection))
+                    {
+                        await connection.OpenAsync();
+                        await using var reader = await command.ExecuteReaderAsync();
+                        var companies = new List<CompanyRequest>();
+                        while (await reader.ReadAsync())
+                        {
+                            var company = new CompanyRequest
+                            {
+                                UserId = reader.GetGuid(reader.GetOrdinal("UserId")),
+                                Name = reader.GetString(reader.GetOrdinal("Name")),
+                                Email = reader.GetString(reader.GetOrdinal("Email")),
+                                IsActive = reader.GetBoolean(reader.GetOrdinal("IsActive")),
+                                IsApproved = reader.GetBoolean(reader.GetOrdinal("IsApproved"))
+                            };
+
+                            companies.Add(company);
+                        }
+
+                        return companies;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error fetching companies: {ex.Message}");
+                return new List<CompanyRequest>();
+            }
+        }
     }
 }

@@ -56,7 +56,7 @@ namespace CarGo.Service
             company.Id = Guid.NewGuid();
             company.CreatedByUserId = userId;
             company.UpdatedByUserId = userId;
-            var result =  await _companyRequestRepository.CreateCompanyAsync(company);
+            var result = await _companyRequestRepository.CreateCompanyAsync(company);
             if (result)
             {
                 var notification = new Notification
@@ -152,6 +152,11 @@ namespace CarGo.Service
                 Console.WriteLine($"Error occurred: {e.Message}");
                 return false;
             }
+        }
+
+        public async Task<List<CompanyRequest>> GetCompanyRequestAsync()
+        {
+            return await _companyRequestRepository.GetCompanyRequestsAsync();
         }
     }
 }

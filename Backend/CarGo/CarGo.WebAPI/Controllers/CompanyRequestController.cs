@@ -1,5 +1,6 @@
 ﻿using CarGo.Model;
 using CarGo.Repository.Common;
+using CarGo.Service;
 using CarGo.Service.Common;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -44,6 +45,23 @@ namespace CarGo.WebAPI.Controllers
                 return Ok("Company request managed successfully.");
             }
             return BadRequest("Failed to manage company request.");
+        }
+
+        [Authorize(Roles = "Administrator")]
+        [HttpGet("get-all-company-requests")]
+        public async Task<IActionResult> GetAllCompanyRequestsAsync()
+        {
+            var companyes = await _companyRequestRepository.GetCompanyRequestsAsync();
+            if (companyes.Count > 0)
+            {
+                return Ok(companyes);
+            }
+
+            return NotFound(new
+            {
+                error = "Not found",
+                message = "No company requests found."
+            });
         }
     }
 }

@@ -11,5 +11,7 @@ namespace CarGo.Service.Common
         Task<bool> UpdateCompanyRequestAsync(CompanyRequest companyRequest);
 
         Task<bool> ManageCompanyRequest(Guid userId, bool isAccepted);
+
+        Task<List<CompanyRequest>> GetCompanyRequestAsync();
     }
 }
