@@ -1,7 +1,0 @@
-HttpGet Request - LocationController
-HttpDelete Request - LocationController
-HttpPost Request - LocationController			
-HttpPut Request - LocationController - isActive to false			
-
-
-NBbb****&({
