@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './AddDamageReportForm.css'
+import damageReportService from '../../services/DamageReportService';
 
 function AddDamageReportForm({ bookingId }) {
 
@@ -22,7 +23,10 @@ function AddDamageReportForm({ bookingId }) {
         if (damageReport.title === "")
             alert("Title field must be filled.")
         else {
-            // TODO: Call service and save.
+            damageReportService.createDamageReport(damageReport)
+                .then(() => {
+                    navigate(-1)
+                })
         }
     }
 
@@ -38,8 +42,9 @@ function AddDamageReportForm({ bookingId }) {
             <form onSubmit={handleSubmit}>
                 <table className="addDamageReportFormTable">
                     <tbody>
-                        <tr><td>Title:</td><td><input type="text" name="title" value={damageReport.title || ""} onChange={handleChange} placeholder="Fullname" /></td></tr>
-                        <tr><td>Description:</td><td><input type="text" name="description" value={damageReport.description || ""} onChange={handleChange} placeholder="Phonenumber" /></td></tr>                    </tbody>
+                        <tr><td>Title:</td><td><input type="text" name="title" value={damageReport.title || ""} onChange={handleChange} placeholder="Title" /></td></tr>
+                        <tr><td>Description:</td><td><input type="text" name="description" value={damageReport.description || ""} onChange={handleChange} placeholder="Description" /></td></tr>
+                    </tbody>
                 </table>
                 <button>Save</button>
                 <button onClick={handleCancelClick}>Cancel</button>
