@@ -5,14 +5,14 @@ namespace CarGo.Service.Common
 {
     public interface IBookService
     {
-        Task<List<Booking>> GetAllBookingsAsync(BookingSorting sorting, BookingPaging paging, BookingFilter filter);
+        Task<List<BookingDto>> GetAllBookingsAsync(BookingSorting sorting, BookingPaging paging, BookingFilter filter);
 
         Task<Booking> GetBookingByIdAsync(Guid id);
 
         Task AddBookingAsync(Booking booking);
 
         Task UpdateBookingAsync(Guid id, Booking updatedBooking);
-        Task UpdateBookingStatusAsync(Guid id, BookingStatus status);
+        Task UpdateBookingStatusAsync(Guid id, Guid statusId);
         Task SoftDeleteBookingAsync(Guid id);
     }
 }

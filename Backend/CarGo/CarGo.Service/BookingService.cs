@@ -15,11 +15,13 @@ namespace CarGo.Service
         private readonly IVehicleMakeService _vehicleMakeService;
         private readonly ICompanyService _companyService;
         private readonly IUserService _userService;
-        
+        private readonly IBookingStatusRepository _bookingStatus;
 
-        public BookingService(IBookRepository repository, ITokenService tokenService, INotificationService notificationService, ICompanyVehicleService companyVehicleService, IVehicleModelService vehicleModelService, IVehicleMakeService vehicleMakeService, ICompanyService companyService, IUserService userService)
+
+        public BookingService(IBookRepository repository, ITokenService tokenService,IBookingStatusRepository bookingStatusRepository, INotificationService notificationService, ICompanyVehicleService companyVehicleService, IVehicleModelService vehicleModelService, IVehicleMakeService vehicleMakeService, ICompanyService companyService, IUserService userService)
         {
             _repository = repository;
+            _bookingStatus= bookingStatusRepository;
             _tokenService = tokenService;
             _notificationService = notificationService;
             _companyVehicleService = companyVehicleService;
@@ -30,34 +32,62 @@ namespace CarGo.Service
    
         }
 
-        public async Task<List<Booking>> GetAllBookingsAsync(BookingSorting sorting, BookingPaging paging, BookingFilter filter)
+        public async Task<List<BookingDto>> GetAllBookingsAsync(BookingSorting sorting, BookingPaging paging, BookingFilter filter)
         {
             var userId = _tokenService.GetCurrentUserId();
             var userRole = _tokenService.GetCurrentUserRoleName();
 
-
             filter.UserId = userId;
             filter.UserRole = userRole;
 
-
             if (userRole == "Administrator")
             {
-                
                 filter.IsActive = null;
+                filter.UserId = null;
             }
             else if (userRole == "User")
             {
-       
                 filter.IsActive = true;
             }
 
-            if (userRole == "Administrator")
+            var bookings = await _repository.GetAllBookingsAsync(sorting, paging, filter);
+            var bookingResponses = new List<BookingDto>();
+
+            foreach (var booking in bookings)
             {
-                filter.UserId = null;  
+                var companyVehicle = await _companyVehicleService.GetCompanyVehicleByIdAsync(booking.CompanyVehicleId);
+                var vehicleModel = companyVehicle != null
+                    ? await _vehicleModelService.GetByIdAsync(companyVehicle.VehicleModelId)
+                    : null;
+                var vehicleMake = vehicleModel != null
+                    ? await _vehicleMakeService.GetByIdAsync(vehicleModel.MakeId)
+                    : null;
+                var company = companyVehicle != null
+                    ? await _companyService.GetCompanyAsync(companyVehicle.CompanyId)
+                    : null;
+                var status = booking.StatusId != Guid.Empty
+                    ? await _bookingStatus.GetByIdAsync(booking.StatusId)
+                    : null;
+
+                var response = new BookingDto
+                {
+                    Id = booking.Id,
+                    BookingStatus = status?.Name ?? "Unknown",
+                    VehicleMake = vehicleMake?.Name ?? "Unknown",
+                    VehicleModel = vehicleModel?.Name ?? "Unknown",
+                    CompanyName = company?.Name ?? "Unknown",
+                    TotalPrice = booking.TotalPrice,
+                    StartDate = booking.StartDate,
+                    EndDate = booking.EndDate
+                };
+
+                bookingResponses.Add(response);
             }
 
-            return await _repository.GetAllBookingsAsync(sorting, paging, filter);
+            return bookingResponses;
         }
+
+
         public async Task<Booking> GetBookingByIdAsync(Guid id)
         {
             return await _repository.GetBookingByIdAsync(id);
@@ -93,10 +123,10 @@ namespace CarGo.Service
             await _repository.UpdateBookingAsync(id, updatedBooking, userId);
         }
 
-        public async Task UpdateBookingStatusAsync(Guid id, BookingStatus status)
+        public async Task UpdateBookingStatusAsync(Guid id, Guid statusId)
         {
             var userId = _tokenService.GetCurrentUserId();
-            await _repository.UpdateBookingStatusAsync(id, status, userId);
+            await _repository.UpdateBookingStatusAsync(id, statusId, userId);
         }
 
         public async Task SoftDeleteBookingAsync(Guid id)

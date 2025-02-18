@@ -6,7 +6,13 @@ namespace Repository
 {
     public class BookingStatusRepository : IBookingStatusRepository
     {
-        private readonly string connectionString = "";
+        private string? _connectionString;
+        public BookingStatusRepository()
+        {
+            _connectionString = Environment.GetEnvironmentVariable("ConnectionStrings__PostgresDb")
+                                ?? throw new InvalidOperationException("Database connection string is not set.");
+        }
+
 
         //GET ALL
         public async Task<List<BookingStatus>> GetAllAsync()
@@ -15,7 +21,7 @@ namespace Repository
 
             try
             {
-                using (var connection = new NpgsqlConnection(connectionString))
+                using (var connection = new NpgsqlConnection(_connectionString))
                 {
                     var commandText = "SELECT \"Id\", \"Name\"" +
                                       "FROM \"BookingStatus\"";
@@ -62,7 +68,7 @@ namespace Repository
             {
                 var bookingStatus = new BookingStatus() { };
 
-                using (var connection = new NpgsqlConnection(connectionString))
+                using (var connection = new NpgsqlConnection(_connectionString))
                 {
                     var commandText = "SELECT " +
                                       "\"BookingStatus\".\"Id\", \"Name\"" +

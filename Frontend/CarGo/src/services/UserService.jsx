@@ -1,5 +1,4 @@
 import axiosClient from "../axiosClient.jsx";
-import roleService from "./RoleService.jsx";
 
 class UserService {
   async registerUser(user) {
