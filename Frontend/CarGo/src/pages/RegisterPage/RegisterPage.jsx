@@ -1,14 +1,18 @@
-import './RegisterPage.css'
+import "./RegisterPage.css";
 
-import RegisterForm from '../../components/RegisterForm/RegisterForm'
+import RegisterForm from "../../components/RegisterForm/RegisterForm";
+import NavBar from "../../components/NavBar/NavBar";
 
 function RegisterPage() {
-    return (
-        <div className="registerPage">
-            <h1>Register a New Account</h1>
-            <RegisterForm />
-        </div>
-    )
+  return (
+    <div>
+      <NavBar />
+      <div className="registerPage">
+        <h1>Register a New Account</h1>
+        <RegisterForm />
+      </div>
+    </div>
+  );
 }
 
-export default RegisterPage
+export default RegisterPage;

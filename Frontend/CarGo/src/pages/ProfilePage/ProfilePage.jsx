@@ -23,7 +23,7 @@ function ProfilePage() {
     }, [])
 
     function handleClick() {
-        // TODO: Navigatet to edit profile page.
+        navigate(`/profile/${localStorage.getItem("userId")}`);
     }
     
     return (
