@@ -1,0 +1,8 @@
+.editProfileFormTable td {
+    text-align: start;
+    padding: 0.5rem 1rem;
+}
+
+.editProfileForm button {
+    margin: 0.5rem;
+}

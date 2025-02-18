@@ -1,13 +1,15 @@
-import { Route, Routes } from "react-router-dom";
-import "./App.css";
-import AddVehiclePage from "./pages/VehiclePage/AddVehiclePage.jsx";
-import CompanyRequestsPage from './pages/CompanyRequestsPage'
-import CompanyRegisterPage from './pages/CompanyRegisterPage'
+import { Routes, Route } from 'react-router-dom'
+import './App.css'
+
 import RegisterPage from './pages/RegisterPage/RegisterPage'
 import LoginPage from './pages/LoginPage/LoginPage'
 import HomePage from './pages/HomePage/HomePage'
 import ProfilePage from './pages/ProfilePage/ProfilePage'
 import EditProfilePage from './pages/EditProfilePage/EditProfilePage'
+import AddVehiclePage from "./pages/VehiclePage/AddVehiclePage.jsx";
+import CompanyRequestsPage from './pages/CompanyRequestsPage'
+import CompanyRegisterPage from './pages/CompanyRegisterPage'
+import AddDamageReportPage from './pages/AddDamageReportPage/AddDamageReportPage.jsx'
 
 function App() {
   return (
@@ -20,8 +22,9 @@ function App() {
       <Route path="/add-vehicle" element={<AddVehiclePage />} />
       <Route path="/company-register" element={<CompanyRegisterPage />} />
       <Route path="/company-requests" element={<CompanyRequestsPage />} />
+      <Route path="/addDamageReport/:id" element={<AddDamageReportPage />} />
     </Routes>
   )
 }
 
-export default App;
+export default App
