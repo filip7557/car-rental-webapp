@@ -1,0 +1,15 @@
+.vehicle-info {
+	display: flex;
+	justify-content: space-between;
+	margin-bottom: 20px;
+}
+
+.vehicle-title {
+	font-size: 24px;
+	font-weight: bold;
+}
+
+.vehicle-description {
+	font-size: 18px;
+	color: gray;
+}
