@@ -1,6 +1,6 @@
 import React from 'react';
-import CompanyRequests from "../components/CompanyRequests";
-import NavBar from '../components/NavBar/NavBar';
+import CompanyRequests from '../../components/CompanyRequests/CompanyRequests';
+import NavBar from '../../components/NavBar/NavBar';
 
 const CompanyRequestsPage = () => {
   return (

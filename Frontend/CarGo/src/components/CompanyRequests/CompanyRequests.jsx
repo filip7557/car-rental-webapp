@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import CompanyRequestService from "../services/CompanyRegisterAndRequestService";
+import CompanyRegisterAndRequestService from '../../services/CompanyRegisterAndRequestService';
 import './CompanyRequests.css';
 
 const CompanyRequests = () => {
@@ -7,7 +7,7 @@ const CompanyRequests = () => {
   
   const getCompanyRequests = async () => {
     try {
-      setCompanyRequests(await CompanyRequestService.getCompanyRequests());
+      setCompanyRequests(await CompanyRegisterAndRequestService.getCompanyRequests());
     } catch (error) {
       console.error("Error fetching company requests:", error);
     }
@@ -16,7 +16,7 @@ const CompanyRequests = () => {
   // Handle accept/reject action
   const handleAction = async (userId, action) => {
     try {
-      const response = await CompanyRequestService.manageCompanyRequests(userId, action);
+      const response = await CompanyRegisterAndRequestService.manageCompanyRequests(userId, action);
       if (response.status === 200) {
         getCompanyRequests();
       }

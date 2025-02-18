@@ -7,8 +7,8 @@ import HomePage from './pages/HomePage/HomePage'
 import ProfilePage from './pages/ProfilePage/ProfilePage'
 import EditProfilePage from './pages/EditProfilePage/EditProfilePage'
 import AddVehiclePage from "./pages/VehiclePage/AddVehiclePage.jsx";
-import CompanyRequestsPage from './pages/CompanyRequestsPage'
-import CompanyRegisterPage from './pages/CompanyRegisterPage'
+import CompanyRequestsPage from './pages/CompanyRequestsPage/CompanyRequestsPage.jsx'
+import CompanyRegisterPage from './pages/CompanyRegisterPage/CompanyRegisterPage.jsx'
 import AddDamageReportPage from './pages/AddDamageReportPage/AddDamageReportPage.jsx'
 
 function App() {

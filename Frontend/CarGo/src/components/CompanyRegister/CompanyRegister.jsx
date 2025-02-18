@@ -1,6 +1,6 @@
-  import { useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import CompanyRegisterService from "../services/CompanyRegisterAndRequestService";
+import CompanyRegisterAndRequestService from "../../services/CompanyRegisterAndRequestService";
 
 const CompanyRegister = () => {
   const [name, setName] = useState("");
@@ -18,7 +18,7 @@ const CompanyRegister = () => {
     };
 
     try {
-      await CompanyRegisterService.createCompanyRequest(companyData);
+      await CompanyRegisterAndRequestService.createCompanyRequest(companyData);
       alert("Company registered successfully!");
       navigate("/");
       

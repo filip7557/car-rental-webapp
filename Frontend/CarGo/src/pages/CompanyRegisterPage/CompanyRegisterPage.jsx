@@ -1,4 +1,4 @@
-import CompanyRegister from "../components/CompanyRegister";
+import CompanyRegister from "../../components/CompanyRegister/CompanyRegister";
 
 const CompanyRegisterPage = () => {
   return (
