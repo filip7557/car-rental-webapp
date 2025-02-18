@@ -13,6 +13,18 @@ using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Dodavanje CORS politike koja omoguæava pristup sa svih izvora
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAllOrigins", policy =>
+    {
+        policy.AllowAnyOrigin()  // Omoguæava sve izvore
+              .AllowAnyMethod()  // Omoguæava sve HTTP metode (GET, POST, itd.)
+              .AllowAnyHeader()
+               .WithExposedHeaders("Authorization"); // Omoguæava sve zaglavlja
+    });
+});
+
 builder.Host
     .UseServiceProviderFactory(new AutofacServiceProviderFactory())
     .ConfigureContainer<ContainerBuilder>((containerBuilder) =>
@@ -59,8 +71,7 @@ builder.Host
         containerBuilder.RegisterType<HttpContextAccessor>().As<IHttpContextAccessor>().SingleInstance();
     });
 
-// Add services to the container.
-
+// Dodavanje usluga
 builder.Services.AddHttpContextAccessor();
 builder.Services.Configure<EmailSettings>(builder.Configuration.GetSection("EmailSettings"));
 
@@ -85,13 +96,14 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 builder.Services.AddAuthorization();
 
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+
+// Dodavanje Swaggera
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+// Konfiguracija pipeline-a
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -99,6 +111,9 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+// Aktiviranje CORS-a s politikom "AllowAllOrigins"
+app.UseCors("AllowAllOrigins");
 
 app.UseAuthentication();
 app.UseAuthorization();
