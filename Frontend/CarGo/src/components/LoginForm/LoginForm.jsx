@@ -30,7 +30,7 @@ function LoginForm() {
                 localStorage.clear();
             }
             else {
-                navigate("/profile")
+                navigate("/")
             }
         })
   }
