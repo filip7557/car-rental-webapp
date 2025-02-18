@@ -1,18 +1,14 @@
-import "./LoginPage.css";
+import './LoginPage.css'
 
-import LoginForm from "../../components/LoginForm/LoginForm";
-import NavBar from "../../components/NavBar/NavBar";
+import LoginForm from '../../components/LoginForm/LoginForm'
 
 function LoginPage() {
-  return (
-    <div>
-      <NavBar />
-      <div className="loginPage">
-        <h1>Log In to Your Account</h1>
-        <LoginForm />
-      </div>
-    </div>
-  );
+    return (
+        <div className='loginPage'>
+            <h1>Log In to Your Account</h1>
+            <LoginForm />
+        </div>
+    )
 }
 
-export default LoginPage;
+export default LoginPage
