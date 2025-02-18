@@ -48,6 +48,19 @@ class UserService {
       console.log(error);
     }
   }
+
+  async updateUser(id, user) {
+    try {
+      const response = await axiosClient.put(`/api/User/${id}`, {
+        fullName: user.fullName,
+        phoneNumber: user.phoneNumber,
+        email: user.email,
+      });
+      console.log(response.data);
+    } catch (error) {
+      console.log(error);
+    }
+  }
 }
 
 const userService = new UserService();
