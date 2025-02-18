@@ -2,6 +2,7 @@
 using CarGo.Service.Common;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 
 namespace CarGo.WebAPI.Controllers
 {
@@ -37,12 +38,12 @@ namespace CarGo.WebAPI.Controllers
             if (companyVehicleId == Guid.Empty)
                 return BadRequest();
 
-            var damageReportDTO = await _damageReportService.GetDamageReportByCompanyVehicleIdAsync(companyVehicleId);
+            var damageReportDTOs = await _damageReportService.GetDamageReportByCompanyVehicleIdAsync(companyVehicleId);
 
-            if (damageReportDTO == null)
+            if (damageReportDTOs.IsNullOrEmpty())
                 return NotFound();
 
-            return Ok(damageReportDTO);
+            return Ok(damageReportDTOs);
         }
 
         [Authorize(Roles = "Administrator,Manager")]

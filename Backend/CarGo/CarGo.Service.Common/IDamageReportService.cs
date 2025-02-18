@@ -6,7 +6,7 @@ namespace CarGo.Service.Common
     {
         Task<bool> CreateDamageReportAsync(DamageReport damageReport);
 
-        Task<DamageReportDTO?> GetDamageReportByCompanyVehicleIdAsync(Guid companyVehicleId);
+        Task<List<DamageReportDTO>> GetDamageReportByCompanyVehicleIdAsync(Guid companyVehicleId);
 
         Task<bool> DeleteDamageReportAsync(Guid damageReportId);
     }

@@ -17,6 +17,22 @@ function AddDamageReportForm({ bookingId }) {
         setDamageReport({...damageReport, [e.target.name]: e.target.value})
     }
 
+    function handleSubmit(e) {
+        e.preventDefault();
+        if (damageReport.title === "")
+            alert("Title field must be filled.")
+        else {
+            // TODO: Call service and save.
+        }
+    }
+
+    function handleCancelClick(e) {
+        e.preventDefault();
+        setDamageReport({...damageReport, title: ""})
+        setDamageReport({...damageReport, description: ""})
+        navigate(-1)
+    }
+
     return (
         <div className='addDamageReportForm'>
             <form onSubmit={handleSubmit}>
@@ -26,7 +42,7 @@ function AddDamageReportForm({ bookingId }) {
                         <tr><td>Description:</td><td><input type="text" name="description" value={damageReport.description || ""} onChange={handleChange} placeholder="Phonenumber" /></td></tr>                    </tbody>
                 </table>
                 <button>Save</button>
-                <button>Cancel</button>
+                <button onClick={handleCancelClick}>Cancel</button>
             </form>
         </div>
     )

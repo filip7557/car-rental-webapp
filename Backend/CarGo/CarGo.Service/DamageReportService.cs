@@ -2,6 +2,7 @@
 using CarGo.Model;
 using CarGo.Repository.Common;
 using CarGo.Service.Common;
+using Microsoft.IdentityModel.Tokens;
 
 namespace CarGo.Service
 {
@@ -27,22 +28,27 @@ namespace CarGo.Service
             return await _damageReportRepository.CreateDamageReportAsync(damageReport, userId);
         }
 
-        public async Task<DamageReportDTO?> GetDamageReportByCompanyVehicleIdAsync(Guid companyVehicleId)
+        public async Task<List<DamageReportDTO>> GetDamageReportByCompanyVehicleIdAsync(Guid companyVehicleId)
         {
             var roleName = _tokenService.GetCurrentUserRoleName();
             var isAdmin = roleName.Equals(RoleName.Administrator);
-            var damageReport = await _damageReportRepository.GetDamageReportByCompanyVehicleIdAsync(companyVehicleId, isAdmin);
-            if (damageReport == null)
-                return null;
+            var damageReports = await _damageReportRepository.GetDamageReportByCompanyVehicleIdAsync(companyVehicleId, isAdmin);
+            var damageReportDTOs = new List<DamageReportDTO>();
+            if (damageReports.IsNullOrEmpty())
+                return damageReportDTOs;
 
-            var damageReportDTO = new DamageReportDTO
+            foreach (var damageReport in damageReports)
             {
-                Id = damageReport.Id,
-                Title = damageReport.Title,
-                Description = damageReport.Description,
-            };
+                var damageReportDTO = new DamageReportDTO
+                {
+                    Id = damageReport.Id,
+                    Title = damageReport.Title,
+                    Description = damageReport.Description,
+                };
+                damageReportDTOs.Add(damageReportDTO);
+            }
 
-            return damageReportDTO;
+            return damageReportDTOs;
         }
 
         public async Task<bool> DeleteDamageReportAsync(Guid damageReportId)

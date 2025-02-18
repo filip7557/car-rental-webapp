@@ -51,9 +51,9 @@ namespace CarGo.Repository
             }
         }
 
-        public async Task<DamageReport?> GetDamageReportByCompanyVehicleIdAsync(Guid companyVehicleId, bool isAdmin)
+        public async Task<List<DamageReport>> GetDamageReportByCompanyVehicleIdAsync(Guid companyVehicleId, bool isAdmin)
         {
-            DamageReport? damageReport = null;
+            List<DamageReport> damageReports = new List<DamageReport>();
             try
             {
                 using (var connection = new NpgsqlConnection(_connectionString))
@@ -62,7 +62,8 @@ namespace CarGo.Repository
                         " FROM \"DamageReport\"" +
                         " INNER JOIN \"Booking\" ON \"DamageReport\".\"BookingId\" = \"Booking\".\"Id\"" +
                         " INNER JOIN \"CompanyVehicle\" ON \"Booking\".\"CompanyVehicleId\" = \"CompanyVehicle\".\"Id\"" +
-                        $" WHERE \"CompanyVehicle\".\"Id\" = @id AND {(!isAdmin ? "IsActive = @value" : "")};";
+                        $" WHERE \"CompanyVehicle\".\"Id\" = @id AND {(!isAdmin ? "IsActive = @value" : "")}" +
+                        $" ORDER BY \"DateCreated\" ASC;";
                     using var command = new NpgsqlCommand(commandText, connection);
 
                     command.Parameters.AddWithValue("id", NpgsqlTypes.NpgsqlDbType.Uuid, companyVehicleId);
@@ -73,23 +74,26 @@ namespace CarGo.Repository
                     var reader = await command.ExecuteReaderAsync();
                     if (reader.HasRows)
                     {
-                        await reader.ReadAsync();
-                        damageReport = new DamageReport
+                        while (await reader.ReadAsync())
                         {
-                            Id = Guid.Parse(reader[0].ToString()!),
-                            Title = reader[1].ToString()!,
-                            Description = reader[2].ToString()!,
-                            BookingId = Guid.Parse(reader[3].ToString()!),
-                        };
+                            var damageReport = new DamageReport
+                            {
+                                Id = Guid.Parse(reader[0].ToString()!),
+                                Title = reader[1].ToString()!,
+                                Description = reader[2].ToString()!,
+                                BookingId = Guid.Parse(reader[3].ToString()!),
+                            };
+                            damageReports.Add(damageReport);
+                        }
                     }
 
-                    return damageReport;
+                    return damageReports;
                 }
             }
             catch (Exception ex)
             {
                 Console.WriteLine("Exception: " + ex.Message);
-                return damageReport;
+                return damageReports;
             }
         }
 
