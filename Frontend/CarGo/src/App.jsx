@@ -1,7 +1,5 @@
 import { Route, Routes } from "react-router-dom";
 import "./App.css";
-
-import RegisterPage from "./pages/RegisterPage/RegisterPage";
 import AddVehiclePage from "./pages/VehiclePage/AddVehiclePage.jsx";
 import CompanyRequestsPage from './pages/CompanyRequestsPage'
 import CompanyRegisterPage from './pages/CompanyRegisterPage'
