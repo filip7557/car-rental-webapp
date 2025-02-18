@@ -22,7 +22,7 @@ namespace CarGo.WebAPI.Controllers
         [HttpGet]
         public async Task<IActionResult> GetCompanyVehiclesAsync(
             string orderBy = "Id",
-            string sortOrder = "asc",
+            string sortOrder = "ASC",
             int pageNumber = 1,
             int rpp = 10,
             bool? isActive = null,

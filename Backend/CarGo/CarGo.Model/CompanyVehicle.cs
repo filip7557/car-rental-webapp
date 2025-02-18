@@ -2,6 +2,7 @@
 {
     public class CompanyVehicleDTO
     {
+        public Guid CompanyVehicleId { get; set; }
         public string VehicleModel { get; set; }
         public string CompanyName { get; set; }
         public decimal? DailyPrice { get; set; }

@@ -14,11 +14,13 @@ namespace CarGo.Service
         private readonly IVehicleModelService _vehicleModelService;
 
 
-        public CompanyVehicleService(ICompanyVehicleRepository repository, ITokenService tokenService, IManagerService managerService)
+        public CompanyVehicleService(ICompanyVehicleRepository repository, ITokenService tokenService, IManagerService managerService, IVehicleModelService vehicleModelService, ICompanyService companyService)
         {
             _repository = repository;
             _tokenService = tokenService;
             _managerService = managerService;
+            _vehicleModelService = vehicleModelService;
+            _companyService = companyService;
         }
 
         public async Task<List<CompanyVehicleDTO>> GetAllCompanyVehiclesAsync(BookingSorting sorting, Paging paging,
@@ -29,18 +31,17 @@ namespace CarGo.Service
             foreach(var companyVehicle in companyVehicles){
                 var vehicleModel = await _vehicleModelService.GetByIdAsync(companyVehicle.VehicleModelId);
                 var company = await _companyService.GetCompanyAsync(companyVehicle.CompanyId);
-                var companyVehiclesDTO = new CompanyVehicleDTO
+                var companyVehicleDTO = new CompanyVehicleDTO
                 {
+                    CompanyVehicleId = companyVehicle.VehicleModelId,
                     VehicleModel = vehicleModel!.Name!,
-                    CompanyName = company!.Name
-                    
-                    
-                    //CompanyName = companyVehicle.companyModel,
-
+                    CompanyName = company!.Name,
+                    PlateNumber = companyVehicle.PlateNumber,
+                    DailyPrice = companyVehicle.DailyPrice,
                 };
+                companyVehicleList.Add(companyVehicleDTO);
             }
-            //var companyVehicleDTOs = _mapper.Map
-            return await _repository.GetAllCompanyVehiclesAsync(sorting, paging, filter);
+            return companyVehicleList;
         }
 
 

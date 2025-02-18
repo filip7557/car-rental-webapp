@@ -10,10 +10,10 @@ namespace CarGo.Repository
     {
         private string connectionString = Environment.GetEnvironmentVariable("ConnectionStrings__PostgresDb");
 
-        public async Task<List<CompanyVehicleDTO>> GetAllCompanyVehiclesAsync(BookingSorting sorting, Paging paging,
+        public async Task<List<CompanyVehicle>> GetAllCompanyVehiclesAsync(BookingSorting sorting, Paging paging,
             CompanyVehicleFilter filter)
         {
-            var vehicles = new List<CompanyVehicleDTO>();
+            var vehicles = new List<CompanyVehicle>();
             using (var connection = new NpgsqlConnection(connectionString))
             {
                 using (var cmd = new NpgsqlCommand())
@@ -43,7 +43,7 @@ namespace CarGo.Repository
                         "JOIN \"User\" u ON cv.\"CreatedByUserId\" = u.\"Id\" " +
                         "JOIN \"User\" uu ON cv.\"UpdatedByUserId\" = uu.\"Id\" " +
                         "WHERE 1 = 1");
-
+                    
                     if (filter.UserRole == "User")
                     {
                         commandText.Append(" AND b.\"UserId\" = @userId");
@@ -52,8 +52,7 @@ namespace CarGo.Repository
 
                     else if (filter.UserRole == "Manager")
                     {
-                        commandText.Append(@"
-                    AND cv.""CompanyId"" IN (SELECT ""CompanyId"" FROM ""UserCompany"" WHERE ""UserId"" = @userId)");
+                        commandText.Append(@" AND cv.""CompanyId"" IN (SELECT ""CompanyId"" FROM ""UserCompany"" WHERE ""UserId"" = @userId)");
                         cmd.Parameters.AddWithValue("userId", filter.UserId);
                     }
 
@@ -77,7 +76,7 @@ namespace CarGo.Repository
                     {
                         while (await reader.ReadAsync())
                         {
-                            vehicles.Add(ReadCompanyVehicleDTO(reader));
+                            vehicles.Add(ReadCompanyVehicle(reader));
                         }
                     }
                 }
@@ -312,16 +311,6 @@ namespace CarGo.Repository
             }
         }
 
-        public CompanyVehicleDTO ReadCompanyVehicleDTO(NpgsqlDataReader reader)
-        {
-            return new CompanyVehicleDTO
-            {
-                VehicleModel = reader["VehicleModel"].ToString()!,
-                CompanyName = reader["CompanyName"].ToString()!,
-                DailyPrice = decimal.Parse(reader["DailyPrice"].ToString()!),
-                PlateNumber = reader["PlateNumber"].ToString()!
-            };
-        }
         public CompanyVehicle ReadCompanyVehicle(NpgsqlDataReader reader)
         {
             return new CompanyVehicle
