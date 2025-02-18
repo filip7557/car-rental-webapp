@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import companyVehicleService from "../../services/CompanyVehicleService";
+import "./CompanyVehicleTable.css";
 
 function CompanyVehicle() {
 	const [list, setList] = useState([]);
@@ -12,32 +13,25 @@ function CompanyVehicle() {
 
 	return (
 		<div>
-			{list.length > 0 ? (
-				<div className="table">
-					<table>
-						<thead>
-							<tr className="thead">
-								<th>Company Name</th>
-								<th>Model</th>
-								<th>Daily Price</th>
-								<th>Number of plate</th>
-							</tr>
-						</thead>
-						<tbody>
-							{list.map((vehicle) => (
-								<tr key={vehicle.companyVehicleId}>
-									<td>{vehicle.companyName}</td>
-									<td>{vehicle.vehicleModel}</td>
-									<td>{vehicle.dailyPrice}</td>
-									<td>{vehicle.plateNumber}</td>
-								</tr>
-							))}
-						</tbody>
-					</table>
-				</div>
-			) : (
-				<p>No vehicle available</p>
-			)}
+			<ul>
+				{list.length > 0 ? (
+					list.map((vehicle) => (
+						<li key={vehicle.companyVehicleId}>
+							<h3>{vehicle.vehicleModel}</h3>
+							<img
+								src={vehicle.imageUrl}
+								alt={vehicle.vehicleModel}
+								width="150"
+							/>
+							<p>Company: {vehicle.companyName}</p>
+							<p>Price: ${vehicle.dailyPrice} per day</p>
+							<p>Plate: {vehicle.plateNumber}</p>
+						</li>
+					))
+				) : (
+					<p>No vehicles available</p>
+				)}
+			</ul>
 		</div>
 	);
 }
