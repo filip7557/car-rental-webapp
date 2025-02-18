@@ -10,6 +10,7 @@ namespace CarGo.Service
         private ICompanyVehicleRepository _repository;
         private readonly ITokenService _tokenService;
         private readonly IManagerService _managerService;
+        private readonly ICompanyService _companyService;
 
         public CompanyVehicleService(ICompanyVehicleRepository repository, ITokenService tokenService, IManagerService managerService)
         {
@@ -26,6 +27,7 @@ namespace CarGo.Service
 
         public async Task<CompanyVehicle> GetCompanyVehicleByIdAsync(Guid id)
         {
+            
             return await _repository.GetCompanyVehicleByIdAsync(id);
         }
 
