@@ -11,5 +11,7 @@ namespace CarGo.Repository.Common
         Task<bool> AddManagerToCompanyAsync(Guid companyId, Guid managerId);
 
         Task<bool> RemoveManagerFromCompanyAsync(Guid companyId, Guid managerId);
+
+        Task<Guid> GetCompanyIdByUserIdAsync(Guid userId);
     }
 }

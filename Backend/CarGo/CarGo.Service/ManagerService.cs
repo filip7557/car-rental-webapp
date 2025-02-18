@@ -50,5 +50,10 @@ namespace CarGo.Service
 
             return false;
         }
+
+        public async Task<Guid> GetCompanyIdByUserIdAsync(Guid userId)
+        {
+            return await _managerRepository.GetCompanyIdByUserIdAsync(userId);
+        }
     }
 }

@@ -158,5 +158,39 @@ namespace CarGo.Repository
                 return false;
             }
         }
+
+        public async Task<Guid> GetCompanyIdByUserIdAsync(Guid userId)
+        {
+            Guid companyId = Guid.Empty;
+            try
+            {
+                using (var connection = new NpgsqlConnection(_connectionString))
+                {
+                    string commandText =
+                        "SELECT \"CompanyId\" FROM \"UserCompany\" WHERE \"UserId\" = @id;";
+                    using var command = new NpgsqlCommand(commandText, connection);
+
+                    command.Parameters.AddWithValue("id", userId);
+
+                    connection.Open();
+
+                    var reader = await command.ExecuteReaderAsync();
+                    if (reader.HasRows)
+                    {
+                        await reader.ReadAsync();
+                        companyId = Guid.Parse(reader[0].ToString()!);
+                    }
+
+                    connection.Close();
+
+                    return companyId;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Exception: " + ex.Message);
+                return companyId;
+            }
+        }
     }
 }

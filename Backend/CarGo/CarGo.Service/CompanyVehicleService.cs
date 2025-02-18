@@ -35,8 +35,9 @@ namespace CarGo.Service
             var roleName = _tokenService.GetCurrentUserRoleName();
             if (roleName.Equals(RoleName.Manager.ToString()))
             {
+                companyVehicle.CompanyId = await _managerService.GetCompanyIdByUserIdAsync(userId);
                 var managers = await _managerService.GetAllCompanyManagersAsync(companyVehicle.CompanyId);
-                if (!managers.Any(p => p.Id == userId))
+                if (companyVehicle.CompanyId == Guid.Empty)
                     return false;
             }
             return await _repository.AddCompanyVehicleAsync(companyVehicle, userId);

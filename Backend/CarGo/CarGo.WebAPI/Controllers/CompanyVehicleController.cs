@@ -121,8 +121,13 @@ namespace CarGo.WebAPI.Controllers
                 }
 
                 var userId = Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
-                await _service.AddCompanyVehicleAsync(vehicle);
-                return Ok("Vozilo je uspješno dodano");
+                var result = await _service.AddCompanyVehicleAsync(vehicle);
+                if (result)
+                    return Ok("Vozilo je uspješno dodano");
+                else
+                {
+                    return BadRequest("You are not manager of this company.");
+                }
             }
             catch (Exception ex)
             {
