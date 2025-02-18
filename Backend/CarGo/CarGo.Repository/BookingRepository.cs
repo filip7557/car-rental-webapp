@@ -340,7 +340,7 @@ namespace CarGo.Repository
             }
         }
 
-        public async Task UpdateBookingStatusAsync(Guid bookingId, BookingStatus status, Guid updatedByUserId)
+        public async Task UpdateBookingStatusAsync(Guid bookingId, Guid statusId, Guid updatedByUserId)
         {
             string commandText = @"UPDATE ""Booking"" SET ""StatusId"" = @statusId,""UpdatedByUserId"" = @updatedByUserId WHERE ""Id"" = @bookingId";
 
@@ -350,7 +350,7 @@ namespace CarGo.Repository
 
                 using (var command = new NpgsqlCommand(commandText, connection))
                 {
-                    command.Parameters.AddWithValue("@statusId", status.ID);
+                    command.Parameters.AddWithValue("@statusId", statusId);
                     command.Parameters.AddWithValue("@updatedByUserId", updatedByUserId);
                     command.Parameters.AddWithValue("@bookingId", bookingId);
 

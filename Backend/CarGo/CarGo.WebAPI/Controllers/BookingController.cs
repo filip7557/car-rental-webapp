@@ -4,6 +4,7 @@ using CarGo.Service;
 using CarGo.Service.Common;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Service;
 using System.Security.Claims;
 
 namespace CarGo.WebAPI.Controllers
@@ -181,27 +182,31 @@ namespace CarGo.WebAPI.Controllers
 
         [Authorize]
         [HttpPut("{id}/status")]
-        public async Task<IActionResult> UpdateBookingStatusAsync(Guid id, BookingStatus status)
+        public async Task<IActionResult> UpdateBookingStatusAsync(Guid id, [FromBody] Guid statusId)
         {
-            if (status == null)
+            if (statusId == Guid.Empty)
             {
-                return BadRequest("The Booking status information is incorrect");
+                return BadRequest("The Booking status ID is incorrect");
             }
 
             try
             {
-                var existingBooking = _service.GetBookingByIdAsync(id);
+               
+                var existingBooking = await _service.GetBookingByIdAsync(id);
                 if (existingBooking == null)
                 {
                     return NotFound($"The Booking with Id={id} you want to update does not exist");
                 }
-                await _service.UpdateBookingStatusAsync(id, status);
-                return Ok("Booking status has been succesfully updated");
+
+               
+                await _service.UpdateBookingStatusAsync(id, statusId);
+                return Ok("Booking status has been successfully updated");
             }
             catch (Exception ex)
             {
                 return StatusCode(500, $"Error when updating Booking status {ex.Message}");
             }
         }
+
     }
 }
