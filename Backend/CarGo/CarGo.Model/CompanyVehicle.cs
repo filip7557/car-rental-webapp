@@ -1,5 +1,14 @@
 ﻿namespace CarGo.Model
 {
+    public class CompanyVehicleDTO
+    {
+        public string VehicleModel { get; set; }
+        public string CompanyName { get; set; }
+        public decimal? DailyPrice { get; set; }
+        public string? PlateNumber { get; set; }
+
+    }
+        
     public class CompanyVehicle
     {
         public Guid? Id { get; set; }

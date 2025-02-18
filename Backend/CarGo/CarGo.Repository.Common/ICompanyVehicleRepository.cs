@@ -5,7 +5,7 @@ namespace CarGo.Repository.Common
 {
     public interface ICompanyVehicleRepository
     {
-        Task<List<CompanyVehicle>> GetAllCompanyVehiclesAsync(BookingSorting sorting, Paging paging,
+        Task<List<CompanyVehicleDTO>> GetAllCompanyVehiclesAsync(BookingSorting sorting, Paging paging,
             CompanyVehicleFilter filter);
 
         Task<CompanyVehicle> GetCompanyVehicleByIdAsync(Guid id);

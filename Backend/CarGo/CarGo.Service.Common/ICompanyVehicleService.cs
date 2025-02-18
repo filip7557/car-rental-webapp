@@ -5,7 +5,7 @@ namespace CarGo.Service.Common
 {
     public interface ICompanyVehicleService
     {
-        Task<List<CompanyVehicle>> GetAllCompanyVehiclesAsync(BookingSorting sorting, Paging paging,
+        Task<List<CompanyVehicleDTO>> GetAllCompanyVehiclesAsync(BookingSorting sorting, Paging paging,
             CompanyVehicleFilter filter);
 
         Task<CompanyVehicle> GetCompanyVehicleByIdAsync(Guid id);

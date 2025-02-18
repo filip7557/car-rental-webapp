@@ -5,12 +5,14 @@ using CarGo.Service.Common;
 
 namespace CarGo.Service
 {
-    public class CompanyVehicleService : ICompanyVehicleService
+    public class CompanyVehicleService : ICompanyVehicleService 
     {
         private ICompanyVehicleRepository _repository;
         private readonly ITokenService _tokenService;
         private readonly IManagerService _managerService;
         private readonly ICompanyService _companyService;
+        private readonly IVehicleModelService _vehicleModelService;
+
 
         public CompanyVehicleService(ICompanyVehicleRepository repository, ITokenService tokenService, IManagerService managerService)
         {
@@ -19,11 +21,28 @@ namespace CarGo.Service
             _managerService = managerService;
         }
 
-        public async Task<List<CompanyVehicle>> GetAllCompanyVehiclesAsync(BookingSorting sorting, Paging paging,
+        public async Task<List<CompanyVehicleDTO>> GetAllCompanyVehiclesAsync(BookingSorting sorting, Paging paging,
             CompanyVehicleFilter filter)
         {
+            var companyVehicles = await _repository.GetAllCompanyVehiclesAsync(sorting, paging, filter);
+            var companyVehicleList = new List<CompanyVehicleDTO>();
+            foreach(var companyVehicle in companyVehicles){
+                var vehicleModel = await _vehicleModelService.GetByIdAsync(companyVehicle.VehicleModelId);
+                var company = await _companyService.GetCompanyAsync(companyVehicle.CompanyId);
+                var companyVehiclesDTO = new CompanyVehicleDTO
+                {
+                    VehicleModel = vehicleModel!.Name!,
+                    CompanyName = company!.Name
+                    
+                    
+                    //CompanyName = companyVehicle.companyModel,
+
+                };
+            }
+            //var companyVehicleDTOs = _mapper.Map
             return await _repository.GetAllCompanyVehiclesAsync(sorting, paging, filter);
         }
+
 
         public async Task<CompanyVehicle> GetCompanyVehicleByIdAsync(Guid id)
         {

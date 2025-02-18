@@ -10,10 +10,10 @@ namespace CarGo.Repository
     {
         private string connectionString = Environment.GetEnvironmentVariable("ConnectionStrings__PostgresDb");
 
-        public async Task<List<CompanyVehicle>> GetAllCompanyVehiclesAsync(BookingSorting sorting, Paging paging,
+        public async Task<List<CompanyVehicleDTO>> GetAllCompanyVehiclesAsync(BookingSorting sorting, Paging paging,
             CompanyVehicleFilter filter)
         {
-            var vehicles = new List<CompanyVehicle>();
+            var vehicles = new List<CompanyVehicleDTO>();
             using (var connection = new NpgsqlConnection(connectionString))
             {
                 using (var cmd = new NpgsqlCommand())
@@ -77,7 +77,7 @@ namespace CarGo.Repository
                     {
                         while (await reader.ReadAsync())
                         {
-                            vehicles.Add(ReadCompanyVehicle(reader));
+                            vehicles.Add(ReadCompanyVehicleDTO(reader));
                         }
                     }
                 }
@@ -312,6 +312,16 @@ namespace CarGo.Repository
             }
         }
 
+        public CompanyVehicleDTO ReadCompanyVehicleDTO(NpgsqlDataReader reader)
+        {
+            return new CompanyVehicleDTO
+            {
+                VehicleModel = reader["VehicleModel"].ToString()!,
+                CompanyName = reader["CompanyName"].ToString()!,
+                DailyPrice = decimal.Parse(reader["DailyPrice"].ToString()!),
+                PlateNumber = reader["PlateNumber"].ToString()!
+            };
+        }
         public CompanyVehicle ReadCompanyVehicle(NpgsqlDataReader reader)
         {
             return new CompanyVehicle
