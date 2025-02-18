@@ -1,22 +1,20 @@
-import { Routes, Route } from 'react-router-dom'
-import './App.css'
+import { Route, Routes } from "react-router-dom";
+import "./App.css";
 
-import RegisterPage from './pages/RegisterPage/RegisterPage'
-import LoginPage from './pages/LoginPage/LoginPage'
-import HomePage from './pages/HomePage/HomePage'
-import ProfilePage from './pages/ProfilePage/ProfilePage'
-import EditProfilePage from './pages/EditProfilePage/EditProfilePage'
+import HomePage from "./pages/HomePage/HomePage";
+import LoginPage from "./pages/LoginPage/LoginPage";
+import RegisterPage from "./pages/RegisterPage/RegisterPage";
+import AddVehiclePage from "./pages/VehiclePage/AddVehiclePage.jsx";
 
 function App() {
-  return (
-    <Routes>
-      <Route path='register' element={<RegisterPage />} />
-      <Route path='login' element={<LoginPage />} />
-      <Route path='/' element={<HomePage />} />
-      <Route path='profile' element={<ProfilePage />} />
-      <Route path='profile/:id' element={<EditProfilePage />} />
-    </Routes>
-  )
+	return (
+		<Routes>
+			<Route path="register" element={<RegisterPage />} />
+			<Route path="login" element={<LoginPage />} />
+			<Route path="/" element={<HomePage />} />
+			<Route path="/add-vehicle" element={<AddVehiclePage />} />
+		</Routes>
+	);
 }
 
-export default App
+export default App;

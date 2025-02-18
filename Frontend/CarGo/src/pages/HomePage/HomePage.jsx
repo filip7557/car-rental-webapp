@@ -1,18 +1,10 @@
 import { useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
 import "./HomePage.css";
 
 import NavBar from "../../components/NavBar/NavBar";
 
 function HomePage() {
   const navigate = useNavigate();
-
-  const [userId, setUserId] = useState("");
-
-  useEffect(() => {
-    const id = localStorage.getItem("userId");
-    if (id) setUserId(id);
-  }, []);
 
   function handleLoginClick() {
     navigate("/login");
@@ -29,15 +21,9 @@ function HomePage() {
         <h1>
           Welcome to <strong>CarGo</strong>!
         </h1>
-        {userId === "" ? (
-          <>
-            <p>You must be logged in to use our services.</p>
-            <button onClick={handleLoginClick}>Login</button>
-            <button onClick={handleRegisterClick}>Register</button>
-          </>
-        ) : (
-          <></>
-        )}
+        <p>You must be logged in to use our services.</p>
+        <button onClick={handleLoginClick}>Login</button>
+        <button onClick={handleRegisterClick}>Register</button>
       </div>
     </div>
   );

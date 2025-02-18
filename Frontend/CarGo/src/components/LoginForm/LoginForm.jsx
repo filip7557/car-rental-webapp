@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import userService from "../../services/UserService";
+import roleService from "../../services/RoleService";
 
 import "./LoginForm.css";
 
@@ -30,7 +31,7 @@ function LoginForm() {
                 localStorage.clear();
             }
             else {
-                navigate("/")
+                navigate("/home")
             }
         })
   }
