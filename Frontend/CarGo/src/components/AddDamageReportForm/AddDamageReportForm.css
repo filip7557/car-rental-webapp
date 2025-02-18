@@ -1,0 +1,31 @@
+.addDamageReportFormTable td {
+    text-align: start;
+    padding: 0.5rem 1rem;
+}
+
+.addDamageReportForm button {
+    margin: 0.5rem;
+}
+
+.addDamageReportForm img {
+    margin: 0.5rem;
+    height: 150px;
+    width: 150px;
+}
+
+.addDamageReportForm form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.addDamageReportForm .images {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+input[name="image"] {
+    margin: 0.5rem;
+}

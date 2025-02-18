@@ -1,13 +1,11 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import "./NavBar.css";
 
 function NavBar() {
 
-  const navigate = useNavigate();
-
-  function handleLogoutClick() {
+  function handleLogoutClick(e) {
     localStorage.clear();
-    navigate("/");
+    document.location.href = "/";
   }
 
   return (

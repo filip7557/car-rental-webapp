@@ -24,10 +24,10 @@ namespace CarGo.WebAPI.Controllers
             if (damageReport == null)
                 return BadRequest();
 
-            var success = await _damageReportService.CreateDamageReportAsync(damageReport);
+            var id = await _damageReportService.CreateDamageReportAsync(damageReport);
 
-            if (success)
-                return Ok("Created.");
+            if (id != Guid.Empty)
+                return Ok(id);
             return BadRequest();
         }
 

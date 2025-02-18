@@ -2,6 +2,7 @@
 using CarGo.Repository;
 using CarGo.Service.Common;
 using Microsoft.AspNetCore.Http;
+using System.Web;
 
 namespace CarGo.Service
 {
@@ -19,9 +20,10 @@ namespace CarGo.Service
         public async Task<bool> SaveImageAsync(ImageDTO imageDto)
         {
             var userId = _tokenService.GetCurrentUserId();
+            var base64string = imageDto.ImageFile;
             var image = new Image
             {
-                ImageFile = await ConvertToByteArrayAsync(imageDto.ImageFile),
+                ImageFile = base64string,
                 DamageReportId = imageDto.DamageReportId,
             };
             return await _imageRepository.SaveImageAsync(image, userId);

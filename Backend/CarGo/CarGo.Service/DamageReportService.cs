@@ -17,15 +17,20 @@ namespace CarGo.Service
             _tokenService = tokenService;
         }
 
-        public async Task<bool> CreateDamageReportAsync(DamageReport damageReport)
+        public async Task<Guid> CreateDamageReportAsync(DamageReport damageReport)
         {
             if (damageReport == null)
-                return false;
+                return Guid.Empty;
 
             var userId = _tokenService.GetCurrentUserId();
             damageReport.Id = Guid.NewGuid();
 
-            return await _damageReportRepository.CreateDamageReportAsync(damageReport, userId);
+            var result =  await _damageReportRepository.CreateDamageReportAsync(damageReport, userId);
+
+            if (result)
+                return damageReport.Id;
+            else
+                return Guid.Empty;
         }
 
         public async Task<List<DamageReportDTO>> GetDamageReportByCompanyVehicleIdAsync(Guid companyVehicleId)

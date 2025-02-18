@@ -32,7 +32,7 @@ const CompanyRequests = () => {
   return (
     <div>
       <h2>Company Requests</h2>
-      <table>
+      <table className='companyRequests'>
         <thead>
           <tr>
             <th>Name</th>

@@ -4,7 +4,7 @@ namespace CarGo.Service.Common
 {
     public interface IDamageReportService
     {
-        Task<bool> CreateDamageReportAsync(DamageReport damageReport);
+        Task<Guid> CreateDamageReportAsync(DamageReport damageReport);
 
         Task<List<DamageReportDTO>> GetDamageReportByCompanyVehicleIdAsync(Guid companyVehicleId);
 
