@@ -1,4 +1,4 @@
-import { useState } from "react";
+  import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import CompanyRegisterService from "../services/CompanyRegisterAndRequestService";
 
@@ -28,7 +28,7 @@ const CompanyRegister = () => {
   };
 
   return (
-    <div>
+    <div className="container">
       <h1>Register Company</h1>
       <form onSubmit={handleSubmit}>
         <input

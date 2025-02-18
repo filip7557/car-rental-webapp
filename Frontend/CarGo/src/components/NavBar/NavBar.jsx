@@ -8,18 +8,26 @@ function NavBar() {
         <h3>CarGo</h3>
         <div className="nav-menu">
           <Link to="/">Home</Link>
-          {localStorage.getItem("userId") ? (
-            <>
-            <Link to="/company-register">Register company</Link>
-            <Link to="/profile">Profile</Link>
-            <Link onClick={handleLogoutClick} to="/">Logout</Link>
-            </>
-          ) : (
-            <>
+
+          {
+            localStorage.getItem("userId") ? (
+              localStorage.getItem("role") === "Administrator" ?
+                <>
+                  <Link to="/create-company-by-admin">Create company</Link>
+                  <Link to="/get-all-company-requests">Company Requests</Link>
+                </> : 
+                  localStorage.getItem("role") === "Manager" ?
+                    <>
+                      <Link to=" ">Manage company</Link>
+                    </> :
+                      <Link to="/company-register">Register company</Link>
+            ) : (
+              <>
               <Link to="/login">Login</Link>
               <Link to="/register">Register</Link>
             </>
-          )}
+            )
+          }
         </div>
       </nav>
     </div>
