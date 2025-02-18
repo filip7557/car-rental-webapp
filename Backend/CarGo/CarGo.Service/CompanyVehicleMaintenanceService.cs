@@ -36,7 +36,7 @@ namespace CarGo.Service
             if (roleName.Equals(RoleName.Manager.ToString()))
             {
                 var companyVehicle = await _companyVehicleService.GetCompanyVehicleByIdAsync(maintenance.CompanyVehicleId);
-                var managers = await _managerService.GetAllCompanyManagersAsync(companyVehicle.CompanyId);
+                var managers = await _managerService.GetAllCompanyManagersAsync((Guid)companyVehicle.CompanyId!);
                 if (!managers.Any(p => p.Id == createdByUserId))
                     return false;
             }
@@ -53,7 +53,7 @@ namespace CarGo.Service
             if (roleName.Equals(RoleName.Manager.ToString()))
             {
                 var companyVehicle = await _companyVehicleService.GetCompanyVehicleByIdAsync(maintenance.CompanyVehicleId);
-                var managers = await _managerService.GetAllCompanyManagersAsync(companyVehicle.CompanyId);
+                var managers = await _managerService.GetAllCompanyManagersAsync((Guid)companyVehicle.CompanyId!);
                 if (!managers.Any(p => p.Id == userId))
                     return false;
             }
@@ -71,7 +71,7 @@ namespace CarGo.Service
             if (roleName.Equals(RoleName.Manager.ToString()))
             {
                 var companyVehicle = await _companyVehicleService.GetCompanyVehicleByIdAsync(companyVehicleId);
-                var managers = await _managerService.GetAllCompanyManagersAsync(companyVehicle.CompanyId);
+                var managers = await _managerService.GetAllCompanyManagersAsync((Guid)companyVehicle.CompanyId!);
                 if (!managers.Any(p => p.Id == userId))
                     return null;
             }

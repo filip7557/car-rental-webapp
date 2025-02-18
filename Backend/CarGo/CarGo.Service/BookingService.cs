@@ -70,7 +70,7 @@ namespace CarGo.Service
             var companyVehicle = await _companyVehicleService.GetCompanyVehicleByIdAsync(booking.CompanyVehicleId);
             var vehicleModel = await _vehicleModelService.GetByIdAsync(companyVehicle.VehicleModelId);
             var user = await _userService.GetUserDTOByIdAsync(booking.UserId);
-            var company = await _companyService.GetCompanyAsync(companyVehicle.CompanyId);
+            var company = await _companyService.GetCompanyAsync((Guid)companyVehicle.CompanyId!);
             var notification = new Notification
             {
                 Title = "CarGo - Booking Created",

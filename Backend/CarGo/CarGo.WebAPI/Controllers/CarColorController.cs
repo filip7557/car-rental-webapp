@@ -21,9 +21,6 @@ namespace CarGoAPI.Controllers
         {
             var colors = await _service.GetAllAsync();
 
-            if (colors == null)
-                return BadRequest();
-
             return Ok(colors);
         }
 

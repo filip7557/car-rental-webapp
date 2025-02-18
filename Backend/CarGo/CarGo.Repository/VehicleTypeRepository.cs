@@ -6,7 +6,13 @@ namespace Repository
 {
     public class VehicleTypeRepository : IVehicleTypeRepository
     {
-        private readonly string connectionString = "";
+        private string? _connectionString;
+
+        public VehicleTypeRepository()
+        {
+            _connectionString = Environment.GetEnvironmentVariable("ConnectionStrings__PostgresDb")
+                                ?? throw new InvalidOperationException("Database connection string is not set.");
+        }
 
         //GET ALL
         public async Task<List<VehicleType>> GetAllAsync()
@@ -15,7 +21,7 @@ namespace Repository
 
             try
             {
-                using (var connection = new NpgsqlConnection(connectionString))
+                using (var connection = new NpgsqlConnection(_connectionString))
                 {
                     var commandText = "SELECT \"Id\", \"Name\"" +
                                       "FROM \"VehicleType\"";
@@ -62,7 +68,7 @@ namespace Repository
             {
                 var vehicleType = new VehicleType() { };
 
-                using (var connection = new NpgsqlConnection(connectionString))
+                using (var connection = new NpgsqlConnection(_connectionString))
                 {
                     var commandText = "SELECT " +
                                       "\"VehicleType\".\"Id\", \"Name\"" +

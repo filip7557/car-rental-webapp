@@ -36,7 +36,7 @@ namespace CarGo.Service
             if (roleName.Equals(RoleName.Manager.ToString()))
             {
                 companyVehicle.CompanyId = await _managerService.GetCompanyIdByUserIdAsync(userId);
-                var managers = await _managerService.GetAllCompanyManagersAsync(companyVehicle.CompanyId);
+                var managers = await _managerService.GetAllCompanyManagersAsync((Guid)companyVehicle.CompanyId!);
                 if (companyVehicle.CompanyId == Guid.Empty)
                     return false;
             }
@@ -49,7 +49,8 @@ namespace CarGo.Service
             var roleName = _tokenService.GetCurrentUserRoleName();
             if (roleName.Equals(RoleName.Manager.ToString()))
             {
-                var managers = await _managerService.GetAllCompanyManagersAsync(updatedCompanyVehicle.CompanyId);
+                updatedCompanyVehicle.CompanyId = await _managerService.GetCompanyIdByUserIdAsync(userId);
+                var managers = await _managerService.GetAllCompanyManagersAsync((Guid)updatedCompanyVehicle.CompanyId!);
                 if (!managers.Any(p => p.Id == userId))
                     return false;
             }
@@ -68,7 +69,7 @@ namespace CarGo.Service
                 {
                     return false;
                 }
-                var managers = await _managerService.GetAllCompanyManagersAsync(companyVehicle.CompanyId);
+                var managers = await _managerService.GetAllCompanyManagersAsync((Guid)companyVehicle.CompanyId!);
                 if (!managers.Any(p => p.Id == userId))
                     return false;
             }

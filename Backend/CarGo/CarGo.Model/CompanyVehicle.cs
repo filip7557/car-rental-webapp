@@ -2,9 +2,9 @@
 {
     public class CompanyVehicle
     {
-        public Guid Id { get; set; }
+        public Guid? Id { get; set; }
 
-        public Guid CompanyId { get; set; }
+        public Guid? CompanyId { get; set; }
 
         public Guid VehicleModelId { get; set; }
 
@@ -12,7 +12,7 @@
 
         public Guid ColorId { get; set; }
 
-        public string PlateNumber { get; set; }
+        public required string PlateNumber { get; set; }
 
         public string? ImageUrl { get; set; }
 

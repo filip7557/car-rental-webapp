@@ -6,7 +6,13 @@ namespace Repository
 {
     public class VehicleMakeRepository : IVehicleMakeRepository
     {
-        private readonly string connectionString = "";
+        private string? _connectionString;
+
+        public VehicleMakeRepository()
+        {
+            _connectionString = Environment.GetEnvironmentVariable("ConnectionStrings__PostgresDb")
+                                ?? throw new InvalidOperationException("Database connection string is not set.");
+        }
 
         //GET ALL
         public async Task<List<VehicleMake>> GetAllAsync()
@@ -15,7 +21,7 @@ namespace Repository
 
             try
             {
-                using (var connection = new NpgsqlConnection(connectionString))
+                using (var connection = new NpgsqlConnection(_connectionString))
                 {
                     var commandText = "SELECT \"Id\", \"Name\"" +
                                       "FROM \"VehicleMake\"";
@@ -62,7 +68,7 @@ namespace Repository
             {
                 var vehicleMake = new VehicleMake() { };
 
-                using (var connection = new NpgsqlConnection(connectionString))
+                using (var connection = new NpgsqlConnection(_connectionString))
                 {
                     var commandText = "SELECT " +
                                       "\"VehicleMake\".\"Id\", \"Name\"" +

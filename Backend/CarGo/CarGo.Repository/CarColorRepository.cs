@@ -6,7 +6,13 @@ namespace Repository
 {
     public class CarColorRepository : ICarColorRepository
     {
-        private readonly string connectionString = "";
+        private string? _connectionString;
+
+        public CarColorRepository()
+        {
+            _connectionString = Environment.GetEnvironmentVariable("ConnectionStrings__PostgresDb")
+                                ?? throw new InvalidOperationException("Database connection string is not set.");
+        }
 
         //GET ALL
         public async Task<List<CarColor>> GetAllAsync()
@@ -15,10 +21,10 @@ namespace Repository
 
             try
             {
-                using (var connection = new NpgsqlConnection(connectionString))
+                using (var connection = new NpgsqlConnection(_connectionString))
                 {
                     var commandText = "SELECT \"Id\", \"Name\"" +
-                                      "FROM \"Color\"";
+                                      "FROM \"VehicleColor\"";
 
                     using var command = new NpgsqlCommand(commandText, connection);
 
@@ -41,7 +47,7 @@ namespace Repository
                     else
                     {
                         connection.Close();
-                        return null;
+                        return carColors;
                     }
 
                     connection.Close();
@@ -51,7 +57,7 @@ namespace Repository
             }
             catch (Exception)
             {
-                return null;
+                return carColors;
             }
         }
 
@@ -62,7 +68,7 @@ namespace Repository
             {
                 var carColor = new CarColor() { };
 
-                using (var connection = new NpgsqlConnection(connectionString))
+                using (var connection = new NpgsqlConnection(_connectionString))
                 {
                     var commandText = "SELECT " +
                                       "\"Color\".\"Id\", \"Name\"" +
