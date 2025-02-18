@@ -17,7 +17,7 @@ function NavBar() {
           {localStorage.getItem("userId") ? (
             <>
             <Link to="/profile">Profile</Link>
-            <Link onClick={handleLogoutClick} to="">Logout</Link>
+            <Link onClick={handleLogoutClick} to="/">Logout</Link>
             </>
           ) : (
             <>
