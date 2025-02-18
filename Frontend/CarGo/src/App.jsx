@@ -4,6 +4,7 @@ import "./App.css";
 import RegisterPage from "./pages/RegisterPage/RegisterPage";
 import LoginPage from "./pages/LoginPage/LoginPage";
 import HomePage from "./pages/HomePage/HomePage";
+import BookingsPage from "./pages/BookingsPage/BookingsPage";
 import ProfilePage from "./pages/ProfilePage/ProfilePage";
 import EditProfilePage from "./pages/EditProfilePage/EditProfilePage";
 import AddVehiclePage from "./pages/VehiclePage/AddVehiclePage.jsx";
@@ -24,6 +25,7 @@ function App() {
       <Route path="/company-register" element={<CompanyRegisterPage />} />
       <Route path="/company-requests" element={<CompanyRequestsPage />} />
       <Route path="/addDamageReport/:id" element={<AddDamageReportPage />} />
+      <Route path="/bookingsPage" element={<BookingsPage />} />
     </Routes>
   );
 }

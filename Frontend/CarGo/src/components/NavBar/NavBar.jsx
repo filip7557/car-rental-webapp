@@ -25,6 +25,7 @@ function NavBar() {
                 </>
               ) : (
                 <>
+                  <Link to="/bookingsPage">Bookings</Link>
                   <Link to="/company-register">Register company</Link>
                   <Link to="/profile">Profile</Link>
                   <Link onClick={handleLogoutClick} to="/">
