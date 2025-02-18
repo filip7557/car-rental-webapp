@@ -11,7 +11,7 @@ function HomePage() {
 
   useEffect(() => {
     const id = localStorage.getItem("userId");
-    if (id) setUserId(id);
+    setUserId(id);
   }, []);
 
   function handleLoginClick() {
@@ -29,7 +29,7 @@ function HomePage() {
         <h1>
           Welcome to <strong>CarGo</strong>!
         </h1>
-        {userId === "" ? (
+        {userId == null || userId == "" ? (
           <>
             <p>You must be logged in to use our services.</p>
             <button onClick={handleLoginClick}>Login</button>

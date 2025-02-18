@@ -105,7 +105,7 @@ namespace CarGo.Repository
                             image = new Image
                             {
                                 Id = Guid.Parse(reader[0].ToString()!),
-                                ImageFile = (byte[])reader[1],
+                                ImageFile = reader[1].ToString()!,
                             };
                         }
                     }

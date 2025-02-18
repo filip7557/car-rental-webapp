@@ -36,22 +36,21 @@ namespace CarGo.WebAPI.Controllers
         [HttpPost("saveList")]
         public async Task<IActionResult> SaveImagesAsync(List<ImageDTO> images)
         {
-            if (!images.Any()) return BadRequest();
-            var userId = Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+            //if (!images.Any()) return BadRequest();
             var success = await _imageService.SaveImagesAsync(images);
             if (success)
                 return Ok("Saved.");
             return BadRequest();
         }
 
-        [Authorize]
+        //[Authorize]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetImageByIdAsync(Guid id)
         {
             var image = await _imageService.GetImageByIdAsync(id);
             if (image == null)
                 return NotFound();
-            return File(image.ImageFile, "image/*");
+            return Ok(image.ImageFile);
         }
 
         [Authorize]
