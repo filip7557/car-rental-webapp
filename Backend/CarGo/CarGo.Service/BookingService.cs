@@ -63,7 +63,7 @@ namespace CarGo.Service
                     ? await _vehicleMakeService.GetByIdAsync(vehicleModel.MakeId)
                     : null;
                 var company = companyVehicle != null
-                    ? await _companyService.GetCompanyAsync(companyVehicle.CompanyId)
+                    ? await _companyService.GetCompanyAsync((Guid)companyVehicle.CompanyId!)
                     : null;
                 var status = booking.StatusId != Guid.Empty
                     ? await _bookingStatus.GetByIdAsync(booking.StatusId)

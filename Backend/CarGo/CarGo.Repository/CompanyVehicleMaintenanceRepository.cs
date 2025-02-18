@@ -99,13 +99,23 @@ namespace CarGo.Repository
                 using (var connection = new NpgsqlConnection(_connectionString))
                 {
                     string commandText =
-                        $"SELECT \"CompanyVehicleMaintenance\".\"Id\", \"CompanyVehicleId\", \"Title\", \"Description\", \"DateCreated\" FROM \"CompanyVehicleMaintenance\" WHERE \"CompanyVehicleId\" = @companyVehId{(!isActiveFilter ? " AND \"IsActive = @isActive" : "")} ORDER BY \"DateCreated\" DESC LIMIT @rpp OFFSET (@pageNumber - 1) * @rpp";
+                        $"SELECT" +
+                        $" \"CompanyVehicleMaintenance\".\"Id\", \"CompanyVehicleId\", \"Title\", \"Description\"" +
+                        $" FROM \"CompanyVehicleMaintenance\"" +
+                        $" WHERE \"CompanyVehicleId\" = @companyVehId" +
+                        $" ORDER BY \"DateCreated\" DESC" +
+                        $" LIMIT @rpp OFFSET (@pageNumber - 1) * @rpp";
+
                     using var command = new NpgsqlCommand(commandText, connection);
 
                     command.Parameters.AddWithValue("companyVehId", NpgsqlTypes.NpgsqlDbType.Uuid, companyVehicleId);
                     command.Parameters.AddWithValue("isActive", true);
                     command.Parameters.AddWithValue("rpp", paging.Rpp);
                     command.Parameters.AddWithValue("pageNumber", paging.PageNumber);
+
+                    Console.WriteLine(command.CommandText);
+
+                    connection.Open();
 
                     var reader = await command.ExecuteReaderAsync();
 
@@ -187,6 +197,8 @@ namespace CarGo.Repository
                     using var command = new NpgsqlCommand(commandText, connection);
 
                     command.Parameters.AddWithValue("id", NpgsqlTypes.NpgsqlDbType.Uuid, id);
+
+                    connection.Open();
 
                     var reader = await command.ExecuteReaderAsync();
 
