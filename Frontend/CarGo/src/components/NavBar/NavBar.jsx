@@ -1,9 +1,13 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "./NavBar.css";
 
 function NavBar() {
+
+  const navigate = useNavigate();
+
   function handleLogoutClick() {
     localStorage.clear();
+    navigate("/");
   }
 
   return (
@@ -27,12 +31,12 @@ function NavBar() {
                 <>
                   <Link to="/bookingsPage">Bookings</Link>
                   <Link to="/company-register">Register company</Link>
-                  <Link to="/profile">Profile</Link>
-                  <Link onClick={handleLogoutClick} to="/">
-                    Logout
-                  </Link>
                 </>
-              )}{" "}
+              )}
+              <Link to="/profile">Profile</Link>
+              <Link onClick={handleLogoutClick} to="/">
+                Logout
+              </Link>
             </>
           ) : (
             <>
