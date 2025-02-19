@@ -7,7 +7,6 @@ class DamageReportService {
       const response = await axiosClient.get("/api/DamageReport", {
         params: { companyVehicleId: id },
       });
-      console.log(response.data)
       return response.data;
     } catch (error) {
       console.log(error);

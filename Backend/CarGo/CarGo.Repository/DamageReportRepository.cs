@@ -58,15 +58,15 @@ namespace CarGo.Repository
             {
                 using (var connection = new NpgsqlConnection(_connectionString))
                 {
-                    string commandText = "SELECT \"DamageReport\".\"Id\", \"DamageReport\".\"Title\", \"DamageReport\".\"Description\", \"DamageReport\".\"BookingId\"" +
+                    string commandText = "SELECT \"DamageReport\".\"Id\", \"DamageReport\".\"Title\", \"DamageReport\".\"Description\", \"DamageReport\".\"BookingId\", \"DamageReport\".\"DateCreated\", \"Booking\".\"UserId\"" +
                         " FROM \"DamageReport\"" +
                         " INNER JOIN \"Booking\" ON \"DamageReport\".\"BookingId\" = \"Booking\".\"Id\"" +
                         " INNER JOIN \"CompanyVehicle\" ON \"Booking\".\"CompanyVehicleId\" = \"CompanyVehicle\".\"Id\"" +
-                        $" WHERE \"CompanyVehicle\".\"Id\" = @id AND {(!isAdmin ? "IsActive = @value" : "")}" +
-                        $" ORDER BY \"DateCreated\" ASC;";
+                        $" WHERE \"CompanyVehicle\".\"Id\" = @id AND {(!isAdmin ? "\"DamageReport\".\"IsActive\" = @value" : "")}" +
+                        $" ORDER BY \"DamageReport\".\"DateCreated\" DESC;";
                     using var command = new NpgsqlCommand(commandText, connection);
 
-                    command.Parameters.AddWithValue("id", NpgsqlTypes.NpgsqlDbType.Uuid, companyVehicleId);
+                    command.Parameters.AddWithValue("id", companyVehicleId);
                     command.Parameters.AddWithValue("value", true);
 
                     connection.Open();
@@ -82,6 +82,8 @@ namespace CarGo.Repository
                                 Title = reader[1].ToString()!,
                                 Description = reader[2].ToString()!,
                                 BookingId = Guid.Parse(reader[3].ToString()!),
+                                UserId = Guid.Parse(reader[5].ToString()!),
+                                DateCreated = DateTime.Parse(reader[4].ToString()!)
                             };
                             damageReports.Add(damageReport);
                         }

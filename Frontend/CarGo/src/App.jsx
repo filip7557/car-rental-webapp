@@ -4,15 +4,16 @@ import "./App.css";
 import AddDamageReportPage from "./pages/AddDamageReportPage/AddDamageReportPage.jsx";
 import BookingsPage from "./pages/BookingsPage/BookingsPage";
 import AddReviewPage from "./pages/AddReviewPage/AddReviewPage";
+import RegisterPage from "./pages/RegisterPage/RegisterPage.jsx";
+import LoginPage from "./pages/LoginPage/LoginPage.jsx";
+import HomePage from "./pages/HomePage/HomePage.jsx";
+import ProfilePage from "./pages/ProfilePage/ProfilePage.jsx";
+import EditProfilePage from "./pages/EditProfilePage/EditProfilePage.jsx";
+import AddVehiclePage from "./pages/VehiclePage/AddVehiclePage.jsx";
 import CompanyRegisterPage from "./pages/CompanyRegisterPage/CompanyRegisterPage.jsx";
 import CompanyRequestsPage from "./pages/CompanyRequestsPage/CompanyRequestsPage.jsx";
-import CompanyVehicleMaintenancePage from "./pages/CompanyVehicleMaintenancePage/CompanyVehicleMaintenancePage.jsx";
-import EditProfilePage from "./pages/EditProfilePage/EditProfilePage";
-import HomePage from "./pages/HomePage/HomePage";
-import LoginPage from "./pages/LoginPage/LoginPage";
-import ProfilePage from "./pages/ProfilePage/ProfilePage";
-import RegisterPage from "./pages/RegisterPage/RegisterPage";
-import AddVehiclePage from "./pages/VehiclePage/AddVehiclePage.jsx";
+import AddDamageReportPage from "./pages/AddDamageReportPage/AddDamageReportPage.jsx";
+import BookingsPage from "./pages/BookingsPage/BookingsPage.jsx";
 import DamageReportPage from "./pages/DamageReportPage/DamageReportPage.jsx";
 
 function App() {
@@ -21,7 +22,6 @@ function App() {
       <Route path="register" element={<RegisterPage />} />
       <Route path="login" element={<LoginPage />} />
       <Route path="/" element={<HomePage />} />
-      <Route path="home" element={<HomePage />} />
       <Route path="profile" element={<ProfilePage />} />
       <Route path="profile/:id" element={<EditProfilePage />} />
       <Route path="/add-vehicle" element={<AddVehiclePage />} />

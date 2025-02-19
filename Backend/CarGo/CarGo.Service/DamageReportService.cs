@@ -10,11 +10,15 @@ namespace CarGo.Service
     {
         private readonly IDamageReportRepository _damageReportRepository;
         private readonly ITokenService _tokenService;
+        private readonly IUserService _userService;
+        private readonly IImageService _imageService;
 
-        public DamageReportService(IDamageReportRepository damageReportRepository, ITokenService tokenService)
+        public DamageReportService(IDamageReportRepository damageReportRepository, ITokenService tokenService, IUserService userService, IImageService imageService)
         {
             _damageReportRepository = damageReportRepository;
             _tokenService = tokenService;
+            _userService = userService;
+            _imageService = imageService;
         }
 
         public async Task<Guid> CreateDamageReportAsync(DamageReport damageReport)
@@ -44,11 +48,22 @@ namespace CarGo.Service
 
             foreach (var damageReport in damageReports)
             {
+                var user = await _userService.GetUserByIdAsync(damageReport.UserId);
+                var imageIds = await _imageService.GetImageIdsByDamageReportAsync(damageReport.Id);
+                var images = new List<Image>();
+                foreach (var imageId in imageIds)
+                {
+                    var image = await _imageService.GetImageByIdAsync(imageId);
+                    images.Add(image!);
+                }
                 var damageReportDTO = new DamageReportDTO
                 {
                     Id = damageReport.Id,
                     Title = damageReport.Title,
                     Description = damageReport.Description,
+                    Driver = user!.FullName,
+                    Images = images,
+                    DateCreated = damageReport.DateCreated
                 };
                 damageReportDTOs.Add(damageReportDTO);
             }
