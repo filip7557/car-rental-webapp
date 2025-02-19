@@ -3,6 +3,7 @@ import "./App.css";
 
 import AddDamageReportPage from "./pages/AddDamageReportPage/AddDamageReportPage.jsx";
 import BookingsPage from "./pages/BookingsPage/BookingsPage";
+import AddReviewPage from "./pages/AddReviewPage/AddReviewPage";
 import CompanyRegisterPage from "./pages/CompanyRegisterPage/CompanyRegisterPage.jsx";
 import CompanyRequestsPage from "./pages/CompanyRequestsPage/CompanyRequestsPage.jsx";
 import CompanyVehicleMaintenancePage from "./pages/CompanyVehicleMaintenancePage/CompanyVehicleMaintenancePage.jsx";
@@ -27,6 +28,7 @@ function App() {
       <Route path="/company-requests" element={<CompanyRequestsPage />} />
       <Route path="/addDamageReport/:id" element={<AddDamageReportPage />} />
       <Route path="/bookingsPage" element={<BookingsPage />} />
+      <Route path="/add-review/:id" element={<AddReviewPage />} />
       <Route
         path="/vehicle-maintenance/:vehicleId"
         element={<CompanyVehicleMaintenancePage />}
