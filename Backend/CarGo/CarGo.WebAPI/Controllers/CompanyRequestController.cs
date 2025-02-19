@@ -40,11 +40,11 @@ namespace CarGo.WebAPI.Controllers
         public async Task<IActionResult> ManageCompanyRequest(Guid userId, [FromBody] bool isAccepted)
         {
             var result = await _companyRequestService.ManageCompanyRequest(userId, isAccepted);
-            if (result)
+            if (!result)
             {
-                return Ok("Company request managed successfully.");
+                return BadRequest(new { message = "Failed to manage company request.", details = "Additional error details here" });
             }
-            return BadRequest("Failed to manage company request.");
+            return Ok("Company request managed successfully.");
         }
 
         [Authorize(Roles = "Administrator")]

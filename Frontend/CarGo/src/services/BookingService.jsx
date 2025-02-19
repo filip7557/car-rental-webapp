@@ -1,21 +1,11 @@
-import axios from "axios";
+import axiosClient from "../axiosClient";
 
-const API_URL = "https://localhost:7100/api/Booking";
+const API_URL = "/api/Booking";
 
-// Funkcija za dohvaćanje svih rezervacija s filtrima
 export const getBookings = async (filters = {}) => {
-  const token = localStorage.getItem("token");
-  if (!token) {
-    console.error("Token is missing");
-    return [];
-  }
-
   try {
-    const response = await axios.get(API_URL, {
+    const response = await axiosClient.get(API_URL, {
       params: filters,
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
     });
     return response.data;
   } catch (error) {
@@ -25,24 +15,11 @@ export const getBookings = async (filters = {}) => {
 };
 
 export const cancelBooking = async (bookingId) => {
-  const token = localStorage.getItem("token");
-
-  if (!token) {
-    console.error("Token is missing");
-    return;
-  }
-
   try {
     const statusId = "550e8400-e29b-41d4-a716-446655441114";
-    const response = await axios.put(
+    const response = await axiosClient.put(
       `${API_URL}/${bookingId}/status`,
-      JSON.stringify(statusId),
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-      }
+      JSON.stringify(statusId)
     );
     return response.data;
   } catch (error) {

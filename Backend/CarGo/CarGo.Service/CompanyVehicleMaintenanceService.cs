@@ -36,6 +36,8 @@ namespace CarGo.Service
             if (roleName.Equals(RoleName.Manager.ToString()))
             {
                 var companyVehicle = await _companyVehicleService.GetCompanyVehicleByIdAsync(maintenance.CompanyVehicleId);
+                if (companyVehicle == null)
+                    return false;
                 var managers = await _managerService.GetAllCompanyManagersAsync((Guid)companyVehicle.CompanyId!);
                 if (!managers.Any(p => p.Id == createdByUserId))
                     return false;

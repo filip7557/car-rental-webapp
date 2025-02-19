@@ -1,0 +1,21 @@
+.damageReportPage {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.vehInfo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: start;
+    padding: 1rem;
+}
+
+.damageReportPage img {
+    height: 300px;
+    width: 350px;
+    border-radius: 6px;
+    padding-right: 2rem;
+}

@@ -54,7 +54,6 @@ namespace CarGo.Service
         {
             var userId = _tokenService.GetCurrentUserId();
             company.Id = Guid.NewGuid();
-            company.CreatedByUserId = userId;
             company.UpdatedByUserId = userId;
             var result = await _companyRequestRepository.CreateCompanyAsync(company);
             if (result)
@@ -118,10 +117,8 @@ namespace CarGo.Service
                         Id = Guid.NewGuid(),
                         Name = companyRequest.Name,
                         Email = companyRequest.Email,
-                        IsActive = true,
                         CreatedByUserId = userId,
                         DateCreated = DateTime.UtcNow,
-                        UpdatedByUserId = userId,
                     };
 
                     var resultOfCreatingCompany = await CreateCompanyAsync(newCompany);

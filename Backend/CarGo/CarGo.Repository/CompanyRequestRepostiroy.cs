@@ -17,19 +17,17 @@ namespace CarGo.Repository
                 using (var connection = new NpgsqlConnection(connectionString))
                 {
                     var commandText =
-                        "INSERT INTO \"Company\" (\"Id\", \"Name\", \"Email\", \"IsActive\", \"CreatedByUserId\", \"DateCreated\", \"UpdatedByUserId\") " +
-                        "VALUES (@id, @name, @email, @isactive, @createdbyuserid, @datecreated, @updatedbyuserid);";
+                        "INSERT INTO \"Company\" (\"Id\", \"Name\", \"Email\", \"CreatedByUserId\", \"UpdatedByUserId\") " +
+                        "VALUES (@id, @name, @email, @createdbyuserid, @updatedbyuserid);";
                     using (var command = new NpgsqlCommand(commandText, connection))
                     {
                         command.Parameters.AddWithValue("id", NpgsqlTypes.NpgsqlDbType.Uuid, company.Id);
                         command.Parameters.AddWithValue("name", NpgsqlTypes.NpgsqlDbType.Text, company.Name);
                         command.Parameters.AddWithValue("email", NpgsqlTypes.NpgsqlDbType.Text, company.Email);
-                        command.Parameters.AddWithValue("isactive", NpgsqlTypes.NpgsqlDbType.Boolean, company.IsActive);
                         command.Parameters.AddWithValue("createdbyuserid", NpgsqlTypes.NpgsqlDbType.Uuid,
                             company.CreatedByUserId);
                         command.Parameters.AddWithValue("updatedbyuserid", NpgsqlTypes.NpgsqlDbType.Uuid,
                             company.UpdatedByUserId);
-                        command.Parameters.AddWithValue("datecreated", company.DateCreated);
                         await connection.OpenAsync();
                         await command.ExecuteNonQueryAsync();
                     }
@@ -107,11 +105,11 @@ namespace CarGo.Repository
         {
             using (var connection = new NpgsqlConnection(connectionString))
             {
-                await connection.OpenAsync();
                 var query =
                     "SELECT \"UserId\", \"Name\", \"Email\", \"IsActive\", \"IsApproved\" FROM \"CompanyRequest\" WHERE \"UserId\" = @userId;";
                 using (var command = new NpgsqlCommand(query, connection))
                 {
+                    connection.Open();
                     command.Parameters.AddWithValue("userId", NpgsqlTypes.NpgsqlDbType.Uuid, id);
                     using (var reader = await command.ExecuteReaderAsync())
                     {
