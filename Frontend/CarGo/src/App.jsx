@@ -14,6 +14,7 @@ import AddDamageReportPage from "./pages/AddDamageReportPage/AddDamageReportPage
 import BookingsPage from "./pages/BookingsPage/BookingsPage.jsx";
 import CompanyVehicleMaintenancePage from "./pages/CompanyVehicleMaintenancePage/CompanyVehicleMaintenancePage.jsx";
 import DamageReportPage from "./pages/DamageReportPage/DamageReportPage.jsx";
+import CompanyCreatePage from './pages/CompanyCreatePage/CompanyCreatePage.jsx'
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
       <Route path="register" element={<RegisterPage />} />
       <Route path="login" element={<LoginPage />} />
       <Route path="/" element={<HomePage />} />
+      <Route path="home" element={<HomePage />} />
       <Route path="profile" element={<ProfilePage />} />
       <Route path="profile/:id" element={<EditProfilePage />} />
       <Route path="/add-vehicle" element={<AddVehiclePage />} />
@@ -34,6 +36,7 @@ function App() {
         element={<CompanyVehicleMaintenancePage />}
       />
       <Route path="/damageReport/:id" element={<DamageReportPage />} />
+      <Route path="/create-company-by-admin" element={<CompanyCreatePage />} />
     </Routes>
   );
 }
