@@ -83,7 +83,7 @@ namespace Repository
                     Console.Write(commandText); 
 
                     using var command = new NpgsqlCommand(commandText, connection);
-                    command.Parameters.AddWithValue("id", NpgsqlTypes.NpgsqlDbType.Uuid, id);
+                    command.Parameters.AddWithValue("id", id);
 
                     connection.Open();
 
@@ -95,8 +95,7 @@ namespace Repository
                         vehicleModel.MakeId = Guid.Parse(reader[1].ToString());
                         vehicleModel.TypeId = Guid.Parse(reader[2].ToString());
                         vehicleModel.Name = reader[3].ToString()!;
-                        vehicleModel.EnginePower =
-                            int.TryParse(reader[4].ToString(), out int enginePower) ? enginePower : 0;
+                        vehicleModel.EnginePower = int.TryParse(reader[4].ToString(), out int enginePower) ? enginePower : 0;
                     }
                     else
                     {

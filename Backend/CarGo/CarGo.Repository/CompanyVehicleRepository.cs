@@ -43,7 +43,7 @@ namespace CarGo.Repository
                         "JOIN \"User\" u ON cv.\"CreatedByUserId\" = u.\"Id\" " +
                         "JOIN \"User\" uu ON cv.\"UpdatedByUserId\" = uu.\"Id\" " +
                         "WHERE 1 = 1");
-
+                    
                     if (filter.UserRole == "User")
                     {
                         commandText.Append(" AND b.\"UserId\" = @userId");
@@ -52,8 +52,7 @@ namespace CarGo.Repository
 
                     else if (filter.UserRole == "Manager")
                     {
-                        commandText.Append(@"
-                    AND cv.""CompanyId"" IN (SELECT ""CompanyId"" FROM ""UserCompany"" WHERE ""UserId"" = @userId)");
+                        commandText.Append(@" AND cv.""CompanyId"" IN (SELECT ""CompanyId"" FROM ""UserCompany"" WHERE ""UserId"" = @userId)");
                         cmd.Parameters.AddWithValue("userId", filter.UserId);
                     }
 
