@@ -16,6 +16,7 @@ import BookingsPage from "./pages/BookingsPage/BookingsPage.jsx";
 import CompanyVehicleMaintenancePage from "./pages/CompanyVehicleMaintenancePage/CompanyVehicleMaintenancePage.jsx";
 import DamageReportPage from "./pages/DamageReportPage/DamageReportPage.jsx";
 import CompanyCreatePage from "./pages/CompanyCreatePage/CompanyCreatePage.jsx";
+import NotificationsPage from "./pages/NotificationsPage/NotificationsPage.jsx";
 
 function App() {
   return (
@@ -42,6 +43,7 @@ function App() {
       <Route path="/damageReport/:id" element={<DamageReportPage />} />
       <Route path="/create-company-by-admin" element={<CompanyCreatePage />} />
       <Route path="/addReview/:id" element={<AddReviewPage />} />
+      <Route path="/notifications" element={<NotificationsPage />} />
     </Routes>
   );
 }

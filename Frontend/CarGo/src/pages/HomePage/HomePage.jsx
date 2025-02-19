@@ -1,8 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import CompanyVehicle from "../../components/CompanyVehicleTable/CompanyVehicleTable";
 import NavBar from "../../components/NavBar/NavBar";
-import companyVehicleService from "../../services/CompanyVehicleService";
 import "./HomePage.css";
 
 function HomePage() {
@@ -14,9 +12,6 @@ function HomePage() {
 	useEffect(() => {
 		const id = localStorage.getItem("userId");
 		setUserId(id);
-	}, []);
-	useEffect(() => {
-		companyVehicleService.getCompanyVehicles().then(setList);
 	}, []);
 
 	function handleLoginClick() {

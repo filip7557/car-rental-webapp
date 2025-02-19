@@ -1,0 +1,9 @@
+.notificationCard {
+    border-radius: 6px;
+    padding: 1rem;
+    background-color: #1a1a1a;
+    margin: 1rem;
+    text-align: justify;
+    min-width: 500px;
+    transition: all 0.2s ease-in-out;
+}

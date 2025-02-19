@@ -59,7 +59,7 @@ namespace CarGo.Repository
                 using (var connection = new NpgsqlConnection(_connectionString))
                 {
                     string commandText =
-                        "SELECT \"Id\", \"Title\", \"Text\", \"From\", \"To\" FROM \"Notification\" ORDER BY \"DateCreated\" DESC LIMIT @rpp OFFSET (@pageNumber - 1) * @rpp";
+                        "SELECT \"Id\", \"Title\", \"Text\", \"From\", \"To\", \"DateCreated\" FROM \"Notification\" ORDER BY \"DateCreated\" DESC LIMIT @rpp OFFSET (@pageNumber - 1) * @rpp";
                     using var command = new NpgsqlCommand(commandText, connection);
 
                     command.Parameters.AddWithValue("rpp", paging.Rpp);
@@ -80,6 +80,7 @@ namespace CarGo.Repository
                                 Text = reader[2].ToString()!,
                                 From = reader[3].ToString()!,
                                 To = reader[4].ToString()!,
+                                DateCreated = DateTime.Parse(reader[5].ToString()!)
                             };
                             notifications.Add(notification);
                         }
