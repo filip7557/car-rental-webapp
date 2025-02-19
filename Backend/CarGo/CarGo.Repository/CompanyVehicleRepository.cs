@@ -36,6 +36,7 @@ namespace CarGo.Repository
                         "uu.\"Id\" AS \"UpdatedByUserId\", " +
                         "uu.\"FullName\" AS \"UpdatedByUser\" " +
                         "FROM \"CompanyVehicle\" cv " +
+                        "JOIN \"Booking\" b ON cv.\"Id\" = b.\"CompanyVehicleId\" " +
                         "JOIN \"Company\" c ON cv.\"CompanyId\" = c.\"Id\" " +
                         "JOIN \"VehicleModel\" vm ON cv.\"VehicleModelId\" = vm.\"Id\" " +
                         "JOIN \"VehicleMake\" vmm ON vm.\"MakeId\" = vmm.\"Id\" " +
@@ -107,6 +108,11 @@ namespace CarGo.Repository
 
         private void ApplyFilters(NpgsqlCommand cmd, StringBuilder commandText, CompanyVehicleFilter vehicleFilter)
         {
+            if (!string.IsNullOrWhiteSpace(vehicleFilter.StatusName))
+            {
+                commandText.Append(" AND b.\"StatusId\" = (SELECT \"Id\" FROM \"BookingStatus\" WHERE \"Name\" = @status");
+                cmd.Parameters.AddWithValue("@status", vehicleFilter.StatusName);
+            }
             if (vehicleFilter.IsActive.HasValue)
             {
                 commandText.Append(" AND cv.\"IsActive\" = @isActive");
@@ -129,6 +135,16 @@ namespace CarGo.Repository
             {
                 commandText.Append(" AND cv.\"VehicleModelId\" = @vehicleModelId");
                 cmd.Parameters.AddWithValue("@vehicleModelId", vehicleFilter.VehicleModelId.Value);
+            }
+            if (vehicleFilter.VehicleMakeId.HasValue)
+            {
+                commandText.Append(" AND vm.\"MakeId\" = @vehicleMakeId");
+                cmd.Parameters.AddWithValue("@vehicleMakeId", vehicleFilter.VehicleMakeId.Value);
+            }
+            if (vehicleFilter.VehicleTypeId.HasValue)
+            {
+                commandText.Append(" AND vm.\"TypeId\" = @vehicleTypeId");
+                cmd.Parameters.AddWithValue("@vehicleTypeId", vehicleFilter.VehicleTypeId.Value);
             }
 
             if (!string.IsNullOrWhiteSpace(vehicleFilter.VehicleMakeName))

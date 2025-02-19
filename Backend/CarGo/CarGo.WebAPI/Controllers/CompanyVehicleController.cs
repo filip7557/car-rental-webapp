@@ -25,12 +25,15 @@ namespace CarGo.WebAPI.Controllers
             string sortOrder = "ASC",
             int pageNumber = 1,
             int rpp = 10,
-            bool? isActive = null,
             Guid? compId = null,
-            Guid? vehiCompId = null,
             Guid? colorId = null,
             bool? isOper = null,
-            Guid? locId = null)
+            Guid? locId = null,
+            Guid? vehMakeId = null, 
+            Guid? vehiModId = null,
+            Guid? vehTypeId = null,
+            bool? isActive = null
+            )
         {
             try
             {
@@ -38,10 +41,12 @@ namespace CarGo.WebAPI.Controllers
                 {
                     IsActive = isActive,
                     CompanyId = compId,
-                    VehicleModelId = vehiCompId,
+                    VehicleModelId = vehiModId,
                     ColorId = colorId,
                     IsOperational = isOper,
-                    CurrentLocationId = locId
+                    CurrentLocationId = locId,
+                    VehicleMakeId = vehMakeId,
+                    VehicleTypeId = vehTypeId
                 };
 
                 var sorting = new BookingSorting

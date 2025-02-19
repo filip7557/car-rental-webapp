@@ -4,9 +4,11 @@
     {
         public bool? IsOperational { get; set; }
         public bool? IsActive { get; set; }
+        public string? StatusName { get; set; }
         public Guid? CompanyId { get; set; }
         public Guid? VehicleModelId { get; set; }
         public Guid? VehicleMakeId { get; set; }
+        public Guid? VehicleTypeId { get; set; }
         public Guid? ColorId { get; set; }
         public Guid? CurrentLocationId { get; set; }
 

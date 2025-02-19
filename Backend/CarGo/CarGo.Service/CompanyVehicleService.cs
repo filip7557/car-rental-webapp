@@ -14,9 +14,10 @@ namespace CarGo.Service
         private readonly IVehicleModelService _vehicleModelService;
         private readonly IVehicleMakeService _vehicleMake;
         private readonly ICarColorService _vehicleColorService;
+        private readonly IVehicleTypeService _vehicleTypeService;
 
 
-        public CompanyVehicleService(ICarColorService vehicleColorService, ICompanyVehicleRepository repository, ITokenService tokenService, IManagerService managerService, IVehicleModelService vehicleModelService, ICompanyService companyService, IVehicleMakeService vehicleMakeService)
+        public CompanyVehicleService(IVehicleTypeService vehicleTypeService, ICarColorService vehicleColorService, ICompanyVehicleRepository repository, ITokenService tokenService, IManagerService managerService, IVehicleModelService vehicleModelService, ICompanyService companyService, IVehicleMakeService vehicleMakeService)
         {
             _repository = repository;
             _tokenService = tokenService;
@@ -25,6 +26,7 @@ namespace CarGo.Service
             _companyService = companyService;
             _vehicleMake = vehicleMakeService;
             _vehicleColorService = vehicleColorService;
+            _vehicleTypeService = vehicleTypeService;
         }
 
         public async Task<List<CompanyVehicleDTO>> GetAllCompanyVehiclesAsync(BookingSorting sorting, Paging paging,
@@ -35,6 +37,7 @@ namespace CarGo.Service
             foreach(var companyVehicle in companyVehicles){
                 var vehicleModel = await _vehicleModelService.GetByIdAsync(companyVehicle.VehicleModelId);
                 var vehicleMake = await _vehicleMake.GetByIdAsync(vehicleModel.MakeId);
+                var vehicleType = await _vehicleTypeService.GetByIdAsync(vehicleModel.TypeId);
                 var vehicleColor = await _vehicleColorService.GetByIdAsync(companyVehicle.ColorId);
                 var company = await _companyService.GetCompanyAsync((Guid)companyVehicle.CompanyId);
                 var companyVehicleDTO = new CompanyVehicleDTO
@@ -48,7 +51,9 @@ namespace CarGo.Service
                     PlateNumber = companyVehicle.PlateNumber,
                     DailyPrice = companyVehicle.DailyPrice,
                     Color = vehicleColor.Name,
-                    EnginePower = vehicleModel.EnginePower
+                    EnginePower = vehicleModel.EnginePower,
+                    VehicleType = vehicleType!.Name,
+                    isActive = companyVehicle.IsActive
                 };
                 companyVehicleList.Add(companyVehicleDTO);
             }
@@ -65,7 +70,8 @@ namespace CarGo.Service
             }
 
             var vehicleModel = await _vehicleModelService.GetByIdAsync(companyVehicle.VehicleModelId);
-            var vehicleMake = await _vehicleMake.GetByIdAsync(vehicleModel!.MakeId);
+            var vehicleMake = await _vehicleMake.GetByIdAsync(vehicleModel.MakeId);
+            var vehicleType = await _vehicleTypeService.GetByIdAsync(vehicleModel.TypeId);
             var vehicleColor = await _vehicleColorService.GetByIdAsync(companyVehicle.ColorId);
             var company = await _companyService.GetCompanyAsync((Guid)companyVehicle.CompanyId);
 
@@ -80,7 +86,9 @@ namespace CarGo.Service
                 PlateNumber = companyVehicle.PlateNumber,
                 DailyPrice = companyVehicle.DailyPrice,
                 Color = vehicleColor.Name,
-                EnginePower = vehicleModel.EnginePower
+                EnginePower = vehicleModel.EnginePower,
+                VehicleType = vehicleType!.Name,
+                isActive = companyVehicle.IsActive
             };
         }
 
