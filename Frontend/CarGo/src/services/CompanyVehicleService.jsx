@@ -22,12 +22,11 @@ class CompanyVehicleService {
 
 	async getCompanyVehicleById(id) {
 		try {
-			const response = await axios.get(
-				`https://localhost:7100/api/CompanyVehicle/${id}`
-			);
+			const response = await axiosClient.get(`/api/CompanyVehicle/${id}`);
+			console.log(response.data);
 			return response.data;
-		} catch {
-			alert("Greška pri dohvaćanju vozila");
+		} catch (error) {
+			console.log(error);
 			return [];
 		}
 	}

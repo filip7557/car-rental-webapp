@@ -1,9 +1,12 @@
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import CompanyVehicle from "../../components/CompanyVehicleTable/CompanyVehicleTable";
 import NavBar from "../../components/NavBar/NavBar";
+import companyVehicleService from "../../services/CompanyVehicleService";
 import "./HomePage.css";
 
 function HomePage() {
+	const [list, setList] = useState([]);
 	const navigate = useNavigate();
 
 	const [userId, setUserId] = useState("");
