@@ -18,12 +18,19 @@ const AddMaintenanceReportPage = () => {
 			description,
 		};
 
+		//console.log("Podaci koji se šalju na backend:", maintenanceData);
+
 		try {
 			const response =
 				await CompanyVehicleMaintenanceService.addMaintenanceReport(
 					maintenanceData
 				);
 			if (response) {
+				setTitle("");
+				setDescription("");
+
+				localStorage.removeItem("userId");
+
 				navigate(-1);
 			}
 		} catch (error) {
