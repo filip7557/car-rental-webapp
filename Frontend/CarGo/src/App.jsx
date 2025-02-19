@@ -13,6 +13,7 @@ import LoginPage from "./pages/LoginPage/LoginPage";
 import ProfilePage from "./pages/ProfilePage/ProfilePage";
 import RegisterPage from "./pages/RegisterPage/RegisterPage";
 import AddVehiclePage from "./pages/VehiclePage/AddVehiclePage.jsx";
+import DamageReportPage from "./pages/DamageReportPage/DamageReportPage.jsx";
 
 function App() {
   return (
@@ -33,6 +34,7 @@ function App() {
         path="/vehicle-maintenance/:vehicleId"
         element={<CompanyVehicleMaintenancePage />}
       />
+      <Route path="/damageReport/:id" element={<DamageReportPage />} />
     </Routes>
   );
 }
