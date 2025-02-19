@@ -13,6 +13,7 @@ class CompanyVehicleMaintenanceService {
 			});
 
 			console.log("Podaci o održavanju vozila:", response.data);
+
 			return response.data.data || [];
 		} catch (error) {
 			console.error(
@@ -20,6 +21,22 @@ class CompanyVehicleMaintenanceService {
 				error.response?.data || error
 			);
 			return [];
+		}
+	}
+
+	async addMaintenanceReport(data) {
+		try {
+			const response = await axiosClient.post(
+				`/api/CompanyVehicleMaintenance`,
+				data
+			);
+			return response.data;
+		} catch (error) {
+			console.error(
+				"Greška pri dodavanju izvještaja o održavanju:",
+				error.response?.data || error
+			);
+			throw error;
 		}
 	}
 }
