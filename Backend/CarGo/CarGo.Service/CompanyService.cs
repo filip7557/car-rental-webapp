@@ -85,8 +85,8 @@ namespace CarGo.Service
             company.Id = Guid.NewGuid();
             company.CreatedByUserId = userId;
             company.UpdatedByUserId = userId;
-            company.Id = Guid.NewGuid();
             return await _companyRequestRepository.CreateCompanyAsync(company);
+
         }
 
         public async Task<List<CompanyLocationsDto>> GetAllCompanyLocationsAsync()

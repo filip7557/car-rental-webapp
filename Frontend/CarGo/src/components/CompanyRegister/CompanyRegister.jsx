@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import CompanyRegisterAndRequestService from "../../services/CompanyRegisterAndRequestService";
+import CompanyRegisterAndRequestService from "../../services/CompanyService";
 
 const CompanyRegister = () => {
   const [name, setName] = useState("");

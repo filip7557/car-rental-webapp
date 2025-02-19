@@ -1,5 +1,5 @@
 import React from 'react';
-import CompanyRequests from '../../components/CompanyRequests/CompanyRequests';
+import CompanyCreate from '../../components/CompanyCreate/CompanyCreate';
 import NavBar from '../../components/NavBar/NavBar';
 
 const CompanyRequestsPage = () => {
@@ -7,7 +7,7 @@ const CompanyRequestsPage = () => {
     <div>
       <NavBar></NavBar>
       <h1>Company Requests</h1>
-      <CompanyRequests />
+      <CompanyCreate />
     </div>
   );
 };
