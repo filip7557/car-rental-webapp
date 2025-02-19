@@ -1,0 +1,16 @@
+.damageReportCard {
+    border-radius: 6px;
+    padding: 1rem;
+    background-color: #1a1a1a;
+    margin: 1rem;
+    text-align: justify;
+    min-width: 700px;
+    transition: all 0.2s ease-in-out;
+}
+
+.damageReportCard .images {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
