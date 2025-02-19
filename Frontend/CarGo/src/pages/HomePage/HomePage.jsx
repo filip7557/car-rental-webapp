@@ -31,7 +31,6 @@ function HomePage() {
 		<div>
 			<NavBar />
 			<div className="homePage">
-				<CompanyVehicle />
 				<h1>
 					Welcome to <strong>CarGo</strong>!
 				</h1>

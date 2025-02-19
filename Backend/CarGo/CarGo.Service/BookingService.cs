@@ -57,10 +57,10 @@ namespace CarGo.Service
             {
                 var companyVehicle = await _companyVehicleService.GetCompanyVehicleByIdAsync(booking.CompanyVehicleId);
                 var vehicleModel = companyVehicle != null
-                    ? await _vehicleModelService.GetByIdAsync(companyVehicle.VehicleModelId)
+                    ? companyVehicle.VehicleModel
                     : null;
                 var vehicleMake = vehicleModel != null
-                    ? await _vehicleMakeService.GetByIdAsync(vehicleModel.MakeId)
+                    ? companyVehicle.VehicleMake
                     : null;
                 var company = companyVehicle != null
                     ? await _companyService.GetCompanyAsync((Guid)companyVehicle.CompanyId!)
@@ -73,8 +73,8 @@ namespace CarGo.Service
                 {
                     Id = booking.Id,
                     BookingStatus = status?.Name ?? "Unknown",
-                    VehicleMake = vehicleMake?.Name ?? "Unknown",
-                    VehicleModel = vehicleModel?.Name ?? "Unknown",
+                    VehicleMake = vehicleMake ?? "Unknown",
+                    VehicleModel = vehicleModel ?? "Unknown",
                     CompanyName = company?.Name ?? "Unknown",
                     TotalPrice = booking.TotalPrice,
                     StartDate = booking.StartDate,
@@ -98,7 +98,7 @@ namespace CarGo.Service
             var userId = _tokenService.GetCurrentUserId();
             await _repository.AddBookingAsync(booking, userId);
             var companyVehicle = await _companyVehicleService.GetCompanyVehicleByIdAsync(booking.CompanyVehicleId);
-            var vehicleModel = await _vehicleModelService.GetByIdAsync(companyVehicle.VehicleModelId);
+            var vehicleModel = companyVehicle.VehicleModel;
             var user = await _userService.GetUserDTOByIdAsync(booking.UserId);
             var company = await _companyService.GetCompanyAsync((Guid)companyVehicle.CompanyId!);
             var notification = new Notification
@@ -107,7 +107,7 @@ namespace CarGo.Service
                 Text = $"Hello!" +
                 $"\n\n{user!.FullName}, you have successfully created a booking." +
                 $"\nStart date: {booking.StartDate} | End date: {booking.EndDate}" +
-                $"\nVehicle: {await _vehicleMakeService.GetByIdAsync(vehicleModel!.MakeId)} {vehicleModel.Name} Power: {vehicleModel.EnginePower} HP" +
+                $"\nVehicle: {companyVehicle.VehicleMake} {vehicleModel} Power: {companyVehicle.EnginePower} HP" +
                 $"\nCompany: {company!.Name}" +
                 $"\nTotal price: {booking.TotalPrice} €" +
                 $"\n\nBest regards," +

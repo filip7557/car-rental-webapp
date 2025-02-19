@@ -6,9 +6,13 @@
         public string VehicleModel { get; set; }
         public string VehicleMake { get; set; }
         public string CompanyName { get; set; }
+        public Guid CompanyId { get; set; }
         public decimal? DailyPrice { get; set; }
         public string? PlateNumber { get; set; }
         public string? ImageUrl { get; set; }
+        public string? Color { get; set; }
+        public Guid? ColorId { get; set; }
+        public int? EnginePower { get; set; }
 
     }
         

@@ -13,9 +13,10 @@ namespace CarGo.Service
         private readonly ICompanyService _companyService;
         private readonly IVehicleModelService _vehicleModelService;
         private readonly IVehicleMakeService _vehicleMake;
+        private readonly ICarColorService _vehicleColorService;
 
 
-        public CompanyVehicleService(ICompanyVehicleRepository repository, ITokenService tokenService, IManagerService managerService, IVehicleModelService vehicleModelService, ICompanyService companyService, IVehicleMakeService vehicleMakeService)
+        public CompanyVehicleService(ICarColorService vehicleColorService, ICompanyVehicleRepository repository, ITokenService tokenService, IManagerService managerService, IVehicleModelService vehicleModelService, ICompanyService companyService, IVehicleMakeService vehicleMakeService)
         {
             _repository = repository;
             _tokenService = tokenService;
@@ -23,6 +24,7 @@ namespace CarGo.Service
             _vehicleModelService = vehicleModelService;
             _companyService = companyService;
             _vehicleMake = vehicleMakeService;
+            _vehicleColorService = vehicleColorService;
         }
 
         public async Task<List<CompanyVehicleDTO>> GetAllCompanyVehiclesAsync(BookingSorting sorting, Paging paging,
@@ -33,16 +35,20 @@ namespace CarGo.Service
             foreach(var companyVehicle in companyVehicles){
                 var vehicleModel = await _vehicleModelService.GetByIdAsync(companyVehicle.VehicleModelId);
                 var vehicleMake = await _vehicleMake.GetByIdAsync(vehicleModel.MakeId);
+                var vehicleColor = await _vehicleColorService.GetByIdAsync(companyVehicle.ColorId);
                 var company = await _companyService.GetCompanyAsync((Guid)companyVehicle.CompanyId);
                 var companyVehicleDTO = new CompanyVehicleDTO
                 {
                     CompanyVehicleId = (Guid)companyVehicle.Id,
                     VehicleMake = vehicleMake.Name,
-                    VehicleModel = vehicleModel!.Name!,
+                    VehicleModel = vehicleModel.Name!,
                     ImageUrl = companyVehicle.ImageUrl,
                     CompanyName = company!.Name,
+                    CompanyId = company.Id,
                     PlateNumber = companyVehicle.PlateNumber,
                     DailyPrice = companyVehicle.DailyPrice,
+                    Color = vehicleColor.Name,
+                    EnginePower = vehicleModel.EnginePower
                 };
                 companyVehicleList.Add(companyVehicleDTO);
             }
@@ -50,11 +56,34 @@ namespace CarGo.Service
         }
 
 
-        public async Task<CompanyVehicle> GetCompanyVehicleByIdAsync(Guid id)
+        public async Task<CompanyVehicleDTO?> GetCompanyVehicleByIdAsync(Guid id)
         {
-            
-            return await _repository.GetCompanyVehicleByIdAsync(id);
+            var companyVehicle = await _repository.GetCompanyVehicleByIdAsync(id);
+            if (companyVehicle == null)
+            {
+                return null;
+            }
+
+            var vehicleModel = await _vehicleModelService.GetByIdAsync(companyVehicle.VehicleModelId);
+            var vehicleMake = await _vehicleMake.GetByIdAsync(vehicleModel!.MakeId);
+            var vehicleColor = await _vehicleColorService.GetByIdAsync(companyVehicle.ColorId);
+            var company = await _companyService.GetCompanyAsync((Guid)companyVehicle.CompanyId);
+
+            return new CompanyVehicleDTO
+            {
+                CompanyVehicleId = (Guid)companyVehicle.Id,
+                VehicleMake = vehicleMake.Name,
+                VehicleModel = vehicleModel.Name!,
+                ImageUrl = companyVehicle.ImageUrl,
+                CompanyName = company!.Name,
+                CompanyId = company.Id,
+                PlateNumber = companyVehicle.PlateNumber,
+                DailyPrice = companyVehicle.DailyPrice,
+                Color = vehicleColor.Name,
+                EnginePower = vehicleModel.EnginePower
+            };
         }
+
 
         public async Task<bool> AddCompanyVehicleAsync(CompanyVehicle companyVehicle)
         {

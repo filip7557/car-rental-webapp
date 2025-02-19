@@ -22,6 +22,7 @@ namespace CarGo.Repository
                     var commandText = new StringBuilder("SELECT " +
                         "cv.*, " +
                         "cv.\"DailyPrice\", " +
+                        "cv.\"ColorId\", " +
                         "cv.\"PlateNumber\", " +
                         "cv.\"ImageUrl\", cv.\"IsOperational\", cv.\"IsActive\", " +
                         "c.\"Name\" AS \"CompanyName\", " +

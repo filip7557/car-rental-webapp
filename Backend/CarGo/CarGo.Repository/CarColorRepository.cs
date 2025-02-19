@@ -71,9 +71,9 @@ namespace Repository
                 using (var connection = new NpgsqlConnection(_connectionString))
                 {
                     var commandText = "SELECT " +
-                                      "\"Color\".\"Id\", \"Name\"" +
-                                      "FROM \"Color\" " +
-                                      "WHERE \"Color\".\"Id\" = @id;";
+                                      "\"Id\", \"Name\"" +
+                                      " FROM \"VehicleColor\" " +
+                                      "WHERE \"Id\" = @id;";
 
                     using var command = new NpgsqlCommand(commandText, connection);
                     command.Parameters.AddWithValue("id", NpgsqlTypes.NpgsqlDbType.Uuid, id);
@@ -83,7 +83,7 @@ namespace Repository
                     var reader = await command.ExecuteReaderAsync();
                     if (reader.HasRows)
                     {
-                        reader.Read();
+                        await reader.ReadAsync();
                         carColor.ID = Guid.Parse(reader[0].ToString()!);
                         carColor.Name = reader[1].ToString()!;
                     }

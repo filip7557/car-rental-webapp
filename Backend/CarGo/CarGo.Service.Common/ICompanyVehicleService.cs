@@ -8,7 +8,7 @@ namespace CarGo.Service.Common
         Task<List<CompanyVehicleDTO>> GetAllCompanyVehiclesAsync(BookingSorting sorting, Paging paging,
             CompanyVehicleFilter filter);
 
-        Task<CompanyVehicle> GetCompanyVehicleByIdAsync(Guid id);
+        Task<CompanyVehicleDTO> GetCompanyVehicleByIdAsync(Guid id);
 
         Task<bool> AddCompanyVehicleAsync(CompanyVehicle companyVehicle);
 
