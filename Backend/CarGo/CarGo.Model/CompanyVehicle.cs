@@ -4,9 +4,11 @@
     {
         public Guid CompanyVehicleId { get; set; }
         public string VehicleModel { get; set; }
+        public string VehicleMake { get; set; }
         public string CompanyName { get; set; }
         public decimal? DailyPrice { get; set; }
         public string? PlateNumber { get; set; }
+        public string? ImageUrl { get; set; }
 
     }
         

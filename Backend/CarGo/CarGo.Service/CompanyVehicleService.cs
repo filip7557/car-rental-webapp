@@ -12,15 +12,17 @@ namespace CarGo.Service
         private readonly IManagerService _managerService;
         private readonly ICompanyService _companyService;
         private readonly IVehicleModelService _vehicleModelService;
+        private readonly IVehicleMakeService _vehicleMake;
 
 
-        public CompanyVehicleService(ICompanyVehicleRepository repository, ITokenService tokenService, IManagerService managerService, IVehicleModelService vehicleModelService, ICompanyService companyService)
+        public CompanyVehicleService(ICompanyVehicleRepository repository, ITokenService tokenService, IManagerService managerService, IVehicleModelService vehicleModelService, ICompanyService companyService, IVehicleMakeService vehicleMakeService)
         {
             _repository = repository;
             _tokenService = tokenService;
             _managerService = managerService;
             _vehicleModelService = vehicleModelService;
             _companyService = companyService;
+            _vehicleMake = vehicleMakeService;
         }
 
         public async Task<List<CompanyVehicleDTO>> GetAllCompanyVehiclesAsync(BookingSorting sorting, Paging paging,
@@ -30,11 +32,14 @@ namespace CarGo.Service
             var companyVehicleList = new List<CompanyVehicleDTO>();
             foreach(var companyVehicle in companyVehicles){
                 var vehicleModel = await _vehicleModelService.GetByIdAsync(companyVehicle.VehicleModelId);
+                var vehicleMake = await _vehicleMake.GetByIdAsync(vehicleModel.MakeId);
                 var company = await _companyService.GetCompanyAsync((Guid)companyVehicle.CompanyId);
                 var companyVehicleDTO = new CompanyVehicleDTO
                 {
                     CompanyVehicleId = (Guid)companyVehicle.Id,
+                    VehicleMake = vehicleMake.Name,
                     VehicleModel = vehicleModel!.Name!,
+                    ImageUrl = companyVehicle.ImageUrl,
                     CompanyName = company!.Name,
                     PlateNumber = companyVehicle.PlateNumber,
                     DailyPrice = companyVehicle.DailyPrice,
