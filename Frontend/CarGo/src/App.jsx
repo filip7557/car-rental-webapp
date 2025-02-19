@@ -1,8 +1,6 @@
 import { Route, Routes } from "react-router-dom";
 import "./App.css";
 
-import AddDamageReportPage from "./pages/AddDamageReportPage/AddDamageReportPage.jsx";
-import BookingsPage from "./pages/BookingsPage/BookingsPage";
 import AddReviewPage from "./pages/AddReviewPage/AddReviewPage";
 import RegisterPage from "./pages/RegisterPage/RegisterPage.jsx";
 import LoginPage from "./pages/LoginPage/LoginPage.jsx";
@@ -14,6 +12,7 @@ import CompanyRegisterPage from "./pages/CompanyRegisterPage/CompanyRegisterPage
 import CompanyRequestsPage from "./pages/CompanyRequestsPage/CompanyRequestsPage.jsx";
 import AddDamageReportPage from "./pages/AddDamageReportPage/AddDamageReportPage.jsx";
 import BookingsPage from "./pages/BookingsPage/BookingsPage.jsx";
+import CompanyVehicleMaintenancePage from "./pages/CompanyVehicleMaintenancePage/CompanyVehicleMaintenancePage.jsx";
 import DamageReportPage from "./pages/DamageReportPage/DamageReportPage.jsx";
 
 function App() {

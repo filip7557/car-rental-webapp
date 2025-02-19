@@ -18,8 +18,6 @@ function DamageReportPage() {
     damageReportService.getDamageReports(id).then(setDamageReports);
   }, []);
 
-  console.log(damageReports);
-
   return (
     <div>
       <NavBar />

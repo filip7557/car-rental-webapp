@@ -8,8 +8,6 @@ function DamageReportCard({ damageReport }) {
     setShowImages(!showImages);
   }
 
-  console.log(damageReport.images);
-
   return (
     <div className="damageReportCard">
       <h4>{damageReport.title}</h4>

@@ -20,14 +20,11 @@ class DamageReportService {
             description: damageReport.description,
             bookingId: damageReport.bookingId
         })
-        console.log(response.data);
         const damageReportId = response.data;
         const newImages = [];
-        console.log(images);
         images.forEach((image) => {
           newImages.push({imageFile: image.image, damageReportId: damageReportId})
         })
-        console.log(newImages);
         await imageService.uploadImages(newImages);
     }
     catch (error) {
