@@ -44,6 +44,8 @@ namespace CarGo.Repository
             }
         }
 
+
+
         public async Task<Location> GetByIdLocationAsync(Guid id)
         {
             string commandText =
@@ -77,7 +79,7 @@ namespace CarGo.Repository
             using (var command = new NpgsqlCommand(commandText, connection))
             {
                 await connection.OpenAsync();
-                command.Parameters.AddWithValue("id", Guid.NewGuid());
+                command.Parameters.AddWithValue("id", entity.Id);
                 command.Parameters.AddWithValue("address", entity.Address);
                 command.Parameters.AddWithValue("city", entity.City);
                 command.Parameters.AddWithValue("country", entity.Country);

@@ -6,9 +6,11 @@ namespace CarGo.Service.Common
     {
         Task<List<Location>> GetAsync();
 
+        Task<List<Location>> GetLocationsByCompanyIdAsync(Guid companyId);
+
         Task<Location> GetByIdAsync(Guid id);
 
-        Task<bool> PostAsync(Location entity);
+        Task<bool> PostAsync(Guid companyId, Location entity);
 
         //Task<bool> Put(Guid id);
 

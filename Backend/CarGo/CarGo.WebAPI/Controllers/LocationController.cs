@@ -32,6 +32,28 @@ namespace CarGo.WebAPI.Controllers
             }
         }
 
+
+        [HttpGet("company/{companyId}/locations")]
+        [Authorize(Roles = "User,Administrator,Manager")]
+        public async Task<IActionResult> GetLocationsByCompanyId(Guid companyId)
+        {
+            try
+            {
+                var locations = await _locationService.GetLocationsByCompanyIdAsync(companyId);
+
+                if (locations == null || locations.Count == 0)
+                {
+                    return NotFound("No active locations found for this company.");
+                }
+
+                return Ok(locations);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest($"Error: {ex.Message}");
+            }
+        }
+
         [HttpGet("{id}")]
         [Authorize(Roles = "User,Administrator,Manager")]
         public async Task<IActionResult> GetById(Guid id)
@@ -52,16 +74,16 @@ namespace CarGo.WebAPI.Controllers
             }
         }
 
-        [HttpPost]
+        [HttpPost("{companyId}")]
         [Authorize(Roles = "Administrator,Manager")]
-        public async Task<IActionResult> Post(Location location)
+        public async Task<IActionResult> Post(Guid companyId, Location location)
         {
             try
             {
                 if (location != null)
                 {
                     var userId = Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
-                    await _locationService.PostAsync(location);
+                    await _locationService.PostAsync(companyId, location);
 
                     return Ok("Location of company added successfully.");
                 }
