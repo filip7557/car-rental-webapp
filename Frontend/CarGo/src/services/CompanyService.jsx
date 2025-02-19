@@ -2,8 +2,12 @@ import axiosClient from "../axiosClient";
 
 class CompanyRegisterService {
     async createCompanyRequest(companyData) {
-        const response = await axiosClient.post("https://localhost:7100/api/CompanyRequest/new-company-request", companyData);
-        return response.data;
+        try {
+            const response = await axiosClient.post("https://localhost:7100/api/CompanyRequest/new-company-request", companyData);
+            return response.data;
+        } catch(error) {
+            console.log(error)
+        }
     }
 
     async getCompanyRequests() {
@@ -18,8 +22,21 @@ class CompanyRegisterService {
     }
 
     async manageCompanyRequests(userId, action) {
+        try {
         const response = await axiosClient.put(`https://localhost:7100/api/CompanyRequest/manage-company-request/${userId}`, action);
         return response.data;
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    async adminCreateCompany(company){
+        try{
+            const response = await axiosClient.post(`https://localhost:7100/api/Company/create-company-by-admin`, company);
+            return response.data;
+        } catch(error) {
+            console.log(error)
+        }
     }
 
 }

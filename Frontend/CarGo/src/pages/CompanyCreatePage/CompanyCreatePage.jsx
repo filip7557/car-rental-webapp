@@ -6,7 +6,7 @@ const CompanyRequestsPage = () => {
   return (
     <div>
       <NavBar></NavBar>
-      <h1>Company Requests</h1>
+      <h1>Create Company</h1>
       <CompanyCreate />
     </div>
   );

@@ -15,16 +15,18 @@ const CompanyRequests = () => {
     }
   };
 
-  // Handle accept/reject action
-  const handleAction = async (userId, action) => {
+  function handleAction(userId, isAccepted){
     try {
-      const response = await CompanyService.manageCompanyRequests(userId, action);
-      if (response.status === 200) {
-        getCompanyRequests();
-      }
+      const response = CompanyService.manageCompanyRequests(userId, isAccepted)
+      .then(() => {
+        if (response.status === 200) {
+          getCompanyRequests();
+        }
+      })
     } catch (error) {
-      console.error("Error managing company request:", error);
+      console.error("Error managing company request:", error.response?.data || error.message);
     }
+    
   };
 
   useEffect(() => {
@@ -54,10 +56,10 @@ const CompanyRequests = () => {
                 <td>{request.isActive ? 'Yes' : 'No'}</td>
                 <td>{request.isApproved ? 'Yes' : 'No'}</td>
                 <td>
-                  <button onClick={() => handleAction(request.userId, "true")}>
+                  <button onClick={() => handleAction(request.userId, true)}>
                     Accept
                   </button>
-                  <button onClick={() => handleAction(request.userId, "false")}>
+                  <button onClick={() => handleAction(request.userId, false)}>
                     Reject
                   </button>
                 </td>
