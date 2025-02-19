@@ -5,6 +5,7 @@ import AddDamageReportPage from "./pages/AddDamageReportPage/AddDamageReportPage
 import BookingsPage from "./pages/BookingsPage/BookingsPage";
 import CompanyRegisterPage from "./pages/CompanyRegisterPage/CompanyRegisterPage.jsx";
 import CompanyRequestsPage from "./pages/CompanyRequestsPage/CompanyRequestsPage.jsx";
+import CompanyVehicleMaintenancePage from "./pages/CompanyVehicleMaintenancePage/CompanyVehicleMaintenancePage.jsx";
 import EditProfilePage from "./pages/EditProfilePage/EditProfilePage";
 import HomePage from "./pages/HomePage/HomePage";
 import LoginPage from "./pages/LoginPage/LoginPage";
@@ -26,6 +27,10 @@ function App() {
 			<Route path="/company-requests" element={<CompanyRequestsPage />} />
 			<Route path="/addDamageReport/:id" element={<AddDamageReportPage />} />
 			<Route path="/bookingsPage" element={<BookingsPage />} />
+			<Route
+				path="/vehicle-maintenance/:vehicleId"
+				element={<CompanyVehicleMaintenancePage />}
+			/>
 		</Routes>
 	);
 }
