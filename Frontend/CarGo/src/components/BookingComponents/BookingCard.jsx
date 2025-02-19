@@ -1,15 +1,14 @@
 import React from "react";
-import { useNavigate } from "react-router-dom"; // Koristi useNavigate umjesto useHistory
+import { useNavigate } from "react-router-dom";
 import "./BookingCard.css";
 
 const BookingCard = ({ booking, onCancelBooking }) => {
-  const navigate = useNavigate(); // Inicijaliziraj useNavigate
+  const navigate = useNavigate();
 
   if (!booking) return null;
 
-  const handleReviewClick = (id) => {
-    // Navigira na review stranicu sa ID-em rezervacije
-    navigate(`/review/${id}`);
+  const handleReviewClick = (bookingId) => {
+    navigate(`/add-review/${bookingId}`);
   };
 
   return (
