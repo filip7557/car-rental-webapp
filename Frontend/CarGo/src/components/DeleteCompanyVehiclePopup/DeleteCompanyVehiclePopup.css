@@ -1,0 +1,33 @@
+.popupScreen {
+    height: 100%;
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.75);
+    position: absolute;
+    z-index: 100;
+  }
+  
+  .DeletePopup {
+    border: 2px #e0a96d solid;
+    background-color: #282c34;
+    z-index: 101;
+    border-radius: 6px;
+    padding: 12px 20px;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+    width: 32.5rem;
+    height: 10rem;
+    text-align: center;
+    align-items: center;
+  }
+  
+  .DeletePopup button {
+    margin: 0.5rem;
+  }
+  
+  .DeletePopup h2 {
+    color: white;
+  }
