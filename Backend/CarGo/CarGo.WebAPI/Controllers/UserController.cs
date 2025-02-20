@@ -31,6 +31,18 @@ namespace CarGo.WebAPI.Controllers
         }
 
         [Authorize]
+        [HttpGet("getByEmail/{email}")]
+        public async Task<IActionResult> GetByEmailAsync(string email)
+        {
+            var user = await _userService.GetUserByEmailAsync(email);
+
+            if (user == null)
+                return NotFound();
+
+            return Ok(user);
+        }
+
+        [Authorize]
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateAsync(Guid id, UserDTO user)
         {

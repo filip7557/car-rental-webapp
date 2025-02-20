@@ -21,6 +21,7 @@ import ProfilePage from "./pages/ProfilePage/ProfilePage.jsx";
 import RegisterPage from "./pages/RegisterPage/RegisterPage.jsx";
 import AddVehiclePage from "./pages/VehiclePage/AddVehiclePage.jsx";
 import ManageLocationsPage from "./pages/ManageLocationsPage/ManageLocationsPage.jsx";
+import ManageManagersPage from "./pages/ManageManagersPages/ManageManagersPage.jsx";
 
 function App() {
   return (
@@ -53,9 +54,10 @@ function App() {
       <Route path="/manageCompanyVehicles" element={<ManageVehiclesPage />} />
       <Route path="/manageCompany/" element={<ManageCompanyPage />} />
       <Route
-        path="/path-to-manage-location/:id"
+        path="/manageLocations/:id"
         element={<ManageLocationsPage />}
       />
+      <Route path="/manageManagers" element={<ManageManagersPage />} />
     </Routes>
   );
 }

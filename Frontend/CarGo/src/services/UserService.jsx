@@ -60,6 +60,17 @@ class UserService {
       console.log(error);
     }
   }
+
+  async getUserByEmail(email) {
+    try {
+      const response = await axiosClient.get(`/api/User/getByEmail/${email}`)
+      console.log(response.data);
+      return response.data;
+    }
+    catch (error) {
+      return [];
+    }
+  }
 }
 
 const userService = new UserService();

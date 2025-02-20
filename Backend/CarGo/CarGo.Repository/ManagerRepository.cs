@@ -104,11 +104,14 @@ namespace CarGo.Repository
                 using (var connection = new NpgsqlConnection(_connectionString))
                 {
                     string commandText =
-                        "INSERT INTO \"UserCompany\" (\"UserId\", \"CompanyId\") VALUES (@userId, @companyId);";
+                        "INSERT INTO \"UserCompany\" (\"Id\", \"UserId\", \"CompanyId\") VALUES (@id, @userId, @companyId);";
                     using var command = new NpgsqlCommand(commandText, connection);
 
+                    command.Parameters.AddWithValue("id", Guid.NewGuid());
                     command.Parameters.AddWithValue("userId", managerId);
                     command.Parameters.AddWithValue("companyId", companyId);
+                    
+                    connection.Open();
 
                     var rowsAffected = await command.ExecuteNonQueryAsync();
                     if (rowsAffected == 0)
@@ -140,6 +143,8 @@ namespace CarGo.Repository
 
                     command.Parameters.AddWithValue("userId", managerId);
                     command.Parameters.AddWithValue("companyId", companyId);
+
+                    connection.Open();
 
                     var rowsAffected = await command.ExecuteNonQueryAsync();
                     if (rowsAffected == 0)

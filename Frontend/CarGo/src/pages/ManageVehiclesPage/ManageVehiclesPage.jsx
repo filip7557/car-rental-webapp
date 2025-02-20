@@ -9,13 +9,38 @@ import DeleteCompanyVehiclePopup from "../../components/DeleteCompanyVehiclePopu
 function ManageVehiclesPage() {
   const navigate = useNavigate();
 
-  const [vehicles, setVehicles] = useState([]);
+  const [vehicles, setVehicles] = useState({});
+  const [pageNumber, setPageNumber] = useState(1);
+  const [pageSize, setPageSize] = useState(2);
+  const [pages, setPages] = useState([]);
   const [deleteVeh, setDeleteVeh] = useState("");
   const [showPopup, setShowPopup] = useState(false);
 
   useEffect(() => {
-    companyVehicleService.getCompanyVehicles().then(setVehicles);
+    setPageNumber(1);
+    companyVehicleService
+      .getCompanyVehicles(pageNumber, pageSize)
+      .then(setVehicles);
   }, []);
+
+  useEffect(() => {
+    let numberOfPages = Math.ceil(vehicles.totalRecords / vehicles.pageSize);
+    let newPages = [];
+    for (let i = 1; i <= numberOfPages; i++) {
+      newPages.push(i);
+    }
+    setPages(newPages);
+  }, [vehicles]);
+
+  useEffect(() => {
+    companyVehicleService
+      .getCompanyVehicles(pageNumber, pageSize)
+      .then(setVehicles);
+  }, [pageNumber, pageSize]);
+
+  function handlePageClick(page) {
+    setPageNumber(page);
+  }
 
   function handleAddClick() {
     navigate("/add-vehicle");
@@ -39,8 +64,8 @@ function ManageVehiclesPage() {
           <div className="addVehicle">
             <button onClick={handleAddClick}>Add vehicle</button>
           </div>
-          <div key={vehicles.length} className="vehicles">
-            {vehicles.map((vehicle) => (
+          <div className="vehicles">
+            {vehicles?.data?.map((vehicle) => (
               <EditVehicleCard
                 key={vehicle.companyVehicleId}
                 vehicle={vehicle}
@@ -48,6 +73,17 @@ function ManageVehiclesPage() {
                 setDeleteVehId={setDeleteVeh}
                 setShowPopup={setShowPopup}
               />
+            ))}
+          </div>
+          <div className="pagging">
+            {pages.map((page) => (
+              <label
+                key={page}
+                className={page === pageNumber ? "currentPage" : ""}
+                onClick={() => handlePageClick(page)}
+              >
+                {page}{" "}
+              </label>
             ))}
           </div>
         </div>

@@ -13,7 +13,7 @@ const ManageCompanyPage = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    managerService.getManagerId().then(setCompanyId);
+    managerService.getCompanyId().then(setCompanyId);
   }, []);
 
   useEffect(() => {
@@ -57,7 +57,7 @@ const ManageCompanyPage = () => {
         <div>
           <button
             onClick={() =>
-              handleNavigate(`/path-to-manage-location/${companyId}`)
+              handleNavigate(`/manageLocations/${companyId}`)
             }
           >
             Manage Location
@@ -65,7 +65,7 @@ const ManageCompanyPage = () => {
         </div>
 
         <div>
-          <button onClick={() => handleNavigate("/path-to-manage-managers")}>
+          <button onClick={() => handleNavigate("/manageManagers")}>
             Manage Managers
           </button>
         </div>

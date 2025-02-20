@@ -11,6 +11,7 @@ const CompanyVehiclePage = () => {
 
 	const [pageNumber, setPageNumber] = useState(1);
 	const [pageSize, setPageSize] = useState(2);
+	const [pages, setPages] = useState([]);
 	const [totalRecords, setTotalRecords] = useState(0);
 	const [error, setError] = useState(null);
 
