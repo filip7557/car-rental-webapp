@@ -8,6 +8,9 @@ namespace CarGo.Service.Common
         Task<PagedResponse<CompanyVehicleDTO>> GetAllCompanyVehiclesAsync(BookingSorting sorting, Paging paging,
             CompanyVehicleFilter filter);
 
+        Task<PagedResponse<CompanyVehicleDTO>> GetAllAvailableCompanyVehiclesAsync(BookingSorting sorting, Paging paging,
+            CompanyVehicleFilter filter);
+
         Task<CompanyVehicleDTO> GetCompanyVehicleByIdAsync(Guid id);
 
         Task<bool> AddCompanyVehicleAsync(CompanyVehicle companyVehicle);

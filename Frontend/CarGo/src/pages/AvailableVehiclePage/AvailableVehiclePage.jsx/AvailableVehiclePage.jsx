@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from "react";
 import CompanyVehicleCard from "../../../components/CompanyVehicleTable/CompanyVehicleCard";
 import CompanyVehicleDropDown from "../../../components/CompanyVehicleTable/CompanyVehicleDropdownMake";
-import CompanyVehicleFilter from "../../../components/CompanyVehicleTable/CompanyVehicleFilter";
 import NavBar from "../../../components/NavBar/NavBar";
 import companyVehicleService from "../../../services/CompanyVehicleService";
 
 const CompanyVehiclePage = () => {
 	const [vehicles, setVehicles] = useState([]);
-	const [list, setList] = useState({});
 	const [filters, setFilters] = useState({});
+	const [orderBy, setOrderBy] = useState("Id"); // Default sortiranje
+
 	const [pageNumber, setPageNumber] = useState(1);
 	const [pageSize, setPageSize] = useState(2);
 	const [totalRecords, setTotalRecords] = useState(0);
@@ -17,11 +17,11 @@ const CompanyVehiclePage = () => {
 	useEffect(() => {
 		const fetchData = async () => {
 			try {
-				const data = await companyVehicleService.getCompanyVehicles(
+				const data = await companyVehicleService.getAvailableCompanyVehicles(
 					pageNumber,
-					pageSize
+					pageSize,
+					orderBy
 				);
-				debugger;
 				setVehicles(data.data);
 				const totalPages = Math.ceil(data.totalRecords / pageSize);
 				setTotalRecords(totalPages);
@@ -33,7 +33,7 @@ const CompanyVehiclePage = () => {
 			}
 		};
 		fetchData();
-	}, [pageNumber, pageSize]);
+	}, [pageNumber, pageSize, orderBy]);
 
 	useEffect(() => {
 		companyVehicleService.PageNumber = 1;
@@ -54,17 +54,6 @@ const CompanyVehiclePage = () => {
 		}
 	};
 
-	// const handlePageSizeChange = (event) => {
-	// 	setPageSize(Number(event.target.value));
-	// 	setPageNumber(1);
-	// };
-
-	// function handlePageClick(page) {
-	// 	setCurrentPage(page);
-	// 	companyVehicleService.PageNumber = page;
-	// 	companyVehicleService.getCompanyVehicles().then(setList);
-	// }
-
 	if (error) return <div className="error-message">{error}</div>;
 
 	return (
@@ -73,7 +62,14 @@ const CompanyVehiclePage = () => {
 				<NavBar />
 
 				<h1>Company Vehicles</h1>
-				<CompanyVehicleFilter onFilterChange={handleFilterChange} />
+				<label>Sortiraj po: </label>
+				<select value={orderBy} onChange={(e) => setOrderBy(e.target.value)}>
+					<option value="Id">ID</option>
+					<option value="VehicleMake">Marka</option>
+					<option value="VehicleModel">Model</option>
+					<option value="VehicleType">Tip</option>
+				</select>
+				{/* <CompanyVehicleFilter onFilterChange={handleFilterChange} /> */}
 				<CompanyVehicleDropDown setFilters={setFilters} setList={setVehicles} />
 				<div className="company-vehicle-list">
 					{vehicles.length > 0 ? (

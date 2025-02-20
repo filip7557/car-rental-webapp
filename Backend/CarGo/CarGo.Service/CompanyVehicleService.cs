@@ -65,7 +65,46 @@ namespace CarGo.Service
                 Data = companyVehicleList,
                 PageNumber = paging.PageNumber,
                 PageSize = paging.Rpp,
-                TotalRecords = await _repository.CountAsync(),
+                TotalRecords = await _repository.CountAsync( filter,  false),
+            };
+            //return companyVehicleList;
+        }
+
+        public async Task<PagedResponse<CompanyVehicleDTO>> GetAllAvailableCompanyVehiclesAsync(BookingSorting sorting, Paging paging,
+           CompanyVehicleFilter filter)
+        {
+            var companyVehicles = await _repository.GetAllAvailableCompanyVehiclesAsync(sorting, paging, filter);
+            var companyVehicleList = new List<CompanyVehicleDTO>();
+            foreach (var companyVehicle in companyVehicles)
+            {
+                var vehicleModel = await _vehicleModelService.GetByIdAsync(companyVehicle.VehicleModelId);
+                var vehicleMake = await _vehicleMake.GetByIdAsync(vehicleModel.MakeId);
+                var vehicleType = await _vehicleTypeService.GetByIdAsync(vehicleModel.TypeId);
+                var vehicleColor = await _vehicleColorService.GetByIdAsync(companyVehicle.ColorId);
+                var company = await _companyService.GetCompanyAsync((Guid)companyVehicle.CompanyId);
+                var companyVehicleDTO = new CompanyVehicleDTO
+                {
+                    CompanyVehicleId = (Guid)companyVehicle.Id,
+                    VehicleMake = vehicleMake.Name,
+                    VehicleModel = vehicleModel.Name!,
+                    ImageUrl = companyVehicle.ImageUrl,
+                    CompanyName = company!.Name,
+                    CompanyId = company.Id,
+                    PlateNumber = companyVehicle.PlateNumber,
+                    DailyPrice = companyVehicle.DailyPrice,
+                    Color = vehicleColor.Name,
+                    EnginePower = vehicleModel.EnginePower,
+                    VehicleType = vehicleType!.Name,
+                    isActive = companyVehicle.IsActive
+                };
+                companyVehicleList.Add(companyVehicleDTO);
+            }
+            return new PagedResponse<CompanyVehicleDTO>
+            {
+                Data = companyVehicleList,
+                PageNumber = paging.PageNumber,
+                PageSize = paging.Rpp,
+                TotalRecords = await _repository.CountAsync(filter, true),
             };
             //return companyVehicleList;
         }

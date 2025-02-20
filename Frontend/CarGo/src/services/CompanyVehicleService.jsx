@@ -42,15 +42,48 @@ class CompanyVehicleService {
 		}
 	}
 
-	async getCompanyVehicles(pageNumber, pageSize, vehicleMakeId = null) {
+	async getCompanyVehicles(
+		pageNumber,
+		pageSize,
+		orderBy,
+		vehicleMakeId = null
+	) {
 		//this.sortOrder = this.isAsc ? "ASC" : "DESC";
 		try {
-			debugger;
 			if (!vehicleMakeId) vehicleMakeId = null;
 			const response = await axiosClient.get("/api/CompanyVehicle", {
 				params: {
 					pageNumber,
 					rpp: pageSize,
+					orderBy,
+					// PageNumber: this.PageNumber,
+					vehMakeId: this.vehicleMakeId,
+					vehiModId: this.vehicleModelId,
+					vehTypeId: this.vehicleTypeId,
+				},
+			});
+			console.log(response.data);
+			return response.data;
+		} catch (error) {
+			console.log(error);
+			return [];
+		}
+	}
+
+	async getAvailableCompanyVehicles(
+		pageNumber,
+		pageSize,
+		orderBy,
+		vehicleMakeId = null
+	) {
+		//this.sortOrder = this.isAsc ? "ASC" : "DESC";
+		try {
+			if (!vehicleMakeId) vehicleMakeId = null;
+			const response = await axiosClient.get("/api/CompanyVehicle/available", {
+				params: {
+					pageNumber,
+					rpp: pageSize,
+					orderBy,
 					// PageNumber: this.PageNumber,
 					vehMakeId: this.vehicleMakeId,
 					vehiModId: this.vehicleModelId,
