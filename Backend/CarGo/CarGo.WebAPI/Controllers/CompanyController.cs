@@ -72,7 +72,7 @@ namespace CarGo.WebAPI.Controllers
         }
 
         [Authorize]
-        [HttpGet("get-company-info-by-{id}")]
+        [HttpGet("get-company-info-by-id/{id}")]
         public async Task<IActionResult> GetCompany(Guid id)
         {
             var company = await _companyService.GetCompanyAsync(id);

@@ -47,7 +47,7 @@ function App() {
 			/>
 			<Route path="/damageReport/:id" element={<DamageReportPage />} />
 			<Route path="/create-company-by-admin" element={<CompanyCreatePage />} />
-			<Route path="/addReview/:id" element={<AddReviewPage />} />
+			<Route path="/add-Review/:id" element={<AddReviewPage />} />
 			<Route path="/notifications" element={<NotificationsPage />} />
 			<Route path="/manageCompanyVehicles" element={<ManageVehiclesPage />} />
 			<Route
