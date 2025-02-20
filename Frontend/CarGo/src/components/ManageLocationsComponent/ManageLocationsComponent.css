@@ -1,0 +1,50 @@
+.company-location-table {
+  color: black;
+  width: 100%;
+  max-width: 800px;
+  margin: 20px auto;
+  padding: 10px;
+  border-radius: 8px;
+  background: #f9f9f9;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.company-location-table h2 {
+  text-align: center;
+  margin-bottom: 10px;
+  font-size: 1.5rem;
+  color: #333;
+}
+
+.company-location-table table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.company-location-table th,
+.company-location-table td {
+  padding: 10px;
+  border: 1px solid #ddd;
+  text-align: left;
+}
+
+.company-location-table th {
+  color: black;
+}
+
+.company-location-table tbody tr:nth-child(even) {
+  background: white;
+}
+
+.delete-button {
+  background: #dc3545;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.delete-button:hover {
+  background: #c82333;
+}

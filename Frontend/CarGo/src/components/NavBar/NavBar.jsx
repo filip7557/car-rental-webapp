@@ -2,7 +2,6 @@ import { Link } from "react-router-dom";
 import "./NavBar.css";
 
 function NavBar() {
-
   function handleLogoutClick(e) {
     localStorage.clear();
     document.location.href = "/";

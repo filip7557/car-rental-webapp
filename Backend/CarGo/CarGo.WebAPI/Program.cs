@@ -70,6 +70,9 @@ builder.Host
         containerBuilder.RegisterType<ReviewRepository>().As<IReviewRepository>();
         containerBuilder.RegisterType<HttpContextAccessor>().As<IHttpContextAccessor>().SingleInstance();
         containerBuilder.RegisterType<BookingStatusRepository>().As<IBookingStatusRepository>();
+        containerBuilder.RegisterType<CompanyLocationRepository>().As<ICompanyLocationRepository>();
+        containerBuilder.RegisterType<BookingStatusRepository>().As<IBookingStatusRepository>();
+        containerBuilder.RegisterType<BookingStatusService>().As<IBookingStatusService>();
     });
 
 // Dodavanje usluga
