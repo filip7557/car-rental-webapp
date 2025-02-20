@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import CompanyService from "../../services/CompanyService";
 import managerService from "../../services/ManagerService";
-import './ManageCompanyPage.css'
+import "./ManageCompanyPage.css";
 
 import NavBar from "../../components/NavBar/NavBar";
 
@@ -19,13 +19,13 @@ const ManageCompanyPage = () => {
   useEffect(() => {
     const fetchCompanyInfo = async () => {
       try {
-		if (companyId) {
-        const response = await CompanyService.getCompanyInfoById(companyId);
+        if (companyId) {
+          const response = await CompanyService.getCompanyInfoById(companyId);
 
-        //console.log("RESPONSE", response);
+          //console.log("RESPONSE", response);
 
-        setCompany(response);
-		}
+          setCompany(response);
+        }
       } catch (error) {
         console.error("Greška pri dohvaćanju podataka o kompaniji:", error);
         setError("Došlo je do greške pri dohvaćanju podataka.");
@@ -44,7 +44,9 @@ const ManageCompanyPage = () => {
       <NavBar />
       <div className="manageCompanyPage">
         <h1>{company?.name || ""}</h1>
-		<h2><strong>Email:</strong> {company.email}</h2>
+        <h2>
+          <strong>Email:</strong> {company.email}
+        </h2>
 
         <div>
           <button onClick={() => handleNavigate("/manageCompanyVehicles")}>
@@ -53,7 +55,11 @@ const ManageCompanyPage = () => {
         </div>
 
         <div>
-          <button onClick={() => handleNavigate("/path-to-manage-location")}>
+          <button
+            onClick={() =>
+              handleNavigate(`/path-to-manage-location/${companyId}`)
+            }
+          >
             Manage Location
           </button>
         </div>

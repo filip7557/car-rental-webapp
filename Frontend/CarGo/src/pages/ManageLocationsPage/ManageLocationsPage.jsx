@@ -3,10 +3,11 @@ import ManageLocationsService from "../../services/ManageLocationsService";
 import CompanyLocationComponent from "../../components/ManageLocationsComponent/ManageLocationsComponent";
 import NavBar from "../../components/NavBar/NavBar";
 import "./ManageLocationsPage.css";
+import { useParams } from "react-router-dom";
 
 const ManageLocationsPage = () => {
-  /* const { companyId } = useParams(); */
-  let companyId = "550e8400-e29b-41d4-a716-446655440031";
+  const { id } = useParams();
+
   const [locations, setLocations] = useState([]);
   const [newLocation, setNewLocation] = useState({
     country: "",
@@ -17,7 +18,7 @@ const ManageLocationsPage = () => {
   useEffect(() => {
     const fetchLocations = async () => {
       try {
-        const data = await ManageLocationsService.getLocations(companyId);
+        const data = await ManageLocationsService.getLocations(id);
         setLocations(data);
       } catch (error) {
         console.error("Error fetching locations:", error);
@@ -28,13 +29,10 @@ const ManageLocationsPage = () => {
 
   const handleAddLocation = async () => {
     try {
-      const newLoc = await ManageLocationsService.addLocation(
-        companyId,
-        newLocation
-      );
-      console.log("New location added:", newLoc); // Provjeri što vraća backend
+      const newLoc = await ManageLocationsService.addLocation(id, newLocation);
+      console.log("New location added:", newLoc);
 
-      const data = await ManageLocationsService.getLocations(companyId);
+      const data = await ManageLocationsService.getLocations(id);
       setLocations(data);
 
       setNewLocation({ country: "", city: "", address: "" });
@@ -45,7 +43,7 @@ const ManageLocationsPage = () => {
 
   const handleDeleteLocation = async (locationId) => {
     try {
-      await ManageLocationsService.deleteLocation(companyId, locationId);
+      await ManageLocationsService.deleteLocation(id, locationId);
       setLocations(locations.filter((loc) => loc.id !== locationId));
     } catch (error) {
       console.error("Error deleting location:", error);

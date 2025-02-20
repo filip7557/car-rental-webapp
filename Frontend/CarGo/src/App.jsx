@@ -20,6 +20,7 @@ import NotificationsPage from "./pages/NotificationsPage/NotificationsPage.jsx";
 import ProfilePage from "./pages/ProfilePage/ProfilePage.jsx";
 import RegisterPage from "./pages/RegisterPage/RegisterPage.jsx";
 import AddVehiclePage from "./pages/VehiclePage/AddVehiclePage.jsx";
+import ManageLocationsPage from "./pages/ManageLocationsPage/ManageLocationsPage.jsx";
 
 function App() {
   return (
@@ -51,6 +52,10 @@ function App() {
       <Route path="/notifications" element={<NotificationsPage />} />
       <Route path="/manageCompanyVehicles" element={<ManageVehiclesPage />} />
       <Route path="/manageCompany/" element={<ManageCompanyPage />} />
+      <Route
+        path="/path-to-manage-location/:id"
+        element={<ManageLocationsPage />}
+      />
     </Routes>
   );
 }
