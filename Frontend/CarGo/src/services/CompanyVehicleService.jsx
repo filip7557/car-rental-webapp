@@ -62,16 +62,29 @@ class CompanyVehicleService {
 		}
 	}
 
-	async getCompanyVehicleById(id) {
-		try {
-			const response = await axiosClient.get(`/api/CompanyVehicle/${id}`);
-			console.log(response.data);
-			return response.data;
-		} catch (error) {
-			console.log(error);
-			return [];
-		}
-	}
+  async getCompanyVehicleById(id) {
+    try {
+      const response = await axiosClient.get(`/api/CompanyVehicle/${id}`);
+      console.log(response.data);
+      return response.data;
+    } catch (error) {
+      console.log(error);
+      return [];
+    }
+  }
+
+  async getCompanyVehiclesByCompanyId(id) {
+    try {
+      const response = await axiosClient.get("/api/CompanyVehicle", {
+        params: { companyId: id },
+      });
+      console.log(response.data);
+      return response.data;
+    } catch (error) {
+      console.log(error);
+      return [];
+    }
+  }
 }
 
 const companyVehicleService = new CompanyVehicleService();
