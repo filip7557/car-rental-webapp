@@ -63,13 +63,67 @@ namespace CarGo.WebAPI.Controllers
 
                 var vehicles = await _service.GetAllCompanyVehiclesAsync(sorting, paging, filter);
 
-                return vehicles.Count > 0 ? Ok(vehicles) : NotFound("Nema dostupnih vozila");
+                return vehicles.Data.Count > 0 ? Ok(vehicles) : NotFound("Nema dostupnih vozila");
             }
             catch (Exception ex)
             {
                 return StatusCode(500, $"Greška pri dohvaćanju vozila: {ex.Message}");
             }
         }
+
+        [Authorize(Roles = "User,Manager,Administrator")]
+        [HttpGet("available")]
+        public async Task<IActionResult> GetAvailableCompanyVehiclesAsync(
+            string orderBy = "Id",
+            string sortOrder = "ASC",
+            int pageNumber = 1,
+            int rpp = 10,
+            Guid? compId = null,
+            Guid? colorId = null,
+            bool? isOper = null,
+            Guid? locId = null,
+            Guid? vehMakeId = null,
+            Guid? vehiModId = null,
+            Guid? vehTypeId = null,
+            bool isActive = true
+            )
+        {
+            try
+            {
+                var filter = new CompanyVehicleFilter
+                {
+                    IsActive = isActive,
+                    CompanyId = compId,
+                    VehicleModelId = vehiModId,
+                    ColorId = colorId,
+                    IsOperational = isOper,
+                    CurrentLocationId = locId,
+                    VehicleMakeId = vehMakeId,
+                    VehicleTypeId = vehTypeId
+                };
+
+                var sorting = new BookingSorting
+                {
+                    OrderBy = orderBy,
+                    SortOrder = sortOrder
+                };
+
+                var paging = new Paging
+                {
+                    PageNumber = pageNumber,
+                    Rpp = rpp
+                };
+
+                var vehicles = await _service.GetAllAvailableCompanyVehiclesAsync(sorting, paging, filter);
+
+                return vehicles.Data.Count > 0 ? Ok(vehicles) : NotFound("Nema dostupnih vozila");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Greška pri dohvaćanju vozila: {ex.Message}");
+            }
+        }
+
 
         [HttpGet("{id}")]
         [Authorize(Roles = "User,Manager,Administrator")]

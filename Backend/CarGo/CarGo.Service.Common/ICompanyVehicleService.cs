@@ -5,7 +5,10 @@ namespace CarGo.Service.Common
 {
     public interface ICompanyVehicleService
     {
-        Task<List<CompanyVehicleDTO>> GetAllCompanyVehiclesAsync(BookingSorting sorting, Paging paging,
+        Task<PagedResponse<CompanyVehicleDTO>> GetAllCompanyVehiclesAsync(BookingSorting sorting, Paging paging,
+            CompanyVehicleFilter filter);
+
+        Task<PagedResponse<CompanyVehicleDTO>> GetAllAvailableCompanyVehiclesAsync(BookingSorting sorting, Paging paging,
             CompanyVehicleFilter filter);
 
         Task<CompanyVehicleDTO> GetCompanyVehicleByIdAsync(Guid id);
@@ -15,5 +18,6 @@ namespace CarGo.Service.Common
         Task<bool> UpdateCompanyVehicleAsync(Guid id, CompanyVehicle updatedCompanyVehicle);
 
         Task<bool> DeleteCompanyVehicleAsync(Guid compVehId, Guid id);
+        
     }
 }
