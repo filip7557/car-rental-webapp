@@ -20,7 +20,6 @@ import NotificationsPage from "./pages/NotificationsPage/NotificationsPage.jsx";
 import ProfilePage from "./pages/ProfilePage/ProfilePage.jsx";
 import RegisterPage from "./pages/RegisterPage/RegisterPage.jsx";
 import AddVehiclePage from "./pages/VehiclePage/AddVehiclePage.jsx";
-import ManageLocationsPage from "./pages/ManageLocationsPage/ManageLocationsPage.jsx";
 
 function App() {
   return (
@@ -35,7 +34,6 @@ function App() {
       <Route path="/company-register" element={<CompanyRegisterPage />} />
       <Route path="/company-requests" element={<CompanyRequestsPage />} />
       <Route path="/addDamageReport/:id" element={<AddDamageReportPage />} />
-      <Route path="/manage-locations" element={<ManageLocationsPage />} />
       <Route path="/bookingsPage" element={<BookingsPage />} />
       <Route path="/cvehiclePage" element={<CompanyVehiclePage />} />
 

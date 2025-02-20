@@ -15,7 +15,6 @@ function NavBar() {
           <Link to="/">Home</Link>
           {localStorage.getItem("userId") ? (
             <>
-              <Link to="/manage-locations">Manage Locations</Link>
               <Link to="/bookingsPage">Bookings</Link>
               {localStorage.getItem("role") === "Administrator" ? (
                 <>
