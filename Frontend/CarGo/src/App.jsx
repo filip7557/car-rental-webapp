@@ -22,6 +22,8 @@ import RegisterPage from "./pages/RegisterPage/RegisterPage.jsx";
 import AddVehiclePage from "./pages/VehiclePage/AddVehiclePage.jsx";
 import ManageLocationsPage from "./pages/ManageLocationsPage/ManageLocationsPage.jsx";
 import ManageManagersPage from "./pages/ManageManagersPages/ManageManagersPage.jsx";
+import ManageVehiclesPage from "./pages/ManageVehiclesPage/ManageVehiclesPage.jsx";
+import CompaniesPage from "./pages/CompaniesPage/CompaniesPage.jsx";
 
 function App() {
   return (
@@ -38,28 +40,19 @@ function App() {
       <Route path="/addDamageReport/:id" element={<AddDamageReportPage />} />
       <Route path="/bookingsPage" element={<BookingsPage />} />
       <Route path="/cvehiclePage" element={<CompanyVehiclePage />} />
-
-      <Route
-        path="/vehicle-maintenance/:vehicleId"
-        element={<CompanyVehicleMaintenancePage />}
-      />
-      <Route
-        path="/add-maintenance-report/:vehicleId"
-        element={<AddMaintenanceReportPage />}
-      />
+      <Route path="/vehicle-maintenance/:vehicleId" element={<CompanyVehicleMaintenancePage />} />
+      <Route path="/add-maintenance-report/:vehicleId" element={<AddMaintenanceReportPage />} />
       <Route path="/damageReport/:id" element={<DamageReportPage />} />
       <Route path="/create-company-by-admin" element={<CompanyCreatePage />} />
       <Route path="/add-Review/:id" element={<AddReviewPage />} />
       <Route path="/notifications" element={<NotificationsPage />} />
       <Route path="/manageCompanyVehicles" element={<ManageVehiclesPage />} />
       <Route path="/manageCompany/" element={<ManageCompanyPage />} />
-      <Route
-        path="/manageLocations/:id"
-        element={<ManageLocationsPage />}
-      />
+      <Route path="/manageLocations/:id" element={<ManageLocationsPage />} />
       <Route path="/manageManagers" element={<ManageManagersPage />} />
-    </Routes>
-  );
+			<Route path="/all-companies" element={<CompaniesPage />} />
+		</Routes>
+	);
 }
 
 export default App;

@@ -200,10 +200,12 @@ namespace CarGo.Repository
                     if (reader.HasRows)
                     {
                         await reader.ReadAsync();
-                        role = new Role {
+                        var newRole = new Role
+                        {
                             Id = Guid.Parse(reader[0].ToString()!),
                             Name = reader[1].ToString()!
                         };
+                        role = newRole;
                     }
                     else
                     {

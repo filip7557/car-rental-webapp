@@ -31,13 +31,15 @@ namespace CarGo.WebAPI.Controllers
         }
 
         [Authorize]
-        [HttpGet("getByEmail/{email}")]
+        [HttpGet("get-by-email/{email}")]
         public async Task<IActionResult> GetByEmailAsync(string email)
         {
             var user = await _userService.GetUserByEmailAsync(email);
 
             if (user == null)
+            {
                 return NotFound();
+            }
 
             return Ok(user);
         }

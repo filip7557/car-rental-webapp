@@ -18,7 +18,8 @@ function NavBar() {
               <Link to="/bookingsPage">Bookings</Link>
               {localStorage.getItem("role") === "Administrator" ? (
                 <>
-                  <Link to="/create-company-by-admin">Create company</Link>
+                  <Link to="/all-companies">Companies</Link>
+                  <Link to="/create-company-by-admin">Create Company</Link>
                   <Link to="/company-requests">Company Requests</Link>
                   <Link to="/notifications">Notifications</Link>
                 </>
