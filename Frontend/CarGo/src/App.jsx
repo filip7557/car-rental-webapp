@@ -20,42 +20,41 @@ import NotificationsPage from "./pages/NotificationsPage/NotificationsPage.jsx";
 import ProfilePage from "./pages/ProfilePage/ProfilePage.jsx";
 import RegisterPage from "./pages/RegisterPage/RegisterPage.jsx";
 import AddVehiclePage from "./pages/VehiclePage/AddVehiclePage.jsx";
+import ManageLocationsPage from "./pages/ManageLocationsPage/ManageLocationsPage.jsx";
 
 function App() {
-	return (
-		<Routes>
-			<Route path="register" element={<RegisterPage />} />
-			<Route path="login" element={<LoginPage />} />
-			<Route path="/" element={<HomePage />} />
-			<Route path="home" element={<HomePage />} />
-			<Route path="profile" element={<ProfilePage />} />
-			<Route path="profile/:id" element={<EditProfilePage />} />
-			<Route path="/add-vehicle" element={<AddVehiclePage />} />
-			<Route path="/company-register" element={<CompanyRegisterPage />} />
-			<Route path="/company-requests" element={<CompanyRequestsPage />} />
-			<Route path="/addDamageReport/:id" element={<AddDamageReportPage />} />
-			<Route path="/bookingsPage" element={<BookingsPage />} />
-			<Route path="/cvehiclePage" element={<CompanyVehiclePage />} />
+  return (
+    <Routes>
+      <Route path="register" element={<RegisterPage />} />
+      <Route path="login" element={<LoginPage />} />
+      <Route path="/" element={<HomePage />} />
+      <Route path="home" element={<HomePage />} />
+      <Route path="profile" element={<ProfilePage />} />
+      <Route path="profile/:id" element={<EditProfilePage />} />
+      <Route path="/add-vehicle" element={<AddVehiclePage />} />
+      <Route path="/company-register" element={<CompanyRegisterPage />} />
+      <Route path="/company-requests" element={<CompanyRequestsPage />} />
+      <Route path="/addDamageReport/:id" element={<AddDamageReportPage />} />
+      <Route path="/manage-locations" element={<ManageLocationsPage />} />
+      <Route path="/bookingsPage" element={<BookingsPage />} />
+      <Route path="/cvehiclePage" element={<CompanyVehiclePage />} />
 
-			<Route
-				path="/vehicle-maintenance/:vehicleId"
-				element={<CompanyVehicleMaintenancePage />}
-			/>
-			<Route
-				path="/add-maintenance-report/:vehicleId"
-				element={<AddMaintenanceReportPage />}
-			/>
-			<Route path="/damageReport/:id" element={<DamageReportPage />} />
-			<Route path="/create-company-by-admin" element={<CompanyCreatePage />} />
-			<Route path="/add-Review/:id" element={<AddReviewPage />} />
-			<Route path="/notifications" element={<NotificationsPage />} />
-			<Route path="/manageCompanyVehicles" element={<ManageVehiclesPage />} />
-			<Route
-				path="/manageCompany/"
-				element={<ManageCompanyPage />}
-			/>
-		</Routes>
-	);
+      <Route
+        path="/vehicle-maintenance/:vehicleId"
+        element={<CompanyVehicleMaintenancePage />}
+      />
+      <Route
+        path="/add-maintenance-report/:vehicleId"
+        element={<AddMaintenanceReportPage />}
+      />
+      <Route path="/damageReport/:id" element={<DamageReportPage />} />
+      <Route path="/create-company-by-admin" element={<CompanyCreatePage />} />
+      <Route path="/add-Review/:id" element={<AddReviewPage />} />
+      <Route path="/notifications" element={<NotificationsPage />} />
+      <Route path="/manageCompanyVehicles" element={<ManageVehiclesPage />} />
+      <Route path="/manageCompany/" element={<ManageCompanyPage />} />
+    </Routes>
+  );
 }
 
 export default App;

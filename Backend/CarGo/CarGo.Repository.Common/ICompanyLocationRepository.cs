@@ -12,6 +12,7 @@ namespace CarGo.Repository.Common
         Task<bool> AddCompanyLocationAsync(Guid companyId, Guid locationId, Guid userId);
         Task<List<Location>> GetLocationByCompanyIdAsync(Guid companyId);
 
+        Task DeleteCompanyLocationByLocationIdAsync(Guid locationId, Guid updatedByUserId);
 
     }
 }

@@ -8,12 +8,12 @@ namespace CarGo.Repository
 {
     public class LocationRepository : ILocationRepository
     {
-        private string connectionString;
+        private string _connectionString;
         protected readonly string TableName = "\"Location\"";
 
         public LocationRepository(IConfiguration configuration)
         {
-            connectionString = Environment.GetEnvironmentVariable("ConnectionStrings__PostgresDb");
+            _connectionString = Environment.GetEnvironmentVariable("ConnectionStrings__PostgresDb");
         }
 
         public async Task<List<Location>> GetLocationAsync()
@@ -22,7 +22,7 @@ namespace CarGo.Repository
             StringBuilder query =
                 new StringBuilder(
                     $"SELECT \"Id\", \"Address\", \"City\", \"Country\" FROM \"Location\" Where \"IsActive\" = true");
-            using (var connection = new NpgsqlConnection(connectionString))
+            using (var connection = new NpgsqlConnection(_connectionString))
             using (var command = new NpgsqlCommand(query.ToString(), connection))
             {
                 await connection.OpenAsync();
@@ -50,7 +50,7 @@ namespace CarGo.Repository
         {
             string commandText =
                 $"SELECT \"Id\", \"Address\", \"City\", \"Country\" FROM \"Location\" WHERE \"Id\" = @id ";
-            using (var connection = new NpgsqlConnection(connectionString))
+            using (var connection = new NpgsqlConnection(_connectionString))
             using (var command = new NpgsqlCommand(commandText, connection))
             {
                 await connection.OpenAsync();
@@ -75,7 +75,7 @@ namespace CarGo.Repository
         {
             string commandText =
                 $"INSERT INTO {TableName} (\"Id\", \"Address\", \"City\", \"Country\", \"IsActive\",\"CreatedByUserId\", \"UpdatedByUserId\") VALUES (@id, @address, @city, @country, @isActive,@createdByUserId, @UpdatedByUserId)";
-            using (var connection = new NpgsqlConnection(connectionString))
+            using (var connection = new NpgsqlConnection(_connectionString))
             using (var command = new NpgsqlCommand(commandText, connection))
             {
                 await connection.OpenAsync();
@@ -98,7 +98,7 @@ namespace CarGo.Repository
             string selectCommandText = $"SELECT \"IsActive\" FROM \"Location\" WHERE \"Id\" = @id  ";
             string commandText =
                 $"UPDATE {TableName} SET \"IsActive\"  = @newIsActive, \"UpdatedByUserId\" = @updatedByUserId WHERE \"Id\" = @id";
-            using (var connection = new NpgsqlConnection(connectionString))
+            using (var connection = new NpgsqlConnection(_connectionString))
             using (var selectCommand = new NpgsqlCommand(selectCommandText, connection))
             {
                 await connection.OpenAsync();

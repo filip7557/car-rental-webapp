@@ -26,7 +26,7 @@ namespace CarGo.Service
 
         public async Task<List<Location>> GetLocationsByCompanyIdAsync(Guid companyId)
         {
-            // Pozivamo metodu iz repozitorija koja dohvaća sve lokacije prema companyId
+            
             return await _companyLocationRepository.GetLocationByCompanyIdAsync(companyId);
         }
 
@@ -59,6 +59,7 @@ namespace CarGo.Service
         public async Task<bool> DeleteAsync(Guid locationId)
         {
             var updatedByUserId = _tokenService.GetCurrentUserId();
+            await _companyLocationRepository.DeleteCompanyLocationByLocationIdAsync(locationId, updatedByUserId);
             return await _locationRepository.DeleteLocationAsync(locationId, updatedByUserId);
         }
     }

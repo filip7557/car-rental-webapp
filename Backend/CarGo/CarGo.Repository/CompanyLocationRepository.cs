@@ -91,7 +91,31 @@ namespace CarGo.Repository
         }
 
 
+        public async Task DeleteCompanyLocationByLocationIdAsync(Guid locationId, Guid updatedByUserId)
+        {
+            string commandText = @"UPDATE ""CompanyLocation"" SET ""IsActive"" = @isActive, ""UpdatedByUserId"" = @updatedByUserId WHERE ""LocationId"" = @locationId";
+
+            using (var connection = new NpgsqlConnection(_connectionString))
+            {
+                await connection.OpenAsync();
+
+                using (var command = new NpgsqlCommand(commandText, connection))
+                {
+                
+                    command.Parameters.AddWithValue("@isActive", false); 
+                    command.Parameters.AddWithValue("@updatedByUserId", updatedByUserId); 
+                    command.Parameters.AddWithValue("@locationId", locationId); 
+
+                    await command.ExecuteNonQueryAsync();
+                }
+            }
+        }
+
+
+
+
+
+
     }
 
 }
-

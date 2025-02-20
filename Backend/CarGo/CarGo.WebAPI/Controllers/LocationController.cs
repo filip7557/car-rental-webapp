@@ -96,9 +96,9 @@ namespace CarGo.WebAPI.Controllers
             }
         }
 
-        [HttpDelete("{locationId}")]
+        [HttpDelete("{companyId}/{locationId}")]
         [Authorize(Roles = "Administrator,Manager")]
-        public async Task<IActionResult> DeleteAsync(Guid locationId)
+        public async Task<IActionResult> DeleteAsync(Guid locationId, Guid companyId)
         {
             try
             {
@@ -107,7 +107,7 @@ namespace CarGo.WebAPI.Controllers
                 {
                     var userId =
                         Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier)!
-                            .Value); //(User.FindFirst(ClaimTypes.NameIdentifier)!.Value);
+                            .Value); 
                     await _locationService.DeleteAsync(locationId);
                     return Ok("Location isActive status changed successfully.");
                 }

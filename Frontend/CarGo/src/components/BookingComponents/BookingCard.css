@@ -1,5 +1,6 @@
 .booking-card {
   border: 1px solid #ddd;
+  color: black;
   border-radius: 8px;
   background-color: #fff;
   padding: 20px;
@@ -17,7 +18,11 @@
 .booking-card p {
   margin: 8px 0;
   font-size: 1rem;
-  color: #666;
+  color: black;
+}
+
+.booking-card h3 {
+  color: black;
 }
 
 .cancel-button {
