@@ -36,8 +36,8 @@ namespace CarGo.Repository
                         "uu.\"Id\" AS \"UpdatedByUserId\", " +
                         "uu.\"FullName\" AS \"UpdatedByUser\" " +
                         "FROM \"CompanyVehicle\" cv " +
-                        "JOIN \"Booking\" b ON cv.\"Id\" = b.\"CompanyVehicleId\" " +
-                        "JOIN \"Company\" c ON cv.\"CompanyId\" = c.\"Id\" " +
+                        "LEFT JOIN \"Booking\" b ON cv.\"Id\" = b.\"CompanyVehicleId\" " +
+                        "LEFT JOIN \"Company\" c ON cv.\"CompanyId\" = c.\"Id\" " +
                         "JOIN \"VehicleModel\" vm ON cv.\"VehicleModelId\" = vm.\"Id\" " +
                         "JOIN \"VehicleMake\" vmm ON vm.\"MakeId\" = vmm.\"Id\" " +
                         "JOIN \"VehicleColor\" vc ON cv.\"ColorId\" = vc.\"Id\" " +

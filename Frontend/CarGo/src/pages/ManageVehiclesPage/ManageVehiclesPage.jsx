@@ -4,6 +4,7 @@ import companyVehicleService from '../../services/CompanyVehicleService';
 import './ManageVehiclesPage.css'
 
 import NavBar from '../../components/NavBar/NavBar';
+import CompanyVehicleCard from '../../components/CompanyVehicleTable/CompanyVehicleCard';
 
 function ManageVehiclesPage() {
 
@@ -12,14 +13,16 @@ function ManageVehiclesPage() {
     const [vehicles, setVehicles] = useState([]);
 
     useEffect(() => {
-        companyVehicleService.getCompanyVehiclesByCompanyId(id).then(setVehicles);
+        companyVehicleService.getCompanyVehicles().then(setVehicles);
     }, [])
+
+    console.log(vehicles);
 
     return (
         <div>
             <NavBar />
             <div className='manageVehiclesPage'>
-                {vehicles.map(vehicle => )}
+                {vehicles.map(vehicle => <CompanyVehicleCard key={vehicle.companyVehicleId} vehicle={vehicle} />)}
             </div>
         </div>
     )

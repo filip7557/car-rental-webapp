@@ -47,13 +47,13 @@ namespace CarGo.Repository
                     r.""Name"" AS ""UserRole""
                 FROM ""Booking"" b
                 JOIN ""BookingStatus"" bs ON b.""StatusId"" = bs.""Id""
-                JOIN ""CompanyVehicle"" cv ON b.""CompanyVehicleId"" = cv.""Id""
-                JOIN ""Company"" c ON cv.""CompanyId"" = c.""Id""
+                LEFT JOIN ""CompanyVehicle"" cv ON b.""CompanyVehicleId"" = cv.""Id""
+                LEFT JOIN ""Company"" c ON cv.""CompanyId"" = c.""Id""
                 JOIN ""VehicleModel"" vm ON cv.""VehicleModelId"" = vm.""Id""
                 JOIN ""VehicleMake"" vmm ON vm.""MakeId"" = vmm.""Id""
                 JOIN ""VehicleColor"" vc ON cv.""ColorId"" = vc.""Id""
-                JOIN ""Location"" cl ON cv.""CurrentLocationId"" = cl.""Id""
-                JOIN ""User"" u ON b.""UserId"" = u.""Id""
+                LEFT JOIN ""Location"" cl ON cv.""CurrentLocationId"" = cl.""Id""
+                LEFT JOIN ""User"" u ON b.""UserId"" = u.""Id""
                 JOIN ""Role"" r ON u.""RoleId"" = r.""Id""
                 WHERE 1 = 1");
 
