@@ -14,11 +14,12 @@ import DamageReportPage from "./pages/DamageReportPage/DamageReportPage.jsx";
 import EditProfilePage from "./pages/EditProfilePage/EditProfilePage.jsx";
 import HomePage from "./pages/HomePage/HomePage.jsx";
 import LoginPage from "./pages/LoginPage/LoginPage.jsx";
+import ManageCompanyPage from "./pages/ManageCompanyPage/ManageCompanyPage.jsx";
+import ManageVehiclesPage from "./pages/ManageVehiclesPage/ManageVehiclesPage.jsx";
 import NotificationsPage from "./pages/NotificationsPage/NotificationsPage.jsx";
 import ProfilePage from "./pages/ProfilePage/ProfilePage.jsx";
 import RegisterPage from "./pages/RegisterPage/RegisterPage.jsx";
 import AddVehiclePage from "./pages/VehiclePage/AddVehiclePage.jsx";
-import ManageVehiclesPage from "./pages/ManageVehiclesPage/ManageVehiclesPage.jsx";
 
 function App() {
 	return (
@@ -49,6 +50,10 @@ function App() {
 			<Route path="/addReview/:id" element={<AddReviewPage />} />
 			<Route path="/notifications" element={<NotificationsPage />} />
 			<Route path="/manageCompanyVehicles" element={<ManageVehiclesPage />} />
+			<Route
+				path="/manage-company-by-id/:companyId"
+				element={<ManageCompanyPage />}
+			/>
 		</Routes>
 	);
 }
