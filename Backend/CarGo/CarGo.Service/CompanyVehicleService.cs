@@ -51,6 +51,7 @@ namespace CarGo.Service
                     PlateNumber = companyVehicle.PlateNumber,
                     DailyPrice = companyVehicle.DailyPrice,
                     Color = vehicleColor.Name,
+                    ColorId = vehicleColor.ID,
                     EnginePower = vehicleModel.EnginePower,
                     VehicleType = vehicleType!.Name,
                     isActive = companyVehicle.IsActive
