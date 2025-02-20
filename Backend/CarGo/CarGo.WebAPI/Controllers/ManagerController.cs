@@ -81,5 +81,12 @@ namespace CarGo.WebAPI.Controllers
 
             return BadRequest();
         }
+
+        [Authorize(Roles = "Manager")]
+        [HttpGet]
+        public async Task<Guid> GetCompanyIdByUserIdAsync(Guid userId)
+        {
+            return await _managerService.GetCompanyIdByUserIdAsync(userId);
+        }
     }
 }

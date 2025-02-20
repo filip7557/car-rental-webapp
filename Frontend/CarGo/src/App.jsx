@@ -51,7 +51,7 @@ function App() {
 			<Route path="/notifications" element={<NotificationsPage />} />
 			<Route path="/manageCompanyVehicles" element={<ManageVehiclesPage />} />
 			<Route
-				path="/manage-company-by-id/:companyId"
+				path="/manageCompany/"
 				element={<ManageCompanyPage />}
 			/>
 		</Routes>
