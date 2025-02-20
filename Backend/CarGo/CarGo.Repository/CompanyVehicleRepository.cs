@@ -105,6 +105,44 @@ namespace CarGo.Repository
                 cmd.Parameters.AddWithValue("@ROWS", paging.Rpp);
             }
         }
+        public async Task<int> CountAsync()
+        {
+            int count = 0;
+            try
+            {
+                using (var connection = new NpgsqlConnection(connectionString))
+                {
+                    string commandText =
+                        "SELECT COUNT(\"Id\") FROM \"CompanyVehicle\"";
+                    using var command = new NpgsqlCommand(commandText, connection);
+
+                    //command.Parameters.AddWithValue("compVehId", NpgsqlTypes.NpgsqlDbType.Uuid, companyVehicleId);
+
+                    connection.Open();
+
+                    var reader = await command.ExecuteReaderAsync();
+                    if (reader.HasRows)
+                    {
+                        await reader.ReadAsync();
+                        int.TryParse(reader[0].ToString(), out count);
+                    }
+                    else
+                    {
+                        connection.Close();
+                        return 0;
+                    }
+
+                    connection.Close();
+
+                    return count;
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return 0;
+            }
+        }
 
         private void ApplyFilters(NpgsqlCommand cmd, StringBuilder commandText, CompanyVehicleFilter vehicleFilter)
         {

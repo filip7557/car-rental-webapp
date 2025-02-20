@@ -15,5 +15,7 @@ namespace CarGo.Repository.Common
         Task<bool> UpdateCompanyVehicleAsync(Guid id, CompanyVehicle updatedCompanyVehicle, Guid userId);
 
         Task<bool> DeleteCompanyVehicleAsync(Guid compVehId, Guid id);
+
+        Task<int> CountAsync();
     }
 }

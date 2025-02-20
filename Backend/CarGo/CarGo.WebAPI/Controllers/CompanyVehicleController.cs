@@ -63,7 +63,7 @@ namespace CarGo.WebAPI.Controllers
 
                 var vehicles = await _service.GetAllCompanyVehiclesAsync(sorting, paging, filter);
 
-                return vehicles.Count > 0 ? Ok(vehicles) : NotFound("Nema dostupnih vozila");
+                return vehicles.Data.Count > 0 ? Ok(vehicles) : NotFound("Nema dostupnih vozila");
             }
             catch (Exception ex)
             {

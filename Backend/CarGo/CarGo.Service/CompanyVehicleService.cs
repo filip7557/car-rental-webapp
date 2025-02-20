@@ -1,5 +1,7 @@
-﻿using CarGo.Common;
+﻿using System.Collections.Generic;
+using CarGo.Common;
 using CarGo.Model;
+using CarGo.Repository;
 using CarGo.Repository.Common;
 using CarGo.Service.Common;
 
@@ -29,7 +31,7 @@ namespace CarGo.Service
             _vehicleTypeService = vehicleTypeService;
         }
 
-        public async Task<List<CompanyVehicleDTO>> GetAllCompanyVehiclesAsync(BookingSorting sorting, Paging paging,
+        public async Task<PagedResponse<CompanyVehicleDTO>> GetAllCompanyVehiclesAsync(BookingSorting sorting, Paging paging,
             CompanyVehicleFilter filter)
         {
             var companyVehicles = await _repository.GetAllCompanyVehiclesAsync(sorting, paging, filter);
@@ -58,7 +60,14 @@ namespace CarGo.Service
                 };
                 companyVehicleList.Add(companyVehicleDTO);
             }
-            return companyVehicleList;
+            return new PagedResponse<CompanyVehicleDTO>
+            {
+                Data = companyVehicleList,
+                PageNumber = paging.PageNumber,
+                PageSize = paging.Rpp,
+                TotalRecords = await _repository.CountAsync(),
+            };
+            //return companyVehicleList;
         }
 
 
