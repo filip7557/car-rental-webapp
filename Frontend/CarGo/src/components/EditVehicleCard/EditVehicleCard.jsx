@@ -1,8 +1,11 @@
+import { useNavigate } from "react-router-dom";
 import "./EditVehicleCard.css";
 
 function EditVehicleCard({ vehicle, setDeleteVehId, setShowPopup }) {
+  const navigate = useNavigate();
+
   function handleEditClick() {
-    // TODO: Navigate to edit page.
+    navigate(`/edit-vehicle/${vehicle.companyVehicleId}`);
   }
 
   function handleDeleteClick() {
