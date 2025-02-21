@@ -73,6 +73,13 @@ const AddReview = () => {
           >
             {loading ? "Submitting..." : "Add Review"}
           </button>
+
+          <button
+            className="damage-report-btn"
+            onClick={() => navigate(`/addDamageReport/${id}`)}
+          >
+            Report Damage
+          </button>
           <button
             className="cancel-btn"
             onClick={() => navigate("/bookingsPage")}
