@@ -12,7 +12,9 @@ namespace CarGo.Service.Common
     {
         Task<CompanyInfoDto?> GetCompanyAsync(Guid id);
 
-        Task<bool> CreateCompanyByAdminAsync(Company company);
+        Task<List<Company>> GetCompaniesForAdminAsync();
+
+        Task<bool> CreateCompanyByAdminAsync(Company company, User newManager);
 
         Task<List<CompanyInfoIdAndNameDto>> GetCompaniesAsync();
 

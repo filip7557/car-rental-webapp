@@ -11,13 +11,50 @@ namespace CarGo.Repository
 
         private string connectionString = Environment.GetEnvironmentVariable("ConnectionStrings__PostgresDb");
 
+        public async Task<List<Company>> GetCompaniesForAdminAsync()
+        {
+            try
+            {
+                using (var connection = new NpgsqlConnection(connectionString))
+                {
+                    var commandText = "SELECT \"Id\", \"Name\", \"Email\", \"CreatedByUserId\", \"DateCreated\", \"IsActive\" FROM \"Company\";";
+                    using (var command = new NpgsqlCommand(commandText, connection))
+                    {
+                        await connection.OpenAsync();
+                        await using var reader = await command.ExecuteReaderAsync();
+                        var companies = new List<Company>();
+
+                        while (await reader.ReadAsync())
+                        {
+                            companies.Add(new Company
+                            {
+                                Id = reader.GetGuid(0),
+                                Name = reader.GetString(1),
+                                Email = reader.GetString(2),
+                                CreatedByUserId = reader.GetGuid(3),
+                                DateCreated = reader.GetDateTime(4),
+                                IsActive = reader.GetBoolean(5)
+                            });
+                        }
+
+                        return companies;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error fetching companies: {ex.Message}");
+                return new List<Company>();
+            }
+        }
+
         public async Task<List<CompanyInfoIdAndNameDto>> GetCompaniesAsync()
         {
             try
             {
                 using (var connection = new NpgsqlConnection(connectionString))
                 {
-                    var commandText = "SELECT \"Id\", \"Name\" FROM \"Company\";";
+                    var commandText = "SELECT \"Id\", \"Name\", \"Email\", \"CreatedByUserId\", \"DateCreated\", \"IsActive\" FROM \"Company\";";
                     using (var command = new NpgsqlCommand(commandText, connection))
                     {
                         await connection.OpenAsync();

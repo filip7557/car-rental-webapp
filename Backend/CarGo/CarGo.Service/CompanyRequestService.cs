@@ -68,8 +68,7 @@ namespace CarGo.Service
                     $"\nCarGo Administration Team.",
                     To = company.Email,
                 };
-                var user = await _userService.GetUserByIdAsync(userId);
-                await _managerService.AddManagerToCompanyAsync(company.Id, user!);
+
                 return await _notificationService.SendNotificationAsync(notification);
             }
             return false;
@@ -121,7 +120,9 @@ namespace CarGo.Service
                         DateCreated = DateTime.UtcNow,
                     };
 
+                    var getUserById = await _userService.GetUserByIdAsync(userId);
                     var resultOfCreatingCompany = await CreateCompanyAsync(newCompany);
+                    var addUserAsManager = await _managerService.AddManagerToCompanyAsync(newCompany.Id, getUserById!);
 
                     if (resultOfCreatingCompany)
                     {

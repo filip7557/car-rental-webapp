@@ -12,18 +12,25 @@ namespace CarGo.Service
         private readonly ICompanyRequestRepository _companyRequestRepository;
         private readonly ITokenService _tokenService;
         private readonly IManagerService _managerService;
+        private readonly IUserService _userService;
 
-        public CompanyService(ICompanyRepository repository, ITokenService token, IManagerService manager, ICompanyRequestRepository companyRequestRepository)
+        public CompanyService(ICompanyRepository repository, ITokenService token, IManagerService manager, ICompanyRequestRepository companyRequestRepository, IUserService userService)
         {
             _repository = repository;
             _tokenService = token;
             _managerService = manager;
             _companyRequestRepository = companyRequestRepository;
+            _userService = userService;
         }
 
         public async Task<CompanyInfoDto?> GetCompanyAsync(Guid id)
         {
             return await _repository.GetCompanyAsync(id);
+        }
+
+        public async Task<List<Company>> GetCompaniesForAdminAsync()
+        {
+            return await _repository.GetCompaniesForAdminAsync();
         }
 
         public async Task<List<CompanyInfoIdAndNameDto>> GetCompaniesAsync()
@@ -79,14 +86,17 @@ namespace CarGo.Service
             return await _repository.UpdateCompanyLocationAsync(companyLocations);
         }
 
-        public async Task<bool> CreateCompanyByAdminAsync(Company company)
+        public async Task<bool> CreateCompanyByAdminAsync(Company company, User newManager)
         {
-            var userId = _tokenService.GetCurrentUserId();
+            var adminId = _tokenService.GetCurrentUserId();
             company.Id = Guid.NewGuid();
-            company.CreatedByUserId = userId;
-            company.UpdatedByUserId = userId;
-            return await _companyRequestRepository.CreateCompanyAsync(company);
+            company.CreatedByUserId = adminId;
+            company.UpdatedByUserId = adminId;
 
+            var result = await _companyRequestRepository.CreateCompanyAsync(company);
+            var addUserAsManager = await _managerService.AddManagerToCompanyAsync(company.Id, newManager);
+
+            return result;
         }
 
         public async Task<List<CompanyLocationsDto>> GetAllCompanyLocationsAsync()

@@ -97,7 +97,7 @@ namespace CarGo.Repository
             }
         }
 
-        public async Task<bool> AddManagerToCompanyAsync(Guid companyId, Guid managerId)
+        public async Task<bool> AddManagerToCompanyAsync(Guid companyId, User managerId)
         {
             try
             {
@@ -108,9 +108,11 @@ namespace CarGo.Repository
                     using var command = new NpgsqlCommand(commandText, connection);
 
                     command.Parameters.AddWithValue("id", Guid.NewGuid());
-                    command.Parameters.AddWithValue("userId", managerId);
+                    command.Parameters.AddWithValue("userId", managerId.Id);
                     command.Parameters.AddWithValue("companyId", companyId);
                     
+                    connection.Open();
+
                     connection.Open();
 
                     var rowsAffected = await command.ExecuteNonQueryAsync();

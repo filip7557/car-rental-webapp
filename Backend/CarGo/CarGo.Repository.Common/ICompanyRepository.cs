@@ -10,6 +10,7 @@ namespace CarGo.Repository.Common
 {
     public interface ICompanyRepository
     {
+        public Task<List<Company>> GetCompaniesForAdminAsync();
         public Task<CompanyInfoDto?> GetCompanyAsync(Guid id);
 
         public Task<List<CompanyInfoIdAndNameDto>> GetCompaniesAsync();

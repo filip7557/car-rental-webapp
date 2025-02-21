@@ -63,14 +63,13 @@ class UserService {
 
   async getUserByEmail(email) {
     try {
-      const response = await axiosClient.get(`/api/User/getByEmail/${email}`)
-      console.log(response.data);
+      const response = await axiosClient.get(`/api/User/get-by-email/${email}`);
       return response.data;
-    }
-    catch (error) {
-      return [];
+    } catch (error) {
+      console.log(error);
     }
   }
+
 }
 
 const userService = new UserService();
