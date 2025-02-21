@@ -25,7 +25,7 @@ import ManageCompanyPage from "./pages/ManageCompanyPage/ManageCompanyPage.jsx";
 import CompaniesPage from "./pages/CompaniesPage/CompaniesPage.jsx";
 import CompanyPage from "./pages/CompanyReviews/CompanyReviewsPage.jsx";
 import ManageManagersPage from "./pages/ManageManagersPage/ManageManagersPage.jsx";
-import AddBookingPage
+import AddBookingPage from "./pages/AddBookingPage/AddBookingPage.jsx";
 function App() {
   return (
     <Routes>
