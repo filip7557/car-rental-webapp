@@ -41,6 +41,19 @@ class VehicleService {
 		}
 	}
 
+	async getVehicleById(vehicleId) {
+		try {
+			const response = await axiosClient.get(
+				`/api/CompanyVehicle/${vehicleId}`
+			);
+			console.log("Vehicle details fetched:", response.data);
+			return response.data;
+		} catch (error) {
+			console.error("Greška pri dohvaćanju vozila:", error);
+			throw error;
+		}
+	}
+
 	async addVehicle(
 		vehicleModelId,
 		dailyPrice,
@@ -80,6 +93,49 @@ class VehicleService {
 				error.response?.data || error
 			);
 			return { success: false, message: "Greška prilikom dodavanja vozila." };
+		}
+	}
+
+	async updateVehicle(
+		vehicleId,
+		vehicleModelId,
+		dailyPrice,
+		colorId,
+		plateNumber,
+		imageUrl,
+		currentLocationId,
+		isOperational,
+		isActive
+	) {
+		try {
+			const payload = {
+				vehicleModelId,
+				dailyPrice: dailyPrice ? parseFloat(dailyPrice) : undefined,
+				colorId,
+				plateNumber,
+				imageUrl,
+				currentLocationId,
+				isOperational,
+				isActive,
+			};
+
+			const filteredPayload = Object.fromEntries(
+				Object.entries(payload).filter(
+					([_, value]) => value !== undefined && value !== null && value !== ""
+				)
+			);
+
+			await axiosClient.put(
+				`/api/CompanyVehicle/${vehicleId}`,
+				filteredPayload
+			);
+			return { success: true };
+		} catch (error) {
+			console.error(
+				"Greška pri ažuriranju vozila:",
+				error.response?.data || error
+			);
+			return { success: false, message: "Greška prilikom ažuriranja vozila." };
 		}
 	}
 }
