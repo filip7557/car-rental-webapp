@@ -1,6 +1,6 @@
 import axiosClient from "../axiosClient";
 
-class CompanyRegisterService {
+class CompanyService {
     async createCompanyRequest(companyData) {
         try {
             const response = await axiosClient.post("/api/CompanyRequest/new-company-request", companyData);
