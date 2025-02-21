@@ -18,7 +18,6 @@ const AddReview = () => {
       return;
     }
 
-    debugger;
     let reviewData = {
       title,
       description,

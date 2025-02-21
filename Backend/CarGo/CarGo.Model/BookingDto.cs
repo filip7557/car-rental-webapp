@@ -9,6 +9,7 @@ namespace CarGo.Model
     public class BookingDto
     {
         public Guid Id { get; set; }
+        public Guid CompanyId { get; set; }
         public string BookingStatus { get; set; }
         public string VehicleMake { get; set; }
         public string VehicleModel { get; set; }
