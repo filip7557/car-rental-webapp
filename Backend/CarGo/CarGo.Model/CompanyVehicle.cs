@@ -4,7 +4,9 @@
     {
         public Guid CompanyVehicleId { get; set; }
         public string VehicleModel { get; set; }
+        public Guid VehicleModelId { get; set; }
         public string VehicleMake { get; set; }
+        public Guid VehicleMakeId { get; set; }
         public string CompanyName { get; set; }
         public Guid CompanyId { get; set; }
         public string VehicleType { get; set; }
@@ -15,6 +17,7 @@
         public Guid? ColorId { get; set; }
         public int? EnginePower { get; set; }
         public bool isActive { get; set; } 
+        public Guid? CurrentLocationId { get; set; }
 
     }
         

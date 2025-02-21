@@ -58,6 +58,18 @@ class CompanyService {
             throw error;
         }
     }
+
+    async getCompanyInfoById(id) {
+		try {
+			const response = await axiosClient.get(
+				`/api/Company/get-company-info-by-id/${id}`
+			);
+			return response.data;
+		} catch (error) {
+			console.error("Greška pri dohvaćanju podataka o kompaniji:", error);
+			return null;
+		}
+	}
 }
 
 export default new CompanyService();

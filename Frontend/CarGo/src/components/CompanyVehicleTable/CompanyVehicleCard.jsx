@@ -8,7 +8,7 @@ const CompanyVehicleCard = ({ vehicle }) => {
 	if (!vehicle) return null;
 
 	const handleDetailsClick = (id) => {
-		navigate(`/vehicle/${id}`);
+		navigate(`/addBooking/${id}`);
 	};
 
 	return (

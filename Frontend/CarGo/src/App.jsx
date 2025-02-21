@@ -23,6 +23,7 @@ import RegisterPage from "./pages/RegisterPage/RegisterPage.jsx";
 import AddVehiclePage from "./pages/VehiclePage/AddVehiclePage.jsx";
 import CompaniesPage from "./pages/CompaniesPage/CompaniesPage.jsx";
 import ManageManagersPage from "./pages/ManageManagersPages/ManageManagersPage.jsx";
+import AddBookingPage from "./components/AddBookingPage/AddBookingPage.jsx";
 
 function App() {
   return (
@@ -46,13 +47,14 @@ function App() {
       <Route path="/add-Review/:id" element={<AddReviewPage />} />
       <Route path="/notifications" element={<NotificationsPage />} />
       <Route path="/manageCompanyVehicles" element={<ManageVehiclesPage />} />
-      <Route path="/manageCompany/" element={<ManageCompanyPage />} />
+      <Route path="/manageCompany" element={<ManageCompanyPage />} />
       <Route
         path="/manageLocations/:id"
         element={<ManageLocationsPage />}
       />
       <Route path="/manageManagers" element={<ManageManagersPage />} />
 			<Route path="/all-companies" element={<CompaniesPage />} />
+      <Route path="/addBooking/:id" element={<AddBookingPage />} />
 		</Routes>
 	);
 }

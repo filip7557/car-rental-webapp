@@ -96,8 +96,16 @@ namespace CarGo.Service
         public async Task AddBookingAsync(Booking booking)
         {
             var userId = _tokenService.GetCurrentUserId();
+            booking.UserId = userId;
+            var statuses = await _bookingStatus.GetAllAsync();
+            Console.WriteLine(statuses.ToString());
+            booking.StatusId = statuses.FirstOrDefault(p => p.Name.Equals("Active"))!.ID;
+            Console.WriteLine(booking.StatusId);
             await _repository.AddBookingAsync(booking, userId);
             var companyVehicle = await _companyVehicleService.GetCompanyVehicleByIdAsync(booking.CompanyVehicleId);
+            var wholeCompanyVehicle = await _companyVehicleService.GetWholeCompanyVehicleByIdAsync(booking.CompanyVehicleId);
+            wholeCompanyVehicle.CurrentLocationId = null;
+            await _companyVehicleService.UpdateCompanyVehicleAsync(booking.CompanyVehicleId, wholeCompanyVehicle!);
             var vehicleModel = companyVehicle.VehicleModel;
             var user = await _userService.GetUserDTOByIdAsync(booking.UserId);
             var company = await _companyService.GetCompanyAsync((Guid)companyVehicle.CompanyId!);
