@@ -22,13 +22,10 @@ import RegisterPage from "./pages/RegisterPage/RegisterPage.jsx";
 import AddVehiclePage from "./pages/VehiclePage/AddVehiclePage.jsx";
 import EditVehiclePage from "./pages/VehiclePage/EditVehiclePage.jsx";
 import ManageCompanyPage from "./pages/ManageCompanyPage/ManageCompanyPage.jsx";
-import ManageManagersPage from "./pages/ManageManagersPage/ManageManagersPage.jsx";
 import CompaniesPage from "./pages/CompaniesPage/CompaniesPage.jsx";
-import AddBookingPage from "./components/AddBookingPage/AddBookingPage.jsx";
-import CompaniesPage from "./pages/CompaniesPage/CompaniesPage.jsx";
-import ManageManagersPage from "./pages/ManageManagersPages/ManageManagersPage.jsx";
 import CompanyPage from "./pages/CompanyReviews/CompanyReviewsPage.jsx";
-
+import ManageManagersPage from "./pages/ManageManagersPage/ManageManagersPage.jsx";
+import AddBookingPage
 function App() {
   return (
     <Routes>
