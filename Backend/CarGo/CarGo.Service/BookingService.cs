@@ -123,10 +123,10 @@ namespace CarGo.Service
             await _repository.UpdateBookingAsync(id, updatedBooking, userId);
         }
 
-        public async Task UpdateBookingStatusAsync(Guid id, Guid statusId)
+        public async Task UpdateBookingStatusAsync(Guid id)
         {
             var userId = _tokenService.GetCurrentUserId();
-            await _repository.UpdateBookingStatusAsync(id, statusId, userId);
+            await _repository.UpdateBookingStatusAsync(id, userId);
         }
 
         public async Task SoftDeleteBookingAsync(Guid id)

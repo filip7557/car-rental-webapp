@@ -14,6 +14,6 @@ namespace CarGo.Repository.Common
         Task AddBookingAsync(Booking booking, Guid createdByUserId);
 
         Task UpdateBookingAsync(Guid id, Booking updatedBooking, Guid createdByUserId);
-        Task UpdateBookingStatusAsync(Guid id, Guid statusId, Guid createdByUserId);
+        Task UpdateBookingStatusAsync(Guid id, Guid createdByUserId);
     }
 }

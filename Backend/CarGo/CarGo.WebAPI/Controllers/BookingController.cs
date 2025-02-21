@@ -182,12 +182,9 @@ namespace CarGo.WebAPI.Controllers
 
         [Authorize]
         [HttpPut("{id}/status")]
-        public async Task<IActionResult> UpdateBookingStatusAsync(Guid id, [FromBody] Guid statusId)
+        public async Task<IActionResult> UpdateBookingStatusAsync(Guid id)
         {
-            if (statusId == Guid.Empty)
-            {
-                return BadRequest("The Booking status ID is incorrect");
-            }
+ 
 
             try
             {
@@ -199,7 +196,7 @@ namespace CarGo.WebAPI.Controllers
                 }
 
                
-                await _service.UpdateBookingStatusAsync(id, statusId);
+                await _service.UpdateBookingStatusAsync(id);
                 return Ok("Booking status has been successfully updated");
             }
             catch (Exception ex)
