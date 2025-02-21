@@ -18,6 +18,7 @@ const AddReview = () => {
       return;
     }
 
+    debugger;
     let reviewData = {
       title,
       description,
@@ -72,6 +73,13 @@ const AddReview = () => {
             disabled={loading}
           >
             {loading ? "Submitting..." : "Add Review"}
+          </button>
+
+          <button
+            className="damage-report-btn"
+            onClick={() => navigate(`/addDamageReport/${id}`)}
+          >
+            Report Damage
           </button>
           <button
             className="cancel-btn"
