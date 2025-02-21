@@ -50,12 +50,9 @@ namespace CarGo.WebAPI.Controllers
         [Authorize(Roles = "Administrator")]
         [HttpGet("get-all-company-requests")]
         public async Task<IActionResult> GetAllCompanyRequestsAsync(
-            bool? isActive = null,
-            int? pageNumber = null,
-            int? rpp = null
+            bool? isActive = null
             )
         {
-
             try
             {
                 var companyRequests = await _companyRequestRepository.GetCompanyRequestsAsync();

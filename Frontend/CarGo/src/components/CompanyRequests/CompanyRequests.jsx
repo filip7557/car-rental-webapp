@@ -5,8 +5,6 @@ import './CompanyRequests.css';
 const CompanyRequests = () => {
   const [companyRequests, setCompanyRequests] = useState([]);
   const [isActiveFilter, setIsActiveFilter] = useState(true);
-  const [page, setPage] = useState(1);
-  const [rpp, setRpp] = useState(10);
   
   const getCompanyRequests = async () => {
     try {
@@ -29,7 +27,7 @@ const CompanyRequests = () => {
 
   useEffect(() => {
     getCompanyRequests();
-  }, [isActiveFilter, page, rpp]);
+  }, [isActiveFilter]);
 
   return (
     <div>
@@ -77,14 +75,6 @@ const CompanyRequests = () => {
           </tbody>
         </table>
       )}
-
-      <div>
-        <button onClick={() => setPage((prev) => Math.max(prev - 1, 1))} disabled={page === 1}>
-          Previous
-        </button>
-        <span> Page {page} </span>
-        <button onClick={() => setPage((prev) => prev + 1)}>Next</button>
-      </div>
     </div>
   );
 };
