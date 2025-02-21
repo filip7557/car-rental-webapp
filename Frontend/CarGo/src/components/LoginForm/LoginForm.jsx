@@ -20,26 +20,25 @@ function LoginForm() {
   function handleSubmit(e) {
     e.preventDefault();
     if (!(email && password)) {
-        alert("Email and password fields must be filled.");
-        return;
+      alert("Email and password fields must be filled.");
+      return;
     }
-    userService.loginUser(email, password)
-        .then((response) => {
-            if (response === "Invalid credentials.") {
-                alert("Invalid credentials.");
-                localStorage.clear();
-            }
-            else {
-                navigate("/")
-            }
-        })
+    userService.loginUser(email, password).then((response) => {
+      if (response === "Invalid credentials.") {
+        alert("Invalid credentials.");
+        localStorage.clear();
+      } else {
+        const role = localStorage.getItem("role");
+        if (role === "Manager") navigate("/manageCompany");
+        else navigate("/cvehiclePage");
+      }
+    });
   }
 
   function handleLabelClick() {
     setEmail("");
     setPassword("");
     navigate("/register");
-
   }
 
   return (

@@ -102,7 +102,7 @@ class CompanyVehicleService {
 		try {
 			const response = await axiosClient.get(`/api/CompanyVehicle/${id}`);
 			console.log(response.data);
-			return response.data.data;
+			return response.data;
 		} catch (error) {
 			console.log(error);
 			return [];

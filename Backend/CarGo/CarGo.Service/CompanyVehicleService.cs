@@ -128,16 +128,20 @@ namespace CarGo.Service
             {
                 CompanyVehicleId = (Guid)companyVehicle.Id,
                 VehicleMake = vehicleMake.Name,
+                VehicleMakeId = vehicleMake.ID,
                 VehicleModel = vehicleModel.Name!,
+                VehicleModelId = vehicleModel.Id,
                 ImageUrl = companyVehicle.ImageUrl,
                 CompanyName = company!.Name,
                 CompanyId = company.Id,
                 PlateNumber = companyVehicle.PlateNumber,
                 DailyPrice = companyVehicle.DailyPrice,
                 Color = vehicleColor.Name,
+                ColorId = vehicleColor.ID,
                 EnginePower = vehicleModel.EnginePower,
                 VehicleType = vehicleType!.Name,
-                isActive = companyVehicle.IsActive
+                isActive = companyVehicle.IsActive,
+                CurrentLocationId = companyVehicle.CurrentLocationId
             };
         }
 
