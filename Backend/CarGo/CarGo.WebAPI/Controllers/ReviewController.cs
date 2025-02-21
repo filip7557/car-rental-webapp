@@ -23,7 +23,7 @@ namespace CarGo.WebAPI.Controllers
        
         [HttpGet("{id}")]
         [Authorize]
-        public async Task<IActionResult> GetReviewByCompanyIdAsync(Guid id) 
+        public async Task<IActionResult> GetReviewsByCompanyIdAsync(Guid id) 
         {
             try
             {

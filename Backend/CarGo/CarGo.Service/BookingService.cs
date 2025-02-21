@@ -55,7 +55,9 @@ namespace CarGo.Service
 
             foreach (var booking in bookings)
             {
+
                 var companyVehicle = await _companyVehicleService.GetCompanyVehicleByIdAsync(booking.CompanyVehicleId);
+
                 var vehicleModel = companyVehicle != null
                     ? companyVehicle.VehicleModel
                     : null;
@@ -72,6 +74,7 @@ namespace CarGo.Service
                 var response = new BookingDto
                 {
                     Id = booking.Id,
+                    CompanyId = company.Id,
                     BookingStatus = status?.Name ?? "Unknown",
                     VehicleMake = vehicleMake ?? "Unknown",
                     VehicleModel = vehicleModel ?? "Unknown",

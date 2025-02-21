@@ -21,11 +21,11 @@ import ProfilePage from "./pages/ProfilePage/ProfilePage.jsx";
 import RegisterPage from "./pages/RegisterPage/RegisterPage.jsx";
 import AddVehiclePage from "./pages/VehiclePage/AddVehiclePage.jsx";
 import EditVehiclePage from "./pages/VehiclePage/EditVehiclePage.jsx";
-import ManageCompanyPage from "./pages/ManageCompanyPage/ManageCompanyPage.jsx"
-import ManageManagersPage from "./pages/ManageManagersPage/ManageManagersPage.jsx"
-import CompaniesPage from "./pages/CompaniesPage/CompaniesPage.jsx"
-import AddBookingPage from "./components/AddBookingPage/AddBookingPage.jsx";
-
+import ManageCompanyPage from "./pages/ManageCompanyPage/ManageCompanyPage.jsx";
+import CompaniesPage from "./pages/CompaniesPage/CompaniesPage.jsx";
+import CompanyPage from "./pages/CompanyReviews/CompanyReviewsPage.jsx";
+import ManageManagersPage from "./pages/ManageManagersPage/ManageManagersPage.jsx";
+import AddBookingPage from "./pages/AddBookingPage/AddBookingPage.jsx";
 function App() {
   return (
     <Routes>
@@ -41,24 +41,28 @@ function App() {
       <Route path="/addDamageReport/:id" element={<AddDamageReportPage />} />
       <Route path="/bookingsPage" element={<BookingsPage />} />
       <Route path="/cvehiclePage" element={<CompanyVehiclePage />} />
-      <Route path="/vehicle-maintenance/:vehicleId" element={<CompanyVehicleMaintenancePage />} />
-      <Route path="/add-maintenance-report/:vehicleId" element={<AddMaintenanceReportPage />} />
+      <Route
+        path="/vehicle-maintenance/:vehicleId"
+        element={<CompanyVehicleMaintenancePage />}
+      />
+      <Route
+        path="/add-maintenance-report/:vehicleId"
+        element={<AddMaintenanceReportPage />}
+      />
       <Route path="/damageReport/:id" element={<DamageReportPage />} />
       <Route path="/create-company-by-admin" element={<CompanyCreatePage />} />
       <Route path="/add-Review/:id" element={<AddReviewPage />} />
       <Route path="/notifications" element={<NotificationsPage />} />
       <Route path="/manageCompanyVehicles" element={<ManageVehiclesPage />} />
       <Route path="/manageCompany" element={<ManageCompanyPage />} />
-      <Route
-        path="/manageLocations/:id"
-        element={<ManageLocationsPage />}
-      />
+      <Route path="/manageLocations/:id" element={<ManageLocationsPage />} />
+      <Route path="/companyReviews/:companyId" element={<CompanyPage />} />
       <Route path="/manageManagers" element={<ManageManagersPage />} />
-			<Route path="/all-companies" element={<CompaniesPage />} />
+      <Route path="/all-companies" element={<CompaniesPage />} />
       <Route path="/addBooking/:id" element={<AddBookingPage />} />
       <Route path="/edit-vehicle/:vehicleId" element={<EditVehiclePage />} />
-		</Routes>
-	);
+    </Routes>
+  );
 }
 
 export default App;

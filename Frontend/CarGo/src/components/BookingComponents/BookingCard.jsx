@@ -1,5 +1,5 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import "./BookingCard.css";
 
 const BookingCard = ({ booking, onCancelBooking }) => {
@@ -13,7 +13,14 @@ const BookingCard = ({ booking, onCancelBooking }) => {
 
   return (
     <div className="booking-card">
-      <h3>{booking.companyName || "N/A"}</h3>
+      <h3>
+        <Link
+          to={`/companyReviews/${booking.companyId}`}
+          className="company-name-link"
+        >
+          {booking.companyName || "N/A"}
+        </Link>
+      </h3>
       <p>
         <strong>Vehicle Make:</strong> {booking.vehicleMake || "N/A"}
       </p>
