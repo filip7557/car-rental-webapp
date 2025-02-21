@@ -113,8 +113,6 @@ namespace CarGo.Repository
                     
                     connection.Open();
 
-                    connection.Open();
-
                     var rowsAffected = await command.ExecuteNonQueryAsync();
                     if (rowsAffected == 0)
                     {

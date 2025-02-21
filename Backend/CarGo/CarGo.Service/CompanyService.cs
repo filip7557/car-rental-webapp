@@ -108,13 +108,18 @@ namespace CarGo.Service
         {
             var userId = _tokenService.GetCurrentUserId();
             var role = _tokenService.GetCurrentUserRoleName();
+            var managers = await _managerService.GetAllCompanyManagersAsync(Id);
             if (role.Equals(RoleName.Manager.ToString()))
             {
-                var managers = await _managerService.GetAllCompanyManagersAsync(Id);
                 if (!managers.Any(x => x.Id == userId))
                 {
                     return false;
                 }
+            }
+
+            foreach (var manager in managers)
+            {
+                await _managerService.RemoveManagerFromCompanyAsync(Id, manager);
             }
 
             return await _repository.ChangeCompanyIsActiveStatusAsync(Id, isActive, userId);
