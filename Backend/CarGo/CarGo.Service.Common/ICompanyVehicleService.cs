@@ -13,6 +13,8 @@ namespace CarGo.Service.Common
 
         Task<CompanyVehicleDTO> GetCompanyVehicleByIdAsync(Guid id);
 
+        Task<CompanyVehicle> GetWholeCompanyVehicleByIdAsync(Guid id);
+
         Task<bool> AddCompanyVehicleAsync(CompanyVehicle companyVehicle);
 
         Task<bool> UpdateCompanyVehicleAsync(Guid id, CompanyVehicle updatedCompanyVehicle);

@@ -422,27 +422,35 @@ namespace CarGo.Repository
             string commandText =
                 "UPDATE \"CompanyVehicle\" SET \"CompanyId\" = @companyId, \"VehicleModelId\" = @vehicleModelId, \"DailyPrice\" = @dailyPrice, \"ColorId\" = @colorId, \"PlateNumber\" = @plateNumber, \"ImageUrl\" = @imageUrl, \"CurrentLocationId\" = @currentLocationId, \"IsOperational\" = @isOperational, \"IsActive\" = @isActive, \"UpdatedByUserId\" = @updatedByUserId, \"DateUpdated\" = CURRENT_TIMESTAMP WHERE \"Id\" = @id";
 
-            using (var connection = new NpgsqlConnection(connectionString))
+            try
             {
-                await connection.OpenAsync();
-                using (var command = new NpgsqlCommand(commandText, connection))
-                {
-                    command.Parameters.AddWithValue("@id", id);
-                    command.Parameters.AddWithValue("@companyId", updatedCompanyVehicle.CompanyId);
-                    command.Parameters.AddWithValue("@vehicleModelId", updatedCompanyVehicle.VehicleModelId);
-                    command.Parameters.AddWithValue("@dailyPrice", updatedCompanyVehicle.DailyPrice);
-                    command.Parameters.AddWithValue("@colorId", updatedCompanyVehicle.ColorId);
-                    command.Parameters.AddWithValue("@plateNumber", updatedCompanyVehicle.PlateNumber);
-                    command.Parameters.AddWithValue("@imageUrl",
-                        updatedCompanyVehicle.ImageUrl ?? (object)DBNull.Value);
-                    command.Parameters.AddWithValue("@currentLocationId",
-                        updatedCompanyVehicle.CurrentLocationId ?? (object)DBNull.Value);
-                    command.Parameters.AddWithValue("@isOperational", updatedCompanyVehicle.IsOperational);
-                    command.Parameters.AddWithValue("@isActive", updatedCompanyVehicle.IsActive);
-                    command.Parameters.AddWithValue("@updatedByUserId", userId);
 
-                    return await command.ExecuteNonQueryAsync() > 0;
+                using (var connection = new NpgsqlConnection(connectionString))
+                {
+                    connection.Open();
+                    using (var command = new NpgsqlCommand(commandText, connection))
+                    {
+                        command.Parameters.AddWithValue("@id", id);
+                        command.Parameters.AddWithValue("@companyId", updatedCompanyVehicle.CompanyId);
+                        command.Parameters.AddWithValue("@vehicleModelId", updatedCompanyVehicle.VehicleModelId);
+                        command.Parameters.AddWithValue("@dailyPrice", updatedCompanyVehicle.DailyPrice);
+                        command.Parameters.AddWithValue("@colorId", updatedCompanyVehicle.ColorId);
+                        command.Parameters.AddWithValue("@plateNumber", updatedCompanyVehicle.PlateNumber);
+                        command.Parameters.AddWithValue("@imageUrl",
+                            updatedCompanyVehicle.ImageUrl ?? (object)DBNull.Value);
+                        command.Parameters.AddWithValue("@currentLocationId",
+                            updatedCompanyVehicle.CurrentLocationId ?? (object)DBNull.Value);
+                        command.Parameters.AddWithValue("@isOperational", updatedCompanyVehicle.IsOperational);
+                        command.Parameters.AddWithValue("@isActive", updatedCompanyVehicle.IsActive);
+                        command.Parameters.AddWithValue("@updatedByUserId", userId);
+
+                        return await command.ExecuteNonQueryAsync() > 0;
+                    }
                 }
+            } catch(Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return false;
             }
         }
 

@@ -12,7 +12,7 @@ function NavBar() {
       <nav className="navbar">
         <h3>CarGo</h3>
         <div className="nav-menu">
-          <Link to="/">Home</Link>
+          <Link to={localStorage.getItem("userId") ? "/cvehiclePage" : "/"}>Home</Link>
           {localStorage.getItem("userId") ? (
             <>
               <Link to="/bookingsPage">Bookings</Link>

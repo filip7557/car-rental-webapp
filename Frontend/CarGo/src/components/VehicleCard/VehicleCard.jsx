@@ -16,7 +16,7 @@ function VehicleCard({ vehicle }) {
           <strong>Company:</strong> {vehicle?.companyName || "N/A"}
         </p>
         <p>
-          <strong>Price:</strong> {vehicle?.dailyPrice} € per day
+          <strong>Price:</strong> {vehicle?.dailyPrice?.toFixed(2)} € per day
         </p>
         <p>
           <strong>Plate:</strong> {vehicle?.plateNumber || "N/A"}
