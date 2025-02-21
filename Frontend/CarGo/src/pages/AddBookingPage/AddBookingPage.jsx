@@ -34,16 +34,14 @@ function AddBookingPage() {
   }
 
   function handleAddClick() {
-    if (
-      booking.pickUpLocationId !== "" &&
-      booking.dropOffLocationId !== "" &&
-      booking.startDate !== "" &&
-      booking.endDate != "" &&
-      totalPrice !== 0
-    ) {
-      booking.companyVehicleId = vehicle.companyVehicleId;
-      booking.totalPrice = totalPrice;
-      addBooking(booking).then(navigate("/bookingsPage"));
+    if((booking.pickUpLocationId !== "" && booking.dropOffLocationId !== "" && booking.startDate !== "" && booking.endDate != "" && totalPrice !== 0)) {
+        booking.companyVehicleId = vehicle.companyVehicleId;
+        booking.totalPrice = totalPrice;
+        addBooking(booking).then(() => {
+            alert("You have booked this vehicle.")
+            navigate(-1);
+        }
+        );
     } else {
       alert("Input all fields.");
     }

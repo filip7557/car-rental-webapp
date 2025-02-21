@@ -13,6 +13,10 @@ function EditVehicleCard({ vehicle, setDeleteVehId, setShowPopup }) {
 	setShowPopup(true);
   }
 
+
+  function handleDamageReportsClick() {
+    navigate(`/damageReport/${vehicle.companyVehicleId}`);
+  }
   return (
     <div className="editVehicleCard">
       <h3>
@@ -38,6 +42,7 @@ function EditVehicleCard({ vehicle, setDeleteVehId, setShowPopup }) {
       <p>
         <strong>Engine Power:</strong> {vehicle.enginePower} HP
       </p>
+      <button onClick={handleDamageReportsClick}>Damage Reports</button>
       <button onClick={handleEditClick} className="button">
         Edit
       </button>

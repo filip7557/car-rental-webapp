@@ -28,6 +28,7 @@ function AddDamageReportForm({ bookingId }) {
     if (damageReport.title === "") alert("Title field must be filled.");
     else {
       damageReportService.createDamageReport(damageReport, images).then(() => {
+        navigate(-1);
       });
     }
   }
