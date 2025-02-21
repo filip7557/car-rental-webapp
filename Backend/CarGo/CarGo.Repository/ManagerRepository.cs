@@ -97,18 +97,23 @@ namespace CarGo.Repository
             }
         }
 
-        public async Task<bool> AddManagerToCompanyAsync(Guid companyId, Guid managerId)
+        public async Task<bool> AddManagerToCompanyAsync(Guid companyId, User managerId)
         {
             try
             {
                 using (var connection = new NpgsqlConnection(_connectionString))
                 {
                     string commandText =
-                        "INSERT INTO \"UserCompany\" (\"UserId\", \"CompanyId\") VALUES (@userId, @companyId);";
+                        "INSERT INTO \"UserCompany\" (\"Id\", \"UserId\", \"CompanyId\") VALUES (@id, @userId, @companyId);";
                     using var command = new NpgsqlCommand(commandText, connection);
 
-                    command.Parameters.AddWithValue("userId", managerId);
+                    command.Parameters.AddWithValue("id", Guid.NewGuid());
+                    command.Parameters.AddWithValue("userId", managerId.Id);
                     command.Parameters.AddWithValue("companyId", companyId);
+                    
+                    connection.Open();
+
+                    connection.Open();
 
                     var rowsAffected = await command.ExecuteNonQueryAsync();
                     if (rowsAffected == 0)
@@ -140,6 +145,8 @@ namespace CarGo.Repository
 
                     command.Parameters.AddWithValue("userId", managerId);
                     command.Parameters.AddWithValue("companyId", companyId);
+
+                    connection.Open();
 
                     var rowsAffected = await command.ExecuteNonQueryAsync();
                     if (rowsAffected == 0)

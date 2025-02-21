@@ -27,13 +27,13 @@ namespace CarGo.Service
             return await _managerRepository.GetManagerByIdAsync(userId);
         }
 
-        public async Task<bool> AddManagerToCompanyAsync(Guid companyId, User user)
+        public async Task<bool> AddManagerToCompanyAsync(Guid companyId, User newManager)
         {
-            var result = await _managerRepository.AddManagerToCompanyAsync(companyId, user.Id);
+            var result = await _managerRepository.AddManagerToCompanyAsync(companyId, newManager);
             if (result)
             {
                 var role = await _roleService.GetRoleByNameAsync("Manager");
-                return await _userService.UpdateUserRoleByUserIdAsync(user.Id, role.Id);
+                return await _userService.UpdateUserRoleByUserIdAsync(newManager.Id, role.Id);
             }
 
             return false;

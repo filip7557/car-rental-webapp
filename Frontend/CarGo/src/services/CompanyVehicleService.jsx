@@ -1,7 +1,6 @@
 import axiosClient from "../axiosClient";
 
 class CompanyVehicleService {
-	// currentPage = 1;
 	// isAsc = true;
 	// currentSort = "Id";
 	// sortOrder = "ASC";
@@ -43,12 +42,21 @@ class CompanyVehicleService {
 		}
 	}
 
-	async getCompanyVehicles(vehicleMakeId, vehicleModelId, vehicleTypeId) {
+	async getCompanyVehicles(
+		pageNumber,
+		pageSize,
+		orderBy,
+		vehicleMakeId = null
+	) {
 		//this.sortOrder = this.isAsc ? "ASC" : "DESC";
 		try {
 			if (!vehicleMakeId) vehicleMakeId = null;
 			const response = await axiosClient.get("/api/CompanyVehicle", {
 				params: {
+					pageNumber: pageNumber,
+					rpp: pageSize,
+					orderBy,
+					// PageNumber: this.PageNumber,
 					vehMakeId: this.vehicleMakeId,
 					vehiModId: this.vehicleModelId,
 					vehTypeId: this.vehicleTypeId,
@@ -62,29 +70,44 @@ class CompanyVehicleService {
 		}
 	}
 
-  async getCompanyVehicleById(id) {
-    try {
-      const response = await axiosClient.get(`/api/CompanyVehicle/${id}`);
-      console.log(response.data);
-      return response.data;
-    } catch (error) {
-      console.log(error);
-      return [];
-    }
-  }
+	async getAvailableCompanyVehicles(
+		pageNumber,
+		pageSize,
+		orderBy,
+		vehicleMakeId = null
+	) {
+		//this.sortOrder = this.isAsc ? "ASC" : "DESC";
+		try {
+			if (!vehicleMakeId) vehicleMakeId = null;
+			const response = await axiosClient.get("/api/CompanyVehicle/available", {
+				params: {
+					pageNumber: pageNumber,
+					rpp: pageSize,
+					orderBy,
+					// PageNumber: this.PageNumber,
+					vehMakeId: this.vehicleMakeId,
+					vehiModId: this.vehicleModelId,
+					vehTypeId: this.vehicleTypeId,
+				},
+			});
+			console.log(response.data);
+			return response.data;
+		} catch (error) {
+			console.log(error);
+			return [];
+		}
+	}
 
-  async getCompanyVehiclesByCompanyId(id) {
-    try {
-      const response = await axiosClient.get("/api/CompanyVehicle", {
-        params: { companyId: id },
-      });
-      console.log(response.data);
-      return response.data;
-    } catch (error) {
-      console.log(error);
-      return [];
-    }
-  }
+	async getCompanyVehicleById(id) {
+		try {
+			const response = await axiosClient.get(`/api/CompanyVehicle/${id}`);
+			console.log(response.data);
+			return response.data;
+		} catch (error) {
+			console.log(error);
+			return [];
+		}
+	}
 }
 
 const companyVehicleService = new CompanyVehicleService();

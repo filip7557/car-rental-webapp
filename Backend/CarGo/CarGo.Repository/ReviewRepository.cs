@@ -79,10 +79,10 @@ namespace CarGo.Repository
                         " (@id, @title, @desc, @bookingId, @createdBy, @updatedBy);";
                     using var command = new NpgsqlCommand(commandText, connection);
 
-                    command.Parameters.AddWithValue("id", NpgsqlTypes.NpgsqlDbType.Uuid, review.Id);
+                    command.Parameters.AddWithValue("id", review.Id);
                     command.Parameters.AddWithValue("title", review.Title);
                     command.Parameters.AddWithValue("desc", review.Description);
-                    command.Parameters.AddWithValue("bookingId", NpgsqlTypes.NpgsqlDbType.Uuid, review.BookingId);
+                    command.Parameters.AddWithValue("bookingId",  review.BookingId);
                     command.Parameters.AddWithValue("createdBy", createdByUserId);
                     command.Parameters.AddWithValue("updatedBy", createdByUserId);
 

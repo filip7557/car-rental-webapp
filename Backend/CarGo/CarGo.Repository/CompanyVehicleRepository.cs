@@ -10,6 +10,13 @@ namespace CarGo.Repository
     {
         private string connectionString = Environment.GetEnvironmentVariable("ConnectionStrings__PostgresDb");
 
+        private readonly Dictionary<string, string> sortOrders = new Dictionary<string, string>
+        {
+            { "VehicleModel", "vm.\"Name\"" },
+            { "VehicleMake", "vmm.\"Name\"" },
+            { "Id", "cv.\"Id\"" }
+        };
+
         public async Task<List<CompanyVehicle>> GetAllCompanyVehiclesAsync(BookingSorting sorting, Paging paging,
             CompanyVehicleFilter filter)
         {
@@ -29,19 +36,89 @@ namespace CarGo.Repository
                         "vm.\"Name\" AS \"Model\", " +
                         "vmm.\"Name\" AS \"Make\", " +
                         "vc.\"Name\" AS \"Color\", " +
-                        "cl.\"Address\" AS \"LocationAddress\", " +
-                        "cl.\"City\" AS \"LocationCity\", " +
                         "u.\"Id\" AS \"CreatedByUserId\", " +
                         "u.\"FullName\" AS \"CreatedByUser\", " +
                         "uu.\"Id\" AS \"UpdatedByUserId\", " +
                         "uu.\"FullName\" AS \"UpdatedByUser\" " +
                         "FROM \"CompanyVehicle\" cv " +
-                        "LEFT JOIN \"Booking\" b ON cv.\"Id\" = b.\"CompanyVehicleId\" " +
-                        "LEFT JOIN \"Company\" c ON cv.\"CompanyId\" = c.\"Id\" " +
+                        "JOIN \"Company\" c ON cv.\"CompanyId\" = c.\"Id\" " +
                         "JOIN \"VehicleModel\" vm ON cv.\"VehicleModelId\" = vm.\"Id\" " +
                         "JOIN \"VehicleMake\" vmm ON vm.\"MakeId\" = vmm.\"Id\" " +
                         "JOIN \"VehicleColor\" vc ON cv.\"ColorId\" = vc.\"Id\" " +
-                        "LEFT JOIN \"Location\" cl ON cv.\"CurrentLocationId\" = cl.\"Id\" " +
+                        "JOIN \"User\" u ON cv.\"CreatedByUserId\" = u.\"Id\" " +
+                        "JOIN \"User\" uu ON cv.\"UpdatedByUserId\" = uu.\"Id\" " +
+                        "WHERE 1 = 1");
+
+                    if (filter.UserRole == "User")
+                    {
+                        commandText.Append(" AND b.\"UserId\" = @userId");
+                        cmd.Parameters.AddWithValue("userId", filter.UserId);
+                    }
+
+                    else if (filter.UserRole == "Manager")
+                    {
+                        commandText.Append(@" AND cv.""CompanyId"" IN (SELECT ""CompanyId"" FROM ""UserCompany"" WHERE ""UserId"" = @userId)");
+                        cmd.Parameters.AddWithValue("userId", filter.UserId);
+                    }
+
+                    else if (filter.UserRole == "Administrator")
+                    {
+                        if (filter.CompanyId.HasValue)
+                        {
+                            commandText.Append(" AND cv.\"CompanyId\" = @companyId");
+                            cmd.Parameters.AddWithValue("companyId", filter.CompanyId.Value);
+                        }
+                    }
+
+                    ApplyFilters(cmd, commandText, filter);
+                    ApplySorting(cmd, commandText, sorting);
+                    ApplyPaging(cmd, commandText, paging);
+
+                    cmd.CommandText = commandText.ToString();
+                    connection.Open();
+
+                    using (var reader = await cmd.ExecuteReaderAsync())
+                    {
+                        while (await reader.ReadAsync())
+                        {
+                            vehicles.Add(ReadCompanyVehicle(reader));
+                        }
+                    }
+                }
+            }
+
+            return vehicles;
+        }
+
+        public async Task<List<CompanyVehicle>> GetAllAvailableCompanyVehiclesAsync(BookingSorting sorting, Paging paging,
+            CompanyVehicleFilter filter)
+        {
+            var vehicles = new List<CompanyVehicle>();
+            using (var connection = new NpgsqlConnection(connectionString))
+            {
+                using (var cmd = new NpgsqlCommand())
+                {
+                    cmd.Connection = connection;
+                    var commandText = new StringBuilder("SELECT " +
+                        "cv.*, " +
+                        "cv.\"DailyPrice\", " +
+                        "cv.\"ColorId\", " +
+                        "cv.\"PlateNumber\", " +
+                        "cv.\"ImageUrl\", cv.\"IsOperational\", cv.\"IsActive\", " +
+                        "c.\"Name\" AS \"CompanyName\", " +
+                        "vm.\"Name\" AS \"Model\", " +
+                        "vmm.\"Name\" AS \"Make\", " +
+                        "vc.\"Name\" AS \"Color\", " +
+                        "u.\"Id\" AS \"CreatedByUserId\", " +
+                        "u.\"FullName\" AS \"CreatedByUser\", " +
+                        "uu.\"Id\" AS \"UpdatedByUserId\", " +
+                        "uu.\"FullName\" AS \"UpdatedByUser\" " +
+                        "FROM \"CompanyVehicle\" cv " +
+                        "JOIN \"Company\" c ON cv.\"CompanyId\" = c.\"Id\" " +
+                        "JOIN \"VehicleModel\" vm ON cv.\"VehicleModelId\" = vm.\"Id\" " +
+                        "JOIN \"VehicleMake\" vmm ON vm.\"MakeId\" = vmm.\"Id\" " +
+                        "JOIN \"VehicleColor\" vc ON cv.\"ColorId\" = vc.\"Id\" " +
+                        "JOIN \"Location\" cl ON cv.\"CurrentLocationId\" = cl.\"Id\" " +
                         "JOIN \"User\" u ON cv.\"CreatedByUserId\" = u.\"Id\" " +
                         "JOIN \"User\" uu ON cv.\"UpdatedByUserId\" = uu.\"Id\" " +
                         "WHERE 1 = 1");
@@ -92,7 +169,7 @@ namespace CarGo.Repository
             if (!string.IsNullOrEmpty(sorting.OrderBy))
             {
                 var direction = sorting.SortOrder.ToUpper() == "DESC" ? "DESC" : "ASC";
-                commandText.Append($" ORDER BY \"{sorting.OrderBy}\" {direction}");
+                commandText.Append($" ORDER BY {sortOrders[sorting.OrderBy]} {direction}");
             }
         }
 
@@ -103,6 +180,47 @@ namespace CarGo.Repository
                 commandText.Append(" OFFSET @OFFSET FETCH NEXT @ROWS ROWS ONLY;");
                 cmd.Parameters.AddWithValue("@OFFSET", (paging.PageNumber - 1) * paging.Rpp);
                 cmd.Parameters.AddWithValue("@ROWS", paging.Rpp);
+            }
+        }
+        public async Task<int> CountAsync(CompanyVehicleFilter filter, bool available)
+        {
+            int count = 0;
+            try
+            {
+                using (var connection = new NpgsqlConnection(connectionString))
+                { //countaš samo available, ako tražiš available
+                    
+                    StringBuilder commandText = new StringBuilder(
+                        $"SELECT COUNT(cv.\"Id\") FROM \"CompanyVehicle\" cv {(available ? "JOIN \"Location\" cl ON cv.\"CurrentLocationId\" = cl.\"Id\"" : "")} JOIN \"VehicleModel\" vm ON cv.\"VehicleModelId\" = vm.\"Id\" JOIN \"VehicleMake\" vmm ON vm.\"MakeId\" = vmm.\"Id\" where 1=1");
+                    using var command = new NpgsqlCommand("", connection);
+                    ApplyFilters(command, commandText, filter);
+                    //command.Parameters.AddWithValue("compVehId", NpgsqlTypes.NpgsqlDbType.Uuid, companyVehicleId);
+
+                    command.CommandText = commandText.ToString();
+                    Console.WriteLine(command.CommandText);
+                    connection.Open();
+
+                    var reader = await command.ExecuteReaderAsync();
+                    if (reader.HasRows)
+                    {
+                        await reader.ReadAsync();
+                        int.TryParse(reader[0].ToString(), out count);
+                    }
+                    else
+                    {
+                        connection.Close();
+                        return 0;
+                    }
+
+                    connection.Close();
+
+                    return count;
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return 0;
             }
         }
 
@@ -304,27 +422,35 @@ namespace CarGo.Repository
             string commandText =
                 "UPDATE \"CompanyVehicle\" SET \"CompanyId\" = @companyId, \"VehicleModelId\" = @vehicleModelId, \"DailyPrice\" = @dailyPrice, \"ColorId\" = @colorId, \"PlateNumber\" = @plateNumber, \"ImageUrl\" = @imageUrl, \"CurrentLocationId\" = @currentLocationId, \"IsOperational\" = @isOperational, \"IsActive\" = @isActive, \"UpdatedByUserId\" = @updatedByUserId, \"DateUpdated\" = CURRENT_TIMESTAMP WHERE \"Id\" = @id";
 
-            using (var connection = new NpgsqlConnection(connectionString))
+            try
             {
-                await connection.OpenAsync();
-                using (var command = new NpgsqlCommand(commandText, connection))
-                {
-                    command.Parameters.AddWithValue("@id", id);
-                    command.Parameters.AddWithValue("@companyId", updatedCompanyVehicle.CompanyId);
-                    command.Parameters.AddWithValue("@vehicleModelId", updatedCompanyVehicle.VehicleModelId);
-                    command.Parameters.AddWithValue("@dailyPrice", updatedCompanyVehicle.DailyPrice);
-                    command.Parameters.AddWithValue("@colorId", updatedCompanyVehicle.ColorId);
-                    command.Parameters.AddWithValue("@plateNumber", updatedCompanyVehicle.PlateNumber);
-                    command.Parameters.AddWithValue("@imageUrl",
-                        updatedCompanyVehicle.ImageUrl ?? (object)DBNull.Value);
-                    command.Parameters.AddWithValue("@currentLocationId",
-                        updatedCompanyVehicle.CurrentLocationId ?? (object)DBNull.Value);
-                    command.Parameters.AddWithValue("@isOperational", updatedCompanyVehicle.IsOperational);
-                    command.Parameters.AddWithValue("@isActive", updatedCompanyVehicle.IsActive);
-                    command.Parameters.AddWithValue("@updatedByUserId", userId);
 
-                    return await command.ExecuteNonQueryAsync() > 0;
+                using (var connection = new NpgsqlConnection(connectionString))
+                {
+                    connection.Open();
+                    using (var command = new NpgsqlCommand(commandText, connection))
+                    {
+                        command.Parameters.AddWithValue("@id", id);
+                        command.Parameters.AddWithValue("@companyId", updatedCompanyVehicle.CompanyId);
+                        command.Parameters.AddWithValue("@vehicleModelId", updatedCompanyVehicle.VehicleModelId);
+                        command.Parameters.AddWithValue("@dailyPrice", updatedCompanyVehicle.DailyPrice);
+                        command.Parameters.AddWithValue("@colorId", updatedCompanyVehicle.ColorId);
+                        command.Parameters.AddWithValue("@plateNumber", updatedCompanyVehicle.PlateNumber);
+                        command.Parameters.AddWithValue("@imageUrl",
+                            updatedCompanyVehicle.ImageUrl ?? (object)DBNull.Value);
+                        command.Parameters.AddWithValue("@currentLocationId",
+                            updatedCompanyVehicle.CurrentLocationId ?? (object)DBNull.Value);
+                        command.Parameters.AddWithValue("@isOperational", updatedCompanyVehicle.IsOperational);
+                        command.Parameters.AddWithValue("@isActive", updatedCompanyVehicle.IsActive);
+                        command.Parameters.AddWithValue("@updatedByUserId", userId);
+
+                        return await command.ExecuteNonQueryAsync() > 0;
+                    }
                 }
+            } catch(Exception e)
+            {
+                Console.WriteLine(e.Message);
+                return false;
             }
         }
 

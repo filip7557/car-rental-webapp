@@ -26,4 +26,14 @@ namespace CarGo.Model
 
         public Guid UpdatedByUserId { get; set; }
     }
+
+    public class ReviewDTO
+    {
+        public string Title { get; set; }
+
+        public string Description { get; set; }
+        public string User { get; set; }
+
+        public DateTime DateCreated { get; set; }
+    }
 }

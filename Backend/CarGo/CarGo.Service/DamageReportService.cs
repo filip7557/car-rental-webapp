@@ -20,7 +20,7 @@ namespace CarGo.Service
             _userService = userService;
             _imageService = imageService;
         }
-
+        
         public async Task<Guid> CreateDamageReportAsync(DamageReport damageReport)
         {
             if (damageReport == null)

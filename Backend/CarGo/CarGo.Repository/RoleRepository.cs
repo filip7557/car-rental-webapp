@@ -199,9 +199,13 @@ namespace CarGo.Repository
                     var reader = await command.ExecuteReaderAsync();
                     if (reader.HasRows)
                     {
-                        reader.Read();
-                        role.Id = Guid.Parse(reader[0].ToString()!);
-                        role.Name = reader[1].ToString()!;
+                        await reader.ReadAsync();
+                        var newRole = new Role
+                        {
+                            Id = Guid.Parse(reader[0].ToString()!),
+                            Name = reader[1].ToString()!
+                        };
+                        role = newRole;
                     }
                     else
                     {

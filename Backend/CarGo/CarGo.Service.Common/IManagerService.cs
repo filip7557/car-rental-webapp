@@ -8,7 +8,7 @@ namespace CarGo.Service.Common
 
         Task<List<User>> GetAllCompanyManagersAsync(Guid companyId);
 
-        Task<bool> AddManagerToCompanyAsync(Guid companyId, User user);
+        Task<bool> AddManagerToCompanyAsync(Guid companyId, User newManagerId);
 
         Task<bool> RemoveManagerFromCompanyAsync(Guid companyId, User user);
 

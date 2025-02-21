@@ -1,0 +1,27 @@
+.manageVehiclesPage {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.manageVehiclesPage .vehicles {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+}
+
+.pagging {
+    display: flex;
+    flex-direction: row;
+}
+
+.pagging label {
+    margin-right: 0.5rem;
+    cursor: pointer;
+}
+
+.pagging .currentPage {
+    color: black;
+}

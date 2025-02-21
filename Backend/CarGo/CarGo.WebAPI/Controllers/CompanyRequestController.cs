@@ -40,28 +40,33 @@ namespace CarGo.WebAPI.Controllers
         public async Task<IActionResult> ManageCompanyRequest(Guid userId, [FromBody] bool isAccepted)
         {
             var result = await _companyRequestService.ManageCompanyRequest(userId, isAccepted);
-            if (!result)
+            if (result)
             {
-                return BadRequest(new { message = "Failed to manage company request.", details = "Additional error details here" });
+                return Ok("Company request managed successfully.");
             }
-            return Ok("Company request managed successfully.");
+            return BadRequest("Failed to manage company request.");
         }
 
         [Authorize(Roles = "Administrator")]
         [HttpGet("get-all-company-requests")]
-        public async Task<IActionResult> GetAllCompanyRequestsAsync()
+        public async Task<IActionResult> GetAllCompanyRequestsAsync(
+            bool? isActive = null
+            )
         {
-            var companyes = await _companyRequestRepository.GetCompanyRequestsAsync();
-            if (companyes.Count > 0)
+            try
             {
-                return Ok(companyes);
+                var companyRequests = await _companyRequestRepository.GetCompanyRequestsAsync();
+
+                companyRequests = companyRequests.Where(req => req.IsActive == isActive).ToList();
+
+                return companyRequests.Count > 0 ? Ok(companyRequests) : NotFound("No company requests found.");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Error fetching company requests: {ex.Message}");
             }
 
-            return NotFound(new
-            {
-                error = "Not found",
-                message = "No company requests found."
-            });
+
         }
     }
 }

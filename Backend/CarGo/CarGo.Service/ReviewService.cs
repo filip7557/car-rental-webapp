@@ -1,13 +1,6 @@
-﻿using CarGo.Common;
-using CarGo.Model;
-using CarGo.Repository;
+﻿using CarGo.Model;
 using CarGo.Repository.Common;
 using CarGo.Service.Common;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CarGo.Service
 {
@@ -16,14 +9,16 @@ namespace CarGo.Service
 
         private readonly IReviewRepository _repository;
         private readonly ITokenService _tokenService;
-        public ReviewService(IReviewRepository reviewRepository, ITokenService tokenService)
+        private readonly IUserService _userService;
+        public ReviewService(IReviewRepository reviewRepository, ITokenService tokenService, IUserService userService)
         {
             _repository = reviewRepository;
             _tokenService = tokenService;
+            _userService = userService;
         }
 
 
-        public async Task<List<Review>> GetReviewsByCompanyIdAsync(Guid id)
+        public async Task<List<ReviewDTO>> GetReviewsByCompanyIdAsync(Guid id)
         {
             var isAdmin = false;
             var userRole = _tokenService.GetCurrentUserRoleName();
@@ -35,7 +30,21 @@ namespace CarGo.Service
                  isAdmin = true;
             }
            
-            return await _repository.GetReviewsByCompanyIdAsync(id,isAdmin);
+            var reviews =  await _repository.GetReviewsByCompanyIdAsync(id,isAdmin);
+            var reviewDTOs = new List<ReviewDTO>();
+            foreach (var review in reviews)
+            {
+                var user = await _userService.GetUserByIdAsync(review.CreatedByUserId);
+                var reviewDTO = new ReviewDTO
+                {
+                    Title = review.Title,
+                    Description = review.Description,
+                    DateCreated = review.DateCreated,
+                    User = user!.FullName
+                };
+                reviewDTOs.Add(reviewDTO);
+            }
+            return reviewDTOs;
         }
 
         public async Task<bool> AddReviewAsync(Review review)

@@ -138,10 +138,7 @@ namespace CarGo.WebAPI.Controllers
                     return BadRequest("The Booking information is incorrect");
                 }
 
-                if (booking.Id == Guid.Empty)
-                {
                     booking.Id = Guid.NewGuid();
-                }
 
                 await _service.AddBookingAsync(booking);
                 return Ok("Booking added succesfully");
@@ -182,12 +179,9 @@ namespace CarGo.WebAPI.Controllers
 
         [Authorize]
         [HttpPut("{id}/status")]
-        public async Task<IActionResult> UpdateBookingStatusAsync(Guid id, [FromBody] Guid statusId)
+        public async Task<IActionResult> UpdateBookingStatusAsync(Guid id)
         {
-            if (statusId == Guid.Empty)
-            {
-                return BadRequest("The Booking status ID is incorrect");
-            }
+ 
 
             try
             {
@@ -199,12 +193,29 @@ namespace CarGo.WebAPI.Controllers
                 }
 
                
-                await _service.UpdateBookingStatusAsync(id, statusId);
+                await _service.UpdateBookingStatusAsync(id);
                 return Ok("Booking status has been successfully updated");
             }
             catch (Exception ex)
             {
                 return StatusCode(500, $"Error when updating Booking status {ex.Message}");
+            }
+        }
+
+        [Authorize]
+        [HttpGet("getTotalPrice")]
+        public IActionResult GetTotalPrice(string startDate, string endDate, decimal dailyPrice)
+        {
+            try {
+                var start = DateTime.Parse(startDate);
+                var end = DateTime.Parse(endDate);
+                Console.WriteLine("Days: " + (end - start).Days);
+                var totalPrice = (end - start).Days * dailyPrice;
+                Console.WriteLine(totalPrice);
+                return Ok(totalPrice);
+            } catch (Exception)
+            {
+                return Ok("Input data to calculate.");
             }
         }
 

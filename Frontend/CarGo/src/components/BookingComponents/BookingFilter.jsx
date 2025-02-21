@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import BookingStatusService from "../../services/BookingStatusService";
 
 const BookingFilter = ({ onFilterChange }) => {
   const getInitialStartDate = () => localStorage.getItem("startDate") || "";
@@ -8,13 +9,15 @@ const BookingFilter = ({ onFilterChange }) => {
   const [startDate, setStartDate] = useState(getInitialStartDate());
   const [endDate, setEndDate] = useState(getInitialEndDate());
   const [status, setStatus] = useState(getInitialStatus());
+  const [statuses, setStatuses] = useState([]);
 
-  const statusMapping = {
-    Active: "550e8400-e29b-41d4-a716-446655441111", // Active
-    "In-progress": "550e8400-e29b-41d4-a716-446655441112", // In-progress
-    Done: "550e8400-e29b-41d4-a716-446655441113", // Done
-    Canceled: "550e8400-e29b-41d4-a716-446655441114", // Canceled
-  };
+  useEffect(() => {
+    const fetchStatuses = async () => {
+      const data = await BookingStatusService.getBookingStatuses();
+      setStatuses(data);
+    };
+    fetchStatuses();
+  }, []);
 
   const saveFiltersToLocalStorage = () => {
     localStorage.setItem("startDate", startDate);
@@ -27,7 +30,7 @@ const BookingFilter = ({ onFilterChange }) => {
     onFilterChange({
       startDate: startDate ? new Date(startDate).toISOString() : null,
       endDate: endDate ? new Date(endDate).toISOString() : null,
-      statusId: statusMapping[status] || null,
+      statusId: status || null,
     });
   };
 
@@ -57,10 +60,11 @@ const BookingFilter = ({ onFilterChange }) => {
         <label>Status:</label>
         <select value={status} onChange={(e) => setStatus(e.target.value)}>
           <option value="">All Statuses</option>
-          <option value="Active">Active</option>
-          <option value="In-progress">In-progress</option>
-          <option value="Done">Done</option>
-          <option value="Canceled">Canceled</option>
+          {statuses.map((s) => (
+            <option key={s.id} value={s.id}>
+              {s.name}
+            </option>
+          ))}
         </select>
       </div>
       <button onClick={handleFilterChange}>Apply Filters</button>

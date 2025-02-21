@@ -12,7 +12,7 @@ namespace CarGo.Service.Common
         Task AddBookingAsync(Booking booking);
 
         Task UpdateBookingAsync(Guid id, Booking updatedBooking);
-        Task UpdateBookingStatusAsync(Guid id, Guid statusId);
+        Task UpdateBookingStatusAsync(Guid id);
         Task SoftDeleteBookingAsync(Guid id);
     }
 }

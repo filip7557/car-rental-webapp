@@ -10,10 +10,12 @@ namespace CarGo.WebAPI.Controllers
     public class ManagerController : ControllerBase
     {
         private readonly IManagerService _managerService;
+        private readonly IUserService _userService;
 
-        public ManagerController(IManagerService managerService)
+        public ManagerController(IManagerService managerService, IUserService userService)
         {
             _managerService = managerService;
+            _userService = userService;
         }
 
         [Authorize(Roles = "Administrator,Manager")]
@@ -32,7 +34,7 @@ namespace CarGo.WebAPI.Controllers
         }
 
         [Authorize(Roles = "Administrator,Manager")]
-        [HttpGet("company/{companyId}")]
+        [HttpGet("company")]
         public async Task<IActionResult> GetAllCompanyManagersAsync(Guid companyId)
         {
             if (companyId == Guid.Empty)
@@ -66,10 +68,12 @@ namespace CarGo.WebAPI.Controllers
 
         [Authorize(Roles = "Administrator,Manager")]
         [HttpDelete("{companyId}")]
-        public async Task<IActionResult> RemoveManagerFromCompanyAsync(Guid companyId, User user)
+        public async Task<IActionResult> RemoveManagerFromCompanyAsync(Guid companyId, Guid userid)
         {
             if (companyId == Guid.Empty)
                 return BadRequest();
+
+            var user = await _userService.GetUserByIdAsync(userid);
 
             if (user == null)
                 return BadRequest();
@@ -80,6 +84,13 @@ namespace CarGo.WebAPI.Controllers
                 return Ok("Removed.");
 
             return BadRequest();
+        }
+
+        [Authorize(Roles = "Manager")]
+        [HttpGet]
+        public async Task<Guid> GetCompanyIdByUserIdAsync(Guid userId)
+        {
+            return await _managerService.GetCompanyIdByUserIdAsync(userId);
         }
     }
 }

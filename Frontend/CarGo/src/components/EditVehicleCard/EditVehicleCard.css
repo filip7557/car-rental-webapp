@@ -1,0 +1,10 @@
+.editVehicleCard {
+    background-color: #1a1a1a;
+    border-radius: 6px;
+    padding: 1rem;
+    margin: 1rem;
+}
+
+.editVehicleCard .button {
+    margin: 0 0.5rem;
+}
