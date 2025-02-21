@@ -3,7 +3,7 @@ import companyVehicleService from "../../services/CompanyVehicleService";
 
 //import "./CompanyVehicleDropDown.css";
 
-function CompanyVehicleDropDown({ setList }) {
+function CompanyVehicleDropDown({ setList, pageNumber, pageSize, orderBy }) {
 	const [makes, setMakes] = useState([]);
 	const [models, setModels] = useState([]);
 	const [types, setTypes] = useState([]);
@@ -21,7 +21,9 @@ function CompanyVehicleDropDown({ setList }) {
 		const make = e.target.value;
 		setSelectedMake(make);
 		companyVehicleService.vehicleMakeId = e.target.value;
-		companyVehicleService.getCompanyVehicles().then(setList);
+		companyVehicleService
+			.getAvailableCompanyVehicles(pageNumber, pageSize, orderBy)
+			.then(setList);
 	}
 
 	// Kada se promeni model
@@ -29,7 +31,9 @@ function CompanyVehicleDropDown({ setList }) {
 		const model = e.target.value;
 		setSelectedModel(model);
 		companyVehicleService.vehicleModelId = e.target.value;
-		companyVehicleService.getCompanyVehicles().then(setList);
+		companyVehicleService
+			.getAvailableCompanyVehicles(pageNumber, pageSize, orderBy)
+			.then(setList);
 	}
 	function handleTypeChange(e) {
 		const type = e.target.value;

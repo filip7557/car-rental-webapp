@@ -34,7 +34,7 @@ const CompanyVehiclePage = () => {
 			}
 		};
 		fetchData();
-	}, [pageNumber, pageSize, orderBy]);
+	}, [pageNumber, pageSize, orderBy, vehicles]);
 
 	useEffect(() => {
 		companyVehicleService.PageNumber = 1;
@@ -71,10 +71,15 @@ const CompanyVehiclePage = () => {
 					<option value="VehicleType">Tip</option>
 				</select>
 				{/* <CompanyVehicleFilter onFilterChange={handleFilterChange} /> */}
-				<CompanyVehicleDropDown setFilters={setFilters} setList={setVehicles} />
+				<CompanyVehicleDropDown
+					setList={setVehicles}
+					currentPage={pageNumber}
+					pageSize={pageSize}
+					orderBy={orderBy}
+				/>
 				<div className="company-vehicle-list">
-					{vehicles.length > 0 ? (
-						vehicles.map((vehicle) => (
+					{vehicles?.length > 0 ? (
+						vehicles?.map((vehicle) => (
 							<CompanyVehicleCard
 								key={vehicle.companyVehicleId}
 								vehicle={vehicle}

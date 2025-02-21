@@ -191,7 +191,7 @@ namespace CarGo.Repository
                 { //countaš samo available, ako tražiš available
                     
                     StringBuilder commandText = new StringBuilder(
-                        $"SELECT COUNT(cv.\"Id\") FROM \"CompanyVehicle\" cv {(available ? "JOIN \"Location\" cl ON cv.\"CurrentLocationId\" = cl.\"Id\"" : "")} where 1=1");
+                        $"SELECT COUNT(cv.\"Id\") FROM \"CompanyVehicle\" cv {(available ? "JOIN \"Location\" cl ON cv.\"CurrentLocationId\" = cl.\"Id\"" : "")} JOIN \"VehicleModel\" vm ON cv.\"VehicleModelId\" = vm.\"Id\" JOIN \"VehicleMake\" vmm ON vm.\"MakeId\" = vmm.\"Id\" where 1=1");
                     using var command = new NpgsqlCommand("", connection);
                     ApplyFilters(command, commandText, filter);
                     //command.Parameters.AddWithValue("compVehId", NpgsqlTypes.NpgsqlDbType.Uuid, companyVehicleId);
