@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "CarGo.Repository": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "ConnectionStrings__PostgresDb": "Host=localhost:5432;Username=postgres;Password=leonpik7;Database=CarGoDB"
+      }
+    }
+  }
+}

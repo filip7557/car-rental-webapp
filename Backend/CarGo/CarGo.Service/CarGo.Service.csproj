@@ -1,0 +1,29 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="CompanyVehicleSevice.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MailKit" Version="4.10.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="9.0.1" />
+    <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="7.1.2" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="7.1.2" />
+    <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.3.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\CarGo.Common\CarGo.Common.csproj" />
+    <ProjectReference Include="..\CarGo.Model\CarGo.Model.csproj" />
+    <ProjectReference Include="..\CarGo.Repository.Common\CarGo.Repository.Common.csproj" />
+    <ProjectReference Include="..\CarGo.Repository\CarGo.Repository.csproj" />
+    <ProjectReference Include="..\CarGo.Service.Common\CarGo.Service.Common.csproj" />
+  </ItemGroup>
+
+</Project>
